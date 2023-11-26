@@ -14,11 +14,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,47 +25,39 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pandacapstone.ui.theme.PandaCapstoneTheme
 import com.maryamrzdh.stepper.Stepper
 
 
-
 @Composable
-fun DietPreferenceScreen() {
-    Box(modifier = Modifier
-        .padding(30.dp, 0.dp)
-        .background(Color.White)) {
-        Column {
-            //Step()
-            Text(
-                text = stringResource(R.string.diet_header),
-                textAlign = TextAlign.Center,
-                style = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 28.sp
-                ),
-                modifier = Modifier
-                    .padding(bottom = 20.dp, top = 20.dp)
-                    .fillMaxWidth()
-            )
-            EverythingCard()
-            VegetarianCard()
-            VeganCard()
-            HalalCard()
-        }
+fun DietPreferenceScreen(
+    onNextButtonClicked: () -> Unit = {},
+) {
+    var isPressed = remember { mutableStateOf(false) }
+
+    Column {
+        EverythingCard(onNextButtonClicked)
+        VegetarianCard(onNextButtonClicked)
+        VeganCard(onNextButtonClicked)
+        HalalCard(onNextButtonClicked)
     }
 }
 
 // Everything Option
 @Composable
-fun EverythingCard() {
+fun EverythingCard(onNextButtonClicked: () -> Unit) {
     var isPressed = remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = { isPressed.value = !isPressed.value }),
+            .clickable(onClick = {
+                onNextButtonClicked()
+                isPressed.value = !isPressed.value
+            }),
         colors = CardDefaults.cardColors(Color.White),
         border = if (isPressed.value) BorderStroke(
             2.dp,
@@ -92,7 +81,7 @@ fun EverythingCard() {
             }
             Box(modifier = Modifier.fillMaxWidth()) {
                 Image(
-                    painter = painterResource(id = R.drawable.everything_logo),
+                    painter = painterResource(id = R.drawable.everything_icon),
                     contentDescription = "Everything logo",
                     modifier = Modifier
                         .size(60.dp)
@@ -103,25 +92,31 @@ fun EverythingCard() {
             }
         }
     }
+
+
 }
 
 // Vegetarian Option
 @Composable
-fun VegetarianCard() {
+fun VegetarianCard(onNextButtonClicked: () -> Unit) {
     var isPressed = remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 20.dp)
-            .clickable(onClick = { isPressed.value = !isPressed.value }),
+            .clickable(onClick = {
+                onNextButtonClicked()
+                isPressed.value = !isPressed.value
+            }),
         colors = CardDefaults.cardColors(Color.White),
         border = if (isPressed.value) BorderStroke(
             2.dp,
             colorResource(id = R.color.party_pink)
         ) else BorderStroke(
             2.dp,
-            color = colorResource(id = R.color.cool_grey)        )
+            color = colorResource(id = R.color.cool_grey)
+        )
     ) {
         Row(modifier = Modifier.padding(16.dp, 20.dp)) {
             Column {
@@ -137,7 +132,7 @@ fun VegetarianCard() {
             }
             Box(modifier = Modifier.fillMaxWidth()) {
                 Image(
-                    painter = painterResource(id = R.drawable.vegetarian_logo),
+                    painter = painterResource(id = R.drawable.vegetarian_icon),
                     contentDescription = "Vegetarian logo",
                     modifier = Modifier
                         .size(60.dp)
@@ -152,14 +147,17 @@ fun VegetarianCard() {
 
 // Vegan Option
 @Composable
-fun VeganCard() {
+fun VeganCard(onNextButtonClicked: () -> Unit) {
     val isPressed = remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 20.dp)
-            .clickable(onClick = { isPressed.value = !isPressed.value }),
+            .clickable(onClick = {
+                onNextButtonClicked()
+                isPressed.value = !isPressed.value
+            }),
         colors = CardDefaults.cardColors(Color.White),
         border = if (isPressed.value) BorderStroke(
             2.dp,
@@ -183,7 +181,7 @@ fun VeganCard() {
             }
             Box(modifier = Modifier.fillMaxWidth()) {
                 Image(
-                    painter = painterResource(id = R.drawable.vegan_logo),
+                    painter = painterResource(id = R.drawable.vegan_icon),
                     contentDescription = "Vegan logo",
                     modifier = Modifier
                         .size(60.dp)
@@ -198,14 +196,17 @@ fun VeganCard() {
 
 // Halal Option
 @Composable
-fun HalalCard() {
+fun HalalCard(onNextButtonClicked: () -> Unit) {
     val isPressed = remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 20.dp)
-            .clickable(onClick = { isPressed.value = !isPressed.value }),
+            .clickable(onClick = {
+                onNextButtonClicked()
+                isPressed.value = !isPressed.value
+            }),
         colors = CardDefaults.cardColors(Color.White),
         border = if (isPressed.value) BorderStroke(
             2.dp,
@@ -229,7 +230,7 @@ fun HalalCard() {
             }
             Box(modifier = Modifier.fillMaxWidth()) {
                 Image(
-                    painter = painterResource(id = R.drawable.halal_logo),
+                    painter = painterResource(id = R.drawable.halal_icon),
                     contentDescription = "Halal logo",
                     modifier = Modifier
                         .size(60.dp)
@@ -240,20 +241,4 @@ fun HalalCard() {
             }
         }
     }
-}
-
-@Composable
-fun Step(currentStep: Int) {
-
-    val numberStep = 4
-   // var currentStep by rememberSaveable { mutableStateOf(1) }
-    val titleList= arrayListOf("Step 1","Step 2","Step 3","Step 4")
-
-    Stepper(
-        numberOfSteps = numberStep,
-        currentStep = currentStep,
-        stepDescriptionList = titleList,
-       // selectedColor = colorResource(id = R.color.panda_color)
-    )
-
 }

@@ -75,41 +75,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-//@Composable
-//@OptIn(ExperimentalMaterial3Api::class)
-//fun AppBar() {
-//    val ctx = LocalContext.current
-//
-//    TopAppBar(
-//        title = { },
-//        // modifier = modifier,
-//        navigationIcon = {
-//            IconButton(onClick = { }) {
-//                Icon(
-//                    imageVector = Icons.Filled.ArrowBack,
-//                    contentDescription = "Back",
-//                    tint = colorResource(id = R.color.panda_color),
-//                    modifier = Modifier.fillMaxSize()
-//                )
-//
-//            }
-//        },
-//        actions = {
-//            IconButton(onClick = { }) {
-//                Icon(
-//                    imageVector = Icons.Default.Check,
-//                    contentDescription = "Select",
-//                    tint = colorResource(id = R.color.panda_color),
-//                    modifier = Modifier.fillMaxSize()
-//                )
-//            }
-//        },
-//    )
-//}
-
-
-
-
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
@@ -127,10 +92,10 @@ fun GreetingPreview() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CardPreview() {
-    PandaCapstoneTheme {
-        EverythingCard()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun CardPreview() {
+//    PandaCapstoneTheme {
+//        EverythingCard()
+//    }
+//}

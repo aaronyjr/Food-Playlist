@@ -15,5 +15,9 @@
     <string name="diet_preference">Diet Preference</string>
     <string name="food_preference">Food Preference</string>
     <string name="freq_time_preference">Frequency and Time Preference</string>
-    <string name="custom">Custom</string>
+    <string name="customisation_preference">Customisation</string>
+
+    <string name="food_header">What\'s your food preferences?</string>
+    <string name="freqtime_header">Select frequency and time</string>
+    <string name="customisation_header">Customise your preference</string>
 </resources>

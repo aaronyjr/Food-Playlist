@@ -6,6 +6,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -112,7 +113,7 @@ private fun Step(modifier: Modifier = Modifier,
             shape = CircleShape,
             border = borderStroke,
             color = innerCircleColor,
-            modifier = Modifier.size(30.dp).constrainAs(circle) {
+            modifier = Modifier.size(40.dp).constrainAs(circle) {
                 top.linkTo(parent.top)
                 end.linkTo(parent.end)
                 bottom.linkTo(parent.bottom)
