@@ -92,8 +92,6 @@ fun EverythingCard(onNextButtonClicked: () -> Unit) {
             }
         }
     }
-
-
 }
 
 // Vegetarian Option

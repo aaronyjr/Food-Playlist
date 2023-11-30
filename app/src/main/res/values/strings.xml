@@ -2,7 +2,7 @@
     <string name="app_name">Panda Capstone</string>
     <string name="playlist_intro">Introduction</string>
     <string name="btn_get_started">Get started!</string>
-    <string name="diet_header">What\'s your diet type?</string>
+    <string name="diet_header">What is your diet type?</string>
     <string name="diet_everything">I eat everything</string>
     <string name="diet_everything_desc">No specific dietary preferences</string>
     <string name="diet_vegetarian">Vegetarian</string>
@@ -17,7 +17,7 @@
     <string name="freq_time_preference">Frequency and Time Preference</string>
     <string name="customisation_preference">Customisation</string>
 
-    <string name="food_header">What\'s your food preferences?</string>
+    <string name="food_header">What is your food preferences?</string>
     <string name="freqtime_header">Select frequency and time</string>
     <string name="customisation_header">Customise your preference</string>
 </resources>

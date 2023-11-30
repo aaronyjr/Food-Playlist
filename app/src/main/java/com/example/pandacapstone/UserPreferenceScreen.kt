@@ -202,7 +202,7 @@ fun Header(headerStr: String) {
             modifier = Modifier
                 .padding(bottom = 20.dp, top = 20.dp)
                 .align(Alignment.CenterVertically)
-                .width(260.dp)
+                .width(270.dp)
         )
         Box(modifier = Modifier.fillMaxWidth()) {
             Image(
