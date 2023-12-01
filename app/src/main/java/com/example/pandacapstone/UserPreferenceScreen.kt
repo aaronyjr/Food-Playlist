@@ -6,14 +6,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -86,6 +90,11 @@ fun AppBar(
                     )
                 }
             }
+            if (currentScreen == UserPreferenceScreen.Start) {
+                IconButton(onClick = { }) {
+                    Icon(imageVector = Icons.Default.Close, contentDescription = "Close")
+                }
+            }
         },
     )
 }
@@ -115,54 +124,65 @@ fun UserPreference(
             currentScreen = currentScreen
         )
         Column(
-            modifier = Modifier
-                .padding(16.dp, 0.dp)
+            modifier = if (currentScreen == UserPreferenceScreen.Start) Modifier
+                .padding(0.dp, 0.dp)
+                .fillMaxHeight()
+            else Modifier
+                .padding(16.dp, 0.dp, 0.dp, 16.dp)
         ) {
             when (currentScreen) {
                 UserPreferenceScreen.DietPreference -> {
                     Header("diet_header")
                     Step(1)
                 }
+
                 UserPreferenceScreen.FoodPreference -> {
                     Header("food_header")
                     Step(2)
                 }
+
                 UserPreferenceScreen.FreqTimePreference -> {
                     Header("freqtime_header")
-                    Step(3)}
+                    Step(3)
+                }
+
                 UserPreferenceScreen.Customisation -> {
                     Header("customisation_header")
-                    Step(4)}
+                    Step(4)
+                }
+
                 else -> ""
             }
 
-            NavHost(
-                navController = navController,
-                startDestination = UserPreferenceScreen.Start.name,
-                //modifier = Modifier.padding(innerPadding)
-            ) {
-                composable(route = UserPreferenceScreen.Start.name) {
-                    PlaylistIntro(onNextButtonClicked = {
-                        navController.navigate(
-                            UserPreferenceScreen.DietPreference.name
-                        )
-                    })
-                }
-                composable(route = UserPreferenceScreen.DietPreference.name) {
-                    DietPreferenceScreen(onNextButtonClicked = {
-                        navController.navigate(
-                            UserPreferenceScreen.FoodPreference.name
-                        )
-                    })
-                }
-                composable(route = UserPreferenceScreen.FoodPreference.name) {
-                    FoodPreferenceScreen()
-                }
-                composable(route = UserPreferenceScreen.FreqTimePreference.name) {
-                    FreqTimePreferenceScreen()
-                }
-                composable(route = UserPreferenceScreen.Customisation.name) {
-                    CustomisationScreen()
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                NavHost(
+                    navController = navController,
+                    startDestination = UserPreferenceScreen.Start.name,
+                    //modifier = Modifier.padding(innerPadding)
+                ) {
+                    composable(route = UserPreferenceScreen.Start.name) {
+                        PlaylistIntro(onNextButtonClicked = {
+                            navController.navigate(
+                                UserPreferenceScreen.DietPreference.name
+                            )
+                        })
+                    }
+                    composable(route = UserPreferenceScreen.DietPreference.name) {
+                        DietPreferenceScreen(onNextButtonClicked = {
+                            navController.navigate(
+                                UserPreferenceScreen.FoodPreference.name
+                            )
+                        })
+                    }
+                    composable(route = UserPreferenceScreen.FoodPreference.name) {
+                        FoodPreferenceScreen()
+                    }
+                    composable(route = UserPreferenceScreen.FreqTimePreference.name) {
+                        FreqTimePreferenceScreen()
+                    }
+                    composable(route = UserPreferenceScreen.Customisation.name) {
+                        CustomisationScreen()
+                    }
                 }
             }
         }
@@ -189,15 +209,15 @@ fun Step(currentStep: Int) {
 fun Header(headerStr: String) {
     Row() {
         Text(
-            text = when(headerStr) {
+            text = when (headerStr) {
                 "diet_header" -> stringResource(R.string.diet_header)
                 "food_header" -> stringResource(id = R.string.food_header)
                 "freqtime_header" -> stringResource(id = R.string.freqtime_header)
                 "customisation_header" -> stringResource(id = R.string.customisation_header)
-                else -> ""},
+                else -> ""
+            },
             style = TextStyle(
-                fontWeight = FontWeight.Bold,
-                fontSize = 26.sp
+                fontWeight = FontWeight.Bold, fontSize = 26.sp
             ),
             modifier = Modifier
                 .padding(bottom = 20.dp, top = 20.dp)
@@ -206,7 +226,7 @@ fun Header(headerStr: String) {
         )
         Box(modifier = Modifier.fillMaxWidth()) {
             Image(
-                painter = when(headerStr) {
+                painter = when (headerStr) {
                     "diet_header" -> painterResource(id = R.drawable.pau_pondering)
                     "food_header" -> painterResource(id = R.drawable.pau_yummy)
                     "freqtime_header" -> painterResource(id = R.drawable.pau_happy)

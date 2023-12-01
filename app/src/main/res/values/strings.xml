@@ -20,4 +20,9 @@
     <string name="food_header">What is your food preferences?</string>
     <string name="freqtime_header">Select frequency and time</string>
     <string name="customisation_header">Customise your preference</string>
+
+    <string name="playlistIntro_title">Tailored to your taste and needs</string>
+    <string name="playlistIntro_desc">Personalize your food playlist based on your:</string>
+    <string name="dietary_preference">Dietary Preferences</string>
+    <string name="dish_preference">Dish Preferences</string>
 </resources>
