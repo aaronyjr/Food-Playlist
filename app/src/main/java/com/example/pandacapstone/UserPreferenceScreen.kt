@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -128,37 +129,35 @@ fun UserPreference(
                 .padding(0.dp, 0.dp)
                 .fillMaxHeight()
             else Modifier
-                .padding(16.dp, 0.dp, 0.dp, 16.dp)
+                .padding(16.dp, 0.dp, 16.dp, 16.dp)
         ) {
             when (currentScreen) {
                 UserPreferenceScreen.DietPreference -> {
-                    Header("diet_header")
+                    Header(stringResource(id = R.string.diet_header), painterResource(id = R.drawable.pau_pondering))
                     Step(1)
                 }
 
                 UserPreferenceScreen.FoodPreference -> {
-                    Header("food_header")
+                    Header(stringResource(id = R.string.food_header), painterResource(id = R.drawable.pau_yummy))
                     Step(2)
                 }
 
                 UserPreferenceScreen.FreqTimePreference -> {
-                    Header("freqtime_header")
+                    Header(stringResource(id = R.string.freqtime_header), painterResource(id = R.drawable.pau_happy))
                     Step(3)
                 }
 
                 UserPreferenceScreen.Customisation -> {
-                    Header("customisation_header")
+                    Header(stringResource(id = R.string.customisation_header), painterResource(id = R.drawable.pau_okay))
                     Step(4)
                 }
-
-                else -> ""
+                else -> null
             }
 
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 NavHost(
                     navController = navController,
                     startDestination = UserPreferenceScreen.Start.name,
-                    //modifier = Modifier.padding(innerPadding)
                 ) {
                     composable(route = UserPreferenceScreen.Start.name) {
                         PlaylistIntro(onNextButtonClicked = {
@@ -191,7 +190,6 @@ fun UserPreference(
 
 @Composable
 fun Step(currentStep: Int) {
-
     val numberStep = 4
     // var currentStep by rememberSaveable { mutableStateOf(1) }
     val titleList = arrayListOf("Step 1", "Step 2", "Step 3", "Step 4")
@@ -206,16 +204,9 @@ fun Step(currentStep: Int) {
 }
 
 @Composable
-fun Header(headerStr: String) {
+fun Header(headerStr: String, pauImg: Painter) {
     Row() {
-        Text(
-            text = when (headerStr) {
-                "diet_header" -> stringResource(R.string.diet_header)
-                "food_header" -> stringResource(id = R.string.food_header)
-                "freqtime_header" -> stringResource(id = R.string.freqtime_header)
-                "customisation_header" -> stringResource(id = R.string.customisation_header)
-                else -> ""
-            },
+        Text(text = headerStr,
             style = TextStyle(
                 fontWeight = FontWeight.Bold, fontSize = 26.sp
             ),
@@ -226,16 +217,9 @@ fun Header(headerStr: String) {
         )
         Box(modifier = Modifier.fillMaxWidth()) {
             Image(
-                painter = when (headerStr) {
-                    "diet_header" -> painterResource(id = R.drawable.pau_pondering)
-                    "food_header" -> painterResource(id = R.drawable.pau_yummy)
-                    "freqtime_header" -> painterResource(id = R.drawable.pau_happy)
-                    "customisation_header" -> painterResource(id = R.drawable.pau_okay)
-                    else -> painterResource(id = R.drawable.pau_pondering)
-                },
-                contentDescription = "Pau Pau pondering",
+                painter = pauImg,
+                contentDescription = "Pau Pau",
             )
         }
     }
 }
-
