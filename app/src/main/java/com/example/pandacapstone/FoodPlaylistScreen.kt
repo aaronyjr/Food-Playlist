@@ -2,7 +2,6 @@ package com.example.pandacapstone
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,10 +9,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
@@ -23,7 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,7 +42,8 @@ import androidx.navigation.compose.rememberNavController
 import com.maryamrzdh.stepper.Stepper
 
 // enum values that represent the screens in the app
-enum class UserPreferenceScreen(@StringRes val title: Int) {
+enum class FoodPlaylistScreen(@StringRes val title: Int) {
+    Home(title = R.string.home),
     Start(title = R.string.playlist_intro),
     DietPreference(title = R.string.diet_preference),
     FoodPreference(title = R.string.food_preference),
@@ -61,7 +57,7 @@ fun AppBar(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     onNextButtonClicked: () -> Unit,
-    currentScreen: UserPreferenceScreen
+    currentScreen: FoodPlaylistScreen
 ) {
     val ctx = LocalContext.current
 
@@ -69,7 +65,7 @@ fun AppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.White),
         title = { },
         navigationIcon = {
-            if (canNavigateBack) {
+            if (canNavigateBack && currentScreen != FoodPlaylistScreen.Start) {
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
@@ -81,7 +77,7 @@ fun AppBar(
             }
         },
         actions = {
-            if (currentScreen == UserPreferenceScreen.FoodPreference || currentScreen == UserPreferenceScreen.FreqTimePreference) {
+            if (currentScreen == FoodPlaylistScreen.FoodPreference || currentScreen == FoodPlaylistScreen.FreqTimePreference) {
                 IconButton(onClick = onNextButtonClicked) {
                     Icon(
                         imageVector = Icons.Default.Check,
@@ -91,8 +87,8 @@ fun AppBar(
                     )
                 }
             }
-            if (currentScreen == UserPreferenceScreen.Start) {
-                IconButton(onClick = { }) {
+            if (currentScreen == FoodPlaylistScreen.Start) {
+                IconButton(onClick = navigateUp) {
                     Icon(imageVector = Icons.Default.Close, contentDescription = "Close")
                 }
             }
@@ -101,12 +97,12 @@ fun AppBar(
 }
 
 @Composable
-fun UserPreference(
+fun FoodPlaylistApp(
     navController: NavHostController = rememberNavController()
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = UserPreferenceScreen.valueOf(
-        backStackEntry?.destination?.route ?: UserPreferenceScreen.DietPreference.name
+    val currentScreen = FoodPlaylistScreen.valueOf(
+        backStackEntry?.destination?.route ?: FoodPlaylistScreen.DietPreference.name
     )
 
     Column {
@@ -114,71 +110,93 @@ fun UserPreference(
             canNavigateBack = navController.previousBackStackEntry != null,
             navigateUp = { navController.navigateUp() },
             onNextButtonClicked = {
-                if (currentScreen == UserPreferenceScreen.DietPreference) {
-                    navController.navigate(UserPreferenceScreen.FoodPreference.name)
-                } else if (currentScreen == UserPreferenceScreen.FoodPreference) {
-                    navController.navigate(UserPreferenceScreen.FreqTimePreference.name)
-                } else if (currentScreen == UserPreferenceScreen.FreqTimePreference) {
-                    navController.navigate(UserPreferenceScreen.Customisation.name)
+                if (currentScreen == FoodPlaylistScreen.Home) {
+                    navController.navigate(FoodPlaylistScreen.DietPreference.name)
+                } else if (currentScreen == FoodPlaylistScreen.DietPreference) {
+                    navController.navigate(FoodPlaylistScreen.FoodPreference.name)
+                } else if (currentScreen == FoodPlaylistScreen.FoodPreference) {
+                    navController.navigate(FoodPlaylistScreen.FreqTimePreference.name)
+                } else if (currentScreen == FoodPlaylistScreen.FreqTimePreference) {
+                    navController.navigate(FoodPlaylistScreen.Customisation.name)
                 }
             },
             currentScreen = currentScreen
         )
         Column(
-            modifier = if (currentScreen == UserPreferenceScreen.Start) Modifier
+            modifier = if (currentScreen == FoodPlaylistScreen.Start) Modifier
                 .padding(0.dp, 0.dp)
                 .fillMaxHeight()
             else Modifier
                 .padding(16.dp, 0.dp, 16.dp, 16.dp)
         ) {
             when (currentScreen) {
-                UserPreferenceScreen.DietPreference -> {
-                    Header(stringResource(id = R.string.diet_header), painterResource(id = R.drawable.pau_pondering))
+                FoodPlaylistScreen.DietPreference -> {
+                    Header(
+                        stringResource(id = R.string.diet_header),
+                        painterResource(id = R.drawable.pau_pondering)
+                    )
                     Step(1)
                 }
 
-                UserPreferenceScreen.FoodPreference -> {
-                    Header(stringResource(id = R.string.food_header), painterResource(id = R.drawable.pau_yummy))
+                FoodPlaylistScreen.FoodPreference -> {
+                    Header(
+                        stringResource(id = R.string.food_header),
+                        painterResource(id = R.drawable.pau_yummy)
+                    )
                     Step(2)
                 }
 
-                UserPreferenceScreen.FreqTimePreference -> {
-                    Header(stringResource(id = R.string.freqtime_header), painterResource(id = R.drawable.pau_happy))
+                FoodPlaylistScreen.FreqTimePreference -> {
+                    Header(
+                        stringResource(id = R.string.freqtime_header),
+                        painterResource(id = R.drawable.pau_happy)
+                    )
                     Step(3)
                 }
 
-                UserPreferenceScreen.Customisation -> {
-                    Header(stringResource(id = R.string.customisation_header), painterResource(id = R.drawable.pau_okay))
+                FoodPlaylistScreen.Customisation -> {
+                    Header(
+                        stringResource(id = R.string.customisation_header),
+                        painterResource(id = R.drawable.pau_okay)
+                    )
                     Step(4)
                 }
+
                 else -> null
             }
 
             NavHost(
                 navController = navController,
-                startDestination = UserPreferenceScreen.Start.name,
+                startDestination = FoodPlaylistScreen.Home.name,
             ) {
-                composable(route = UserPreferenceScreen.Start.name) {
+                composable(route = FoodPlaylistScreen.Home.name) {
+                    HomeScreen(onNextButtonClicked = {
+                        navController.navigate(
+                            FoodPlaylistScreen.Start.name
+                        )
+                    })
+                }
+                composable(route = FoodPlaylistScreen.Start.name) {
                     PlaylistIntro(onNextButtonClicked = {
                         navController.navigate(
-                            UserPreferenceScreen.DietPreference.name
+                            FoodPlaylistScreen.DietPreference.name
                         )
                     })
                 }
-                composable(route = UserPreferenceScreen.DietPreference.name) {
+                composable(route = FoodPlaylistScreen.DietPreference.name) {
                     DietPreferenceScreen(onNextButtonClicked = {
                         navController.navigate(
-                            UserPreferenceScreen.FoodPreference.name
+                            FoodPlaylistScreen.FoodPreference.name
                         )
                     })
                 }
-                composable(route = UserPreferenceScreen.FoodPreference.name) {
+                composable(route = FoodPlaylistScreen.FoodPreference.name) {
                     FoodPreferenceScreen()
                 }
-                composable(route = UserPreferenceScreen.FreqTimePreference.name) {
+                composable(route = FoodPlaylistScreen.FreqTimePreference.name) {
                     FreqTimePreferenceScreen()
                 }
-                composable(route = UserPreferenceScreen.Customisation.name) {
+                composable(route = FoodPlaylistScreen.Customisation.name) {
                     CustomisationScreen()
                 }
             }
@@ -204,7 +222,8 @@ fun Step(currentStep: Int) {
 @Composable
 fun Header(headerStr: String, pauImg: Painter) {
     Row() {
-        Text(text = headerStr,
+        Text(
+            text = headerStr,
             style = TextStyle(
                 fontWeight = FontWeight.Bold, fontSize = 26.sp
             ),

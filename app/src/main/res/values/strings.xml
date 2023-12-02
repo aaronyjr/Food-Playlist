@@ -30,4 +30,5 @@
     <string name="txt_price">Price: </string>
     <string name="txt_rating">Rating: </string>
     <string name="btn_submit">Submit</string>
+    <string name="home">Home</string>
 </resources>

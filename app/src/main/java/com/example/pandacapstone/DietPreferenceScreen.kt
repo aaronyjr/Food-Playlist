@@ -43,7 +43,6 @@ import com.maryamrzdh.stepper.Stepper
 fun DietPreferenceScreen(
     onNextButtonClicked: () -> Unit = {},
 ) {
-
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
        // Everything
         DietTypeCard(

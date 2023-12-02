@@ -30,6 +30,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -68,7 +69,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
-                    UserPreference()
+                    FoodPlaylistApp()
                 }
             }
         }
@@ -91,11 +92,3 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun CardPreview() {
-//    PandaCapstoneTheme {
-//        EverythingCard()
-//    }
-//}
