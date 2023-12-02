@@ -81,7 +81,7 @@ fun AppBar(
             }
         },
         actions = {
-            if (currentScreen != UserPreferenceScreen.Start && currentScreen != UserPreferenceScreen.DietPreference) {
+            if (currentScreen == UserPreferenceScreen.FoodPreference || currentScreen == UserPreferenceScreen.FreqTimePreference) {
                 IconButton(onClick = onNextButtonClicked) {
                     Icon(
                         imageVector = Icons.Default.Check,
@@ -154,34 +154,32 @@ fun UserPreference(
                 else -> null
             }
 
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                NavHost(
-                    navController = navController,
-                    startDestination = UserPreferenceScreen.Start.name,
-                ) {
-                    composable(route = UserPreferenceScreen.Start.name) {
-                        PlaylistIntro(onNextButtonClicked = {
-                            navController.navigate(
-                                UserPreferenceScreen.DietPreference.name
-                            )
-                        })
-                    }
-                    composable(route = UserPreferenceScreen.DietPreference.name) {
-                        DietPreferenceScreen(onNextButtonClicked = {
-                            navController.navigate(
-                                UserPreferenceScreen.FoodPreference.name
-                            )
-                        })
-                    }
-                    composable(route = UserPreferenceScreen.FoodPreference.name) {
-                        FoodPreferenceScreen()
-                    }
-                    composable(route = UserPreferenceScreen.FreqTimePreference.name) {
-                        FreqTimePreferenceScreen()
-                    }
-                    composable(route = UserPreferenceScreen.Customisation.name) {
-                        CustomisationScreen()
-                    }
+            NavHost(
+                navController = navController,
+                startDestination = UserPreferenceScreen.Start.name,
+            ) {
+                composable(route = UserPreferenceScreen.Start.name) {
+                    PlaylistIntro(onNextButtonClicked = {
+                        navController.navigate(
+                            UserPreferenceScreen.DietPreference.name
+                        )
+                    })
+                }
+                composable(route = UserPreferenceScreen.DietPreference.name) {
+                    DietPreferenceScreen(onNextButtonClicked = {
+                        navController.navigate(
+                            UserPreferenceScreen.FoodPreference.name
+                        )
+                    })
+                }
+                composable(route = UserPreferenceScreen.FoodPreference.name) {
+                    FoodPreferenceScreen()
+                }
+                composable(route = UserPreferenceScreen.FreqTimePreference.name) {
+                    FreqTimePreferenceScreen()
+                }
+                composable(route = UserPreferenceScreen.Customisation.name) {
+                    CustomisationScreen()
                 }
             }
         }

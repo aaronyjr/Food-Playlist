@@ -25,4 +25,9 @@
     <string name="playlistIntro_desc">Personalize your food playlist based on your:</string>
     <string name="dietary_preference">Dietary Preferences</string>
     <string name="dish_preference">Dish Preferences</string>
+    <string name="txt_quantity">Quantity: </string>
+    <string name="txt_meal">Meal: </string>
+    <string name="txt_price">Price: </string>
+    <string name="txt_rating">Rating: </string>
+    <string name="btn_submit">Submit</string>
 </resources>

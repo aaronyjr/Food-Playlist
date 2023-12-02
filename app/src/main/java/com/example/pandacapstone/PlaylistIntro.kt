@@ -1,14 +1,10 @@
 package com.example.pandacapstone
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -99,7 +95,7 @@ fun PlaylistIntro(
             verticalArrangement = Arrangement.Bottom,
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(bottom = 60.dp)
+                .padding(bottom = 30.dp)
         ) {
             Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
                 Button(
@@ -114,8 +110,8 @@ fun PlaylistIntro(
                 ) {
                     Text(
                         text = stringResource(id = R.string.btn_get_started),
-                        modifier = Modifier.padding(14.dp),
-                        style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight(700))
+                        modifier = Modifier.padding(10.dp),
+                        style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight(700))
                     )
                 }
             }

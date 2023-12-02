@@ -44,7 +44,7 @@ fun DietPreferenceScreen(
     onNextButtonClicked: () -> Unit = {},
 ) {
 
-    Column {
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
        // Everything
         DietTypeCard(
             onNextButtonClicked,
