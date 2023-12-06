@@ -1,0 +1,30 @@
+Index: .idea/deploymentTargetDropDown.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"deploymentTargetDropDown\">\n    <value>\n      <entry key=\"app\">\n        <State />\n      </entry>\n    </value>\n  </component>\n</project>
+===================================================================
+diff --git a/.idea/deploymentTargetDropDown.xml b/.idea/deploymentTargetDropDown.xml
+--- a/.idea/deploymentTargetDropDown.xml	
++++ b/.idea/deploymentTargetDropDown.xml	
+@@ -3,7 +3,20 @@
+   <component name="deploymentTargetDropDown">
+     <value>
+       <entry key="app">
+-        <State />
++        <State>
++          <targetSelectedWithDropDown>
++            <Target>
++              <type value="QUICK_BOOT_TARGET" />
++              <deviceKey>
++                <Key>
++                  <type value="VIRTUAL_DEVICE_PATH" />
++                  <value value="$USER_HOME$/.android/avd/Pixel_7_API_34.avd" />
++                </Key>
++              </deviceKey>
++            </Target>
++          </targetSelectedWithDropDown>
++          <timeTargetWasSelectedWithDropDown value="2023-12-06T03:41:24.234748Z" />
++        </State>
+       </entry>
+     </value>
+   </component>
