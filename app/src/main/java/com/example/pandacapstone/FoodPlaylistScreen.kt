@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
@@ -126,6 +128,7 @@ fun FoodPlaylistApp(
             modifier = if (currentScreen == FoodPlaylistScreen.Start) Modifier
                 .padding(0.dp, 0.dp)
                 .fillMaxHeight()
+
             else Modifier
                 .padding(16.dp, 0.dp, 16.dp, 16.dp)
         ) {
