@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
@@ -56,7 +58,12 @@ fun CustomisationScreen() {
     var priceRange = remember { mutableStateOf(5f..15f) }
     var rating = remember { mutableIntStateOf(3) }
 
-    Column(modifier = Modifier.padding(top = 30.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(top = 30.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
         Row() {
             Column(modifier = Modifier.padding(end = 16.dp)) {
                 Row(
@@ -221,41 +228,35 @@ fun CustomisationScreen() {
                 )
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp)
                 ) {
                     Text(text = "$${priceRange.value.start.roundToInt()}")
                     Text(text = "$${priceRange.value.endInclusive.roundToInt()}")
                 }
-
-                Column(
-                    verticalArrangement = Arrangement.Bottom,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(bottom = 30.dp)
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Button(
-                            onClick = { },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = colorResource(
-                                    id = R.color.party_pink
-                                )
-                            ),
-                            shape = RoundedCornerShape(8.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.btn_submit),
-                                modifier = Modifier.padding(10.dp),
-                                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight(700))
-                            )
-                        }
-                    }
-                }
             }
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(
+            onClick = { },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(
+                    id = R.color.party_pink
+                )
+            ),
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 30.dp)
+        ) {
+            Text(
+                text = stringResource(id = R.string.btn_submit),
+                modifier = Modifier.padding(10.dp),
+                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight(700))
+            )
         }
     }
 }
