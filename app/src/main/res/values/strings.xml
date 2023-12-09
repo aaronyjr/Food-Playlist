@@ -31,4 +31,8 @@
     <string name="txt_rating">Rating: </string>
     <string name="btn_submit">Submit</string>
     <string name="home">Home</string>
+
+    <!-- Strings for FreqTimePreferenceScreen-->
+    <string name="every">Every</string>
+    <string name="weeks">week(s) on</string>
 </resources>
