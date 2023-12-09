@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +37,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -100,6 +102,7 @@ fun AppBar(
 
 @Composable
 fun FoodPlaylistApp(
+    viewModel: UserPrefViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -167,6 +170,7 @@ fun FoodPlaylistApp(
 
                 else -> null
             }
+            val userPrefState by viewModel.userPrefState.collectAsState()
 
             NavHost(
                 navController = navController,
@@ -188,13 +192,12 @@ fun FoodPlaylistApp(
                 }
                 composable(route = FoodPlaylistScreen.DietPreference.name) {
                     DietPreferenceScreen(onNextButtonClicked = {
-                        navController.navigate(
-                            FoodPlaylistScreen.FoodPreference.name
-                        )
+                        viewModel.setDietType(it)
+                        navController.navigate(FoodPlaylistScreen.FoodPreference.name)
                     })
                 }
                 composable(route = FoodPlaylistScreen.FoodPreference.name) {
-                    FoodPreferenceScreen()
+                    FoodPreferenceScreen(userPreferences = userPrefState)
                 }
                 composable(route = FoodPlaylistScreen.FreqTimePreference.name) {
                     FreqTimePreferenceScreen()

@@ -1,11 +1,7 @@
 package com.example.pandacapstone
 
-import android.media.Image
-import android.util.Log
-import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +15,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,17 +26,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.pandacapstone.ui.theme.PandaCapstoneTheme
-import com.maryamrzdh.stepper.Stepper
 
 
 @Composable
 fun DietPreferenceScreen(
-    onNextButtonClicked: () -> Unit = {},
+    onNextButtonClicked: (String) -> Unit
 ) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
        // Everything
@@ -79,10 +70,11 @@ fun DietPreferenceScreen(
 }
 
 @Composable
-fun DietTypeCard(onNextButtonClicked: () -> Unit,
-                 dietType: String ,
-                 dietTypeDesc: String,
-                 dietTypeIcon: Painter
+fun DietTypeCard(
+    onNextButtonClicked: (String) -> Unit,
+    dietType: String,
+    dietTypeDesc: String,
+    dietTypeIcon: Painter
                  ) {
     var isPressed = remember { mutableStateOf(false) }
     var inputDietType = remember { mutableStateOf("") }
@@ -92,9 +84,9 @@ fun DietTypeCard(onNextButtonClicked: () -> Unit,
             .fillMaxWidth()
             .padding(bottom = 20.dp)
             .clickable(onClick = {
-                onNextButtonClicked()
                 isPressed.value = !isPressed.value
                 inputDietType.value = dietType
+                onNextButtonClicked(dietType)
             }),
         colors = CardDefaults.cardColors(Color.White),
         border = if (isPressed.value) BorderStroke(
