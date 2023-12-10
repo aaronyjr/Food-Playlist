@@ -4,18 +4,9 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSizeIn
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -28,13 +19,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.zIndex
 import java.time.LocalTime
@@ -72,9 +67,10 @@ fun FreqTimePreferenceScreen() {
                     monthlyView.value = false
                 },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor =  colorResource(
+                    containerColor = colorResource(
                         id = if (weeklyView.value) R.color.party_pink
-                        else R.color.cool_grey),
+                        else R.color.cool_grey
+                    ),
                     contentColor = if (weeklyView.value) Color.White else Color.LightGray
                 ),
                 shape = RoundedCornerShape(10.dp),
@@ -113,11 +109,13 @@ fun WeeklyField() {
         ) {
             Text(
                 text = stringResource(id = R.string.every),
+                fontSize = 18.sp
             )
             ExposedDropDownMenuWeeks()
 
             Text(
                 text = stringResource(id = R.string.weeks),
+                fontSize = 18.sp
             )
         }
 
@@ -177,22 +175,25 @@ fun DaySelection() {
 fun ToggleDaysButton(text: String, isSelected: Boolean, onToggle: (Boolean) -> Unit) {
     Button(
         modifier = Modifier
-            .width(80.dp),
+            .width(90.dp),
         shape = RoundedCornerShape(10.dp),
         onClick = { onToggle(!isSelected) },
-        border = if (isSelected) BorderStroke(1.dp, colorResource(id = R.color.party_pink)) else BorderStroke(1.dp, Color.LightGray),
+        border = if (isSelected) BorderStroke(1.dp, colorResource(id = R.color.party_pink)) else BorderStroke(
+            1.dp,
+            Color.LightGray
+        ),
         colors = ButtonDefaults.buttonColors(
             containerColor = if (isSelected) colorResource(id = R.color.party_pink) else Color.White,
             contentColor = if (isSelected) Color.White else colorResource(id = R.color.black)
         ),
     ) {
-        Text(text = text)
+        Text(text = text, fontSize = 16.sp, fontWeight = FontWeight.Bold)
     }
 }
 
 // Menu to set number of weeks
 @Composable
-fun ExposedDropDownMenuWeeks(){
+fun ExposedDropDownMenuWeeks() {
 
     // Declaring a boolean value to store
     // the expanded state of the Text Field
@@ -201,7 +202,7 @@ fun ExposedDropDownMenuWeeks(){
     val weekList = listOf("1", "2", "3", "4")
     // Create a string value to store the selected city
     var mSelectedText by remember { mutableStateOf("1") }
-    var mTextFieldSize by remember { mutableStateOf(Size.Zero)}
+    var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
 
     // Up Icon when expanded and down icon when collapsed
     val icon = if (mExpanded)
@@ -213,9 +214,10 @@ fun ExposedDropDownMenuWeeks(){
         // Create an Outlined Text Field
         // with icon and not expanded
         OutlinedTextField(
+            textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color.LightGray,
-                unfocusedBorderColor = Color.LightGray,
+                disabledBorderColor = Color.LightGray,
+                disabledTextColor = Color.Black
             ),
             readOnly = true,
             value = mSelectedText,
@@ -226,12 +228,15 @@ fun ExposedDropDownMenuWeeks(){
                     // This value is used to assign to
                     // the DropDown the same width
                     mTextFieldSize = coordinates.size.toSize()
-                },
-//            label = {Text("Label")},
+                }
+                .clickable { mExpanded = !mExpanded },
             trailingIcon = {
-                Icon(icon,"contentDescription",
-                    Modifier.clickable { mExpanded = !mExpanded })
-            }
+                Icon(
+                    icon, "contentDescription",
+                    Modifier.clickable { mExpanded = !mExpanded }, tint = colorResource(id = R.color.party_pink)
+                )
+            },
+            enabled = false
         )
 
         // Create a drop-down menu with list of cities,
@@ -240,7 +245,7 @@ fun ExposedDropDownMenuWeeks(){
             expanded = mExpanded,
             onDismissRequest = { mExpanded = false },
             modifier = Modifier
-                .width(with(LocalDensity.current){mTextFieldSize.width.toDp()})
+                .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
         ) {
             weekList.forEach { label ->
                 DropdownMenuItem(onClick = {
@@ -253,9 +258,10 @@ fun ExposedDropDownMenuWeeks(){
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ExposedDropDownMenuTime(){
+fun ExposedDropDownMenuTime() {
 
     // Declaring a boolean value to store
     // the expanded state of the Text Field
@@ -264,55 +270,67 @@ fun ExposedDropDownMenuTime(){
     val deliveryTimeList = generateDeliveryTime()
     // Create a string value to store the selected city
     var mSelectedText by remember { mutableStateOf("12:00 pm - 12:15pm") }
-    var mTextFieldSize by remember { mutableStateOf(Size.Zero)}
+    var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
 
     // Up Icon when expanded and down icon when collapsed
     val icon = if (mExpanded)
         Icons.Filled.KeyboardArrowUp
     else
         Icons.Filled.KeyboardArrowDown
-
     Column {
-        // Create an Outlined Text Field
-        // with icon and not expanded
-        OutlinedTextField(
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color.LightGray,
-                unfocusedBorderColor = Color.LightGray,
-            ),
-            readOnly = true,
-            value = mSelectedText,
-            onValueChange = { mSelectedText = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .onGloballyPositioned { coordinates ->
-                    // This value is used to assign to
-                    // the DropDown the same width
-                    mTextFieldSize = coordinates.size.toSize()
-                },
-            label = { Text("Delivery Time") },
-            trailingIcon = {
-                Icon(icon, "contentDescription",
-                    Modifier.clickable { mExpanded = !mExpanded })
-            }
-        )
+        Text(text = "Delivery Time", fontSize = 18.sp)
 
-        // Create a drop-down menu with list of cities,
-        // when clicked, set the Text Field text as the city selected
-        DropdownMenu(
-            expanded = mExpanded,
-            onDismissRequest = { mExpanded = false },
-            // Set expanded list maxHeight
+        BoxWithConstraints(
             modifier = Modifier
-                .requiredSizeIn(maxHeight = 300.dp)
-                .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
+                .clipToBounds()
         ) {
-            deliveryTimeList.forEach { label ->
-                DropdownMenuItem(onClick = {
-                    mSelectedText = label
-                    mExpanded = false
-                }, text = { Text(label) }
-                )
+            // Create an Outlined Text Field
+            // with icon and not expanded
+            TextField(
+                textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp),
+                colors = TextFieldDefaults.colors(
+                    disabledContainerColor = Color.White,
+                    disabledTextColor = Color.Black,
+                    disabledIndicatorColor = Color.Transparent
+                ),
+                readOnly = true,
+                value = mSelectedText,
+                onValueChange = { mSelectedText = it },
+                modifier = Modifier
+                    .requiredWidth(maxWidth + 16.dp)
+                    .offset(x = (-8).dp, y = (-8).dp)
+                    .onGloballyPositioned { coordinates ->
+                        // This value is used to assign to
+                        // the DropDown the same width
+                        mTextFieldSize = coordinates.size.toSize()
+                    }
+                    .clickable { mExpanded = !mExpanded },
+                trailingIcon = {
+                    Icon(
+                        icon, "contentDescription",
+                        Modifier.clickable { mExpanded = !mExpanded }, tint = colorResource(id = R.color.party_pink)
+                    )
+                },
+                enabled = false
+            )
+
+            // Create a drop-down menu with list of cities,
+            // when clicked, set the Text Field text as the city selected
+            DropdownMenu(
+                expanded = mExpanded,
+                onDismissRequest = { mExpanded = false },
+                // Set expanded list maxHeight
+                modifier = Modifier
+                    .requiredSizeIn(maxHeight = 300.dp)
+                    .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
+            ) {
+                deliveryTimeList.forEach { label ->
+                    DropdownMenuItem(onClick = {
+                        mSelectedText = label
+                        mExpanded = false
+                    }, text = { Text(text = label, fontSize = 16.sp, fontWeight = FontWeight.Bold) }
+                    )
+                }
             }
         }
     }
