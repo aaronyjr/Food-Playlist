@@ -1,6 +1,7 @@
 package com.example.pandacapstone
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -32,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.pandacapstone.model.UserPreferences
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -99,6 +102,8 @@ fun MonthlyField() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WeeklyField() {
+    var userPrefViewModel: UserPrefViewModel = viewModel()
+
     Column(Modifier.fillMaxSize()) {
         // Select
         Row(
@@ -111,7 +116,7 @@ fun WeeklyField() {
                 text = stringResource(id = R.string.every),
                 fontSize = 18.sp
             )
-            ExposedDropDownMenuWeeks()
+            ExposedDropDownMenuWeeks(userPrefViewModel)
 
             Text(
                 text = stringResource(id = R.string.weeks),
@@ -119,7 +124,7 @@ fun WeeklyField() {
             )
         }
 
-        DaySelection()
+        DaySelection(userPrefViewModel)
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -127,44 +132,36 @@ fun WeeklyField() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun DaySelection() {
-    val weekdays = listOf("Mon", "Tue", "Wed", "Thu")
-    val weekends = listOf("Fri", "Sat", "Sun")
+fun DaySelection(userPrefViewModel: UserPrefViewModel) {
+    val listOfdays = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+    val booleanSelectedDay = remember { mutableStateListOf(false, false, false, false, false, false, false) }
 
-    val selectedWeekdays = remember { mutableStateListOf(false, false, false, false) }
-    val selectedWeekends = remember { mutableStateListOf(false, false, false) }
-
-    Column {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 8.dp),
-            horizontalArrangement = Arrangement.Start
-        ) {
-            weekdays.forEachIndexed { index, day ->
+    FlowRow(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        listOfdays.forEachIndexed { index, day ->
+            Box(modifier = Modifier.padding(2.dp)) {
                 ToggleDaysButton(
                     text = day,
-                    isSelected = selectedWeekdays[index],
-                    onToggle = { selectedWeekdays[index] = it },
+                    isSelected = booleanSelectedDay[index],
+                    onToggle = {
+                        booleanSelectedDay[index] = it
+                        var selectedDay = when (day) {
+                            "Mon" -> "Monday"
+                            "Tue" -> "Tuesday"
+                            "Wed" -> "Wednesday"
+                            "Thu" -> "Thursday"
+                            "Fri" -> "Friday"
+                            "Sat" -> "Saturday"
+                            "Sun" -> "Sunday"
+                            else -> ""
+                        }
+                        userPrefViewModel.calDeliveryDate(selectedDay)
+                    },
                 )
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 8.dp),
-            horizontalArrangement = Arrangement.Start
-        ) {
-            weekends.forEachIndexed { index, day ->
-                ToggleDaysButton(
-                    text = day,
-                    isSelected = selectedWeekends[index],
-                    onToggle = { selectedWeekends[index] = it }
-                )
-                Spacer(modifier = Modifier.width(8.dp))
             }
         }
     }
@@ -193,7 +190,7 @@ fun ToggleDaysButton(text: String, isSelected: Boolean, onToggle: (Boolean) -> U
 
 // Menu to set number of weeks
 @Composable
-fun ExposedDropDownMenuWeeks() {
+fun ExposedDropDownMenuWeeks(userPrefViewModel: UserPrefViewModel) {
 
     // Declaring a boolean value to store
     // the expanded state of the Text Field
@@ -250,6 +247,7 @@ fun ExposedDropDownMenuWeeks() {
             weekList.forEach { label ->
                 DropdownMenuItem(onClick = {
                     mSelectedText = label
+                    userPrefViewModel.setNumOfWeeks(mSelectedText)
                     mExpanded = false
                 }, text = { Text(label) }
                 )
