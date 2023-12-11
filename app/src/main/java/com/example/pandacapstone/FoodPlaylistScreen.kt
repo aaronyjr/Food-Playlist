@@ -1,5 +1,7 @@
 package com.example.pandacapstone
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -100,6 +102,7 @@ fun AppBar(
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FoodPlaylistApp(
     viewModel: UserPrefViewModel = viewModel(),
@@ -131,7 +134,6 @@ fun FoodPlaylistApp(
             modifier = if (currentScreen == FoodPlaylistScreen.Start) Modifier
                 .padding(0.dp, 0.dp)
                 .fillMaxHeight()
-
             else Modifier
                 .padding(16.dp, 0.dp, 16.dp, 16.dp)
         ) {
@@ -197,7 +199,14 @@ fun FoodPlaylistApp(
                     })
                 }
                 composable(route = FoodPlaylistScreen.FoodPreference.name) {
-                    FoodPreferenceScreen(userPreferences = userPrefState)
+                    FoodPreferenceScreen(
+                        onNextButtonClicked = {
+                            navController.navigate(
+                                FoodPlaylistScreen.FreqTimePreference.name
+                            )
+                        },
+                        userPreferences = userPrefState
+                    )
                 }
                 composable(route = FoodPlaylistScreen.FreqTimePreference.name) {
                     FreqTimePreferenceScreen()

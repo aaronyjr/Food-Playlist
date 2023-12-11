@@ -38,70 +38,10 @@ import com.example.pandacapstone.model.UserPreferences
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun FreqTimePreferenceScreen() {
-    val monthlyView = remember { mutableStateOf(true) }
-    val weeklyView = remember { mutableStateOf(false) }
-
-    Column {
-        Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-            Button(
-                onClick = {
-                    monthlyView.value = true
-                    weeklyView.value = false
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (monthlyView.value) colorResource(
-                        id = R.color.party_pink
-                    ) else colorResource(id = R.color.cool_grey),
-                    contentColor = if (monthlyView.value) Color.White else Color.LightGray
-                ),
-                shape = RoundedCornerShape(10.dp),
-                modifier = (if (monthlyView.value) Modifier.zIndex(1F) else Modifier.zIndex(0F))
-            ) {
-                Text("Monthly")
-                Modifier.padding(12.dp)
-                // test test test germaine is very pro
-            }
-            Button(
-                onClick = {
-                    weeklyView.value = true
-                    monthlyView.value = false
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(
-                        id = if (weeklyView.value) R.color.party_pink
-                        else R.color.cool_grey
-                    ),
-                    contentColor = if (weeklyView.value) Color.White else Color.LightGray
-                ),
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier.offset((-10).dp)
-            )
-            {
-                Text("Weekly")
-                Modifier.padding(12.dp)
-            }
-        }
-        if (monthlyView.value) {
-            MonthlyField()
-        }
-        if (weeklyView.value) {
-            WeeklyField()
-        }
-    }
-}
-
-@Composable
-fun MonthlyField() {
-    Text("Monthly")
-}
-
 // Requires API 26 because of function generateDeliveryTime()
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun WeeklyField() {
+fun FreqTimePreferenceScreen() {
     var userPrefViewModel: UserPrefViewModel = viewModel()
 
     Column(Modifier.fillMaxSize()) {
@@ -113,13 +53,13 @@ fun WeeklyField() {
                 .fillMaxWidth()
         ) {
             Text(
-                text = stringResource(id = R.string.every),
+                text = stringResource(id = R.string.txt_every),
                 fontSize = 18.sp
             )
             ExposedDropDownMenuWeeks(userPrefViewModel)
 
             Text(
-                text = stringResource(id = R.string.weeks),
+                text = stringResource(id = R.string.txt_weeks),
                 fontSize = 18.sp
             )
         }
@@ -335,24 +275,25 @@ fun ExposedDropDownMenuTime() {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun generateDeliveryTime(): List<String> {
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun generateTimeRangeList(startTime: LocalTime, endTime: LocalTime, intervalMinutes: Int): List<String> {
-        val timeList = mutableListOf<String>()
-        var currentTime = startTime
+fun generateTimeRangeList(startTime: LocalTime, endTime: LocalTime, intervalMinutes: Int): List<String> {
+    val timeList = mutableListOf<String>()
+    var currentTime = startTime
 
-        while (currentTime.isBefore(endTime) || currentTime == endTime) {
-            val endTimeOfRange = currentTime.plusMinutes(intervalMinutes.toLong())
-            var formattedTimeRange = "${currentTime.format(DateTimeFormatter.ofPattern("hh:mm a"))} " +
-                "- ${endTimeOfRange.format(DateTimeFormatter.ofPattern("hh:mm a"))}"
-            // sorry i got OCD for the capitalization of the AM and PM -gw
-            formattedTimeRange = formattedTimeRange.replace("AM", "am").replace("PM", "pm")
-            timeList.add(formattedTimeRange)
-            currentTime = endTimeOfRange
-        }
-
-        return timeList
+    while (currentTime.isBefore(endTime) || currentTime == endTime) {
+        val endTimeOfRange = currentTime.plusMinutes(intervalMinutes.toLong())
+        var formattedTimeRange = "${currentTime.format(DateTimeFormatter.ofPattern("hh:mm a"))} " +
+            "- ${endTimeOfRange.format(DateTimeFormatter.ofPattern("hh:mm a"))}"
+        // sorry i got OCD for the capitalization of the AM and PM -gw
+        formattedTimeRange = formattedTimeRange.replace("AM", "am").replace("PM", "pm")
+        timeList.add(formattedTimeRange)
+        currentTime = endTimeOfRange
     }
+
+    return timeList
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun generateDeliveryTime(): List<String> {
     // Change start and end time for delivery timing selection here
     val startTime = LocalTime.of(8, 0)
     val endTime = LocalTime.of(23, 0)
@@ -360,4 +301,3 @@ fun generateDeliveryTime(): List<String> {
 
     return generateTimeRangeList(startTime, endTime, intervalMinutes)
 }
-
