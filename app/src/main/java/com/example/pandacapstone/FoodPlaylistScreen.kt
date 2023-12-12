@@ -83,7 +83,7 @@ fun AppBar(
             }
         },
         actions = {
-            if (currentScreen == FoodPlaylistScreen.FoodPreference || currentScreen == FoodPlaylistScreen.FreqTimePreference) {
+            if (currentScreen == FoodPlaylistScreen.FreqTimePreference) {
                 IconButton(onClick = onNextButtonClicked) {
                     Icon(
                         imageVector = Icons.Default.Check,
@@ -118,13 +118,7 @@ fun FoodPlaylistApp(
             canNavigateBack = navController.previousBackStackEntry != null,
             navigateUp = { navController.navigateUp() },
             onNextButtonClicked = {
-                if (currentScreen == FoodPlaylistScreen.Home) {
-                    navController.navigate(FoodPlaylistScreen.DietPreference.name)
-                } else if (currentScreen == FoodPlaylistScreen.DietPreference) {
-                    navController.navigate(FoodPlaylistScreen.FoodPreference.name)
-                } else if (currentScreen == FoodPlaylistScreen.FoodPreference) {
-                    navController.navigate(FoodPlaylistScreen.FreqTimePreference.name)
-                } else if (currentScreen == FoodPlaylistScreen.FreqTimePreference) {
+                if (currentScreen == FoodPlaylistScreen.FreqTimePreference) {
                     navController.navigate(FoodPlaylistScreen.Customisation.name)
                 }
             },
@@ -176,7 +170,7 @@ fun FoodPlaylistApp(
 
             NavHost(
                 navController = navController,
-                startDestination = FoodPlaylistScreen.Home.name,
+                startDestination = FoodPlaylistScreen.DietPreference.name,
             ) {
                 composable(route = FoodPlaylistScreen.Home.name) {
                     HomeScreen(onNextButtonClicked = {
@@ -196,23 +190,25 @@ fun FoodPlaylistApp(
                     DietPreferenceScreen(onNextButtonClicked = {
                         viewModel.setDietType(it)
                         navController.navigate(FoodPlaylistScreen.FoodPreference.name)
-                    })
+                    },
+                    )
                 }
                 composable(route = FoodPlaylistScreen.FoodPreference.name) {
                     FoodPreferenceScreen(
                         onNextButtonClicked = {
+                            viewModel.setFoodPref(it)
                             navController.navigate(
                                 FoodPlaylistScreen.FreqTimePreference.name
                             )
                         },
                         userPreferences = userPrefState
-                    )
+                        )
                 }
                 composable(route = FoodPlaylistScreen.FreqTimePreference.name) {
                     FreqTimePreferenceScreen()
                 }
                 composable(route = FoodPlaylistScreen.Customisation.name) {
-                    CustomisationScreen()
+                    CustomisationScreen(userPreferences = userPrefState)
                 }
             }
         }

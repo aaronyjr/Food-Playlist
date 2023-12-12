@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -138,7 +139,7 @@ fun ExposedDropDownMenuWeeks(userPrefViewModel: UserPrefViewModel) {
     // Create a list of cities
     val weekList = listOf("1", "2", "3", "4")
     // Create a string value to store the selected city
-    var mSelectedText by remember { mutableStateOf("1") }
+    var mSelectedText by rememberSaveable { mutableStateOf("1") }
     var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
 
     // Up Icon when expanded and down icon when collapsed
@@ -207,7 +208,7 @@ fun ExposedDropDownMenuTime() {
     // Create a list of cities
     val deliveryTimeList = generateDeliveryTime()
     // Create a string value to store the selected city
-    var mSelectedText by remember { mutableStateOf("12:00 pm - 12:15pm") }
+    var mSelectedText by rememberSaveable { mutableStateOf("12:00 pm - 12:15pm") }
     var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
 
     // Up Icon when expanded and down icon when collapsed

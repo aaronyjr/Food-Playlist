@@ -51,4 +51,13 @@ class UserPrefViewModel : ViewModel() {
         Log.i("foodpanda", nextDate.toString())
         Log.i("foodpanda", everynWeek.toString())
     }
+
+    fun setFoodPref(foodPreference: String) {
+        userPref.update { currentState ->
+            currentState.copy(
+                foodPreference = foodPreference
+            )
+        }
+    }
+
 }

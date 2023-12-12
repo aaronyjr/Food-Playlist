@@ -15,8 +15,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -76,20 +79,20 @@ fun DietTypeCard(
     dietTypeDesc: String,
     dietTypeIcon: Painter
                  ) {
-    var isPressed = remember { mutableStateOf(false) }
-    var inputDietType = remember { mutableStateOf("") }
+    var isPressed by rememberSaveable { mutableStateOf(false) }
+    var inputDietType by rememberSaveable { mutableStateOf("") }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 20.dp)
             .clickable(onClick = {
-                isPressed.value = !isPressed.value
-                inputDietType.value = dietType
+                isPressed = !isPressed
+                inputDietType = dietType
                 onNextButtonClicked(dietType)
             }),
         colors = CardDefaults.cardColors(Color.White),
-        border = if (isPressed.value) BorderStroke(
+        border = if (isPressed) BorderStroke(
             2.dp,
             colorResource(id = R.color.party_pink)
         ) else BorderStroke(

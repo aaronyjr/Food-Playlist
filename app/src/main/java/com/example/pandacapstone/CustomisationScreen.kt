@@ -46,12 +46,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pandacapstone.model.UserPreferences
 import kotlin.math.*
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomisationScreen() {
+fun CustomisationScreen(userPreferences: UserPreferences) {
     var quantity = remember { mutableIntStateOf(1) }
     var mealOptions: List<String> = listOf("Yes", "No")
     var meal = remember { mutableStateOf(mealOptions[0]) }
@@ -64,6 +65,8 @@ fun CustomisationScreen() {
             .padding(top = 30.dp)
             .verticalScroll(rememberScrollState())
     ) {
+        Text(text = "${userPreferences.dietType}")
+        Text(text = "${userPreferences.foodPreference}")
         Row() {
             Column(modifier = Modifier.padding(end = 16.dp)) {
                 Row(
