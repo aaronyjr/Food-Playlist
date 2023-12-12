@@ -31,6 +31,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,8 +63,8 @@ fun SearchViewCuisine(
 ) {
 
     Column(modifier.fillMaxSize()) {
-        var inputFoodPreference = remember { mutableStateOf("") }
         val textState = remember { mutableStateOf(TextFieldValue("")) }
+        val selectedCuisine = rememberSaveable { mutableStateOf<String?>(null) }
 
         SearchViewCuisine(
             state = textState,
@@ -78,7 +79,7 @@ fun SearchViewCuisine(
             items(items = list.filter {
                 it.contains(searchedText, ignoreCase = true)
             }, key = { it }) { item ->
-                ColumnItem(foodItem = item) {
+                ColumnItem(foodItem = item, selectedCuisine = selectedCuisine) {
                     // TO DO: Click menu to pass information
                     onNextButtonClicked(item)
                 }
@@ -90,10 +91,11 @@ fun SearchViewCuisine(
 @Composable
 fun ColumnItem(
     foodItem: String,
+    selectedCuisine: MutableState<String?>,
     onClick: () -> Unit
 ) {
-    var isSelected by remember { mutableStateOf(false) }
-    var inputCuisinePreference by remember { mutableStateOf("") }
+    var isSelected by rememberSaveable { mutableStateOf(false) }
+    isSelected = selectedCuisine.value == foodItem
 
     Column(
         modifier = Modifier
@@ -101,8 +103,12 @@ fun ColumnItem(
             .clickable {
                 // When the item is clicked, toggle isSelected and call onClick
                 isSelected = !isSelected
-                inputCuisinePreference = foodItem
-                onClick()
+                if (isSelected) {
+                    selectedCuisine.value = foodItem
+                    onClick()
+                } else {
+                    selectedCuisine.value = null
+                }
             }
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
