@@ -42,7 +42,9 @@ import java.time.format.DateTimeFormatter
 // Requires API 26 because of function generateDeliveryTime()
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun FreqTimePreferenceScreen() {
+fun FreqTimePreferenceScreen(
+    onNextButtonClicked: (String) -> Unit
+) {
     var userPrefViewModel: UserPrefViewModel = viewModel()
 
     Column(Modifier.fillMaxSize()) {
@@ -69,16 +71,17 @@ fun FreqTimePreferenceScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        ExposedDropDownMenuTime()
+        ExposedDropDownMenuTime(onNextButtonClicked)
     }
 }
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun DaySelection(userPrefViewModel: UserPrefViewModel) {
     val listOfdays = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
-    val booleanSelectedDay = remember { mutableStateListOf(false, false, false, false, false, false, false) }
+    val selectedDays = userPrefViewModel.selectedDays
 
     FlowRow(
         modifier = Modifier.fillMaxWidth()
@@ -87,9 +90,9 @@ fun DaySelection(userPrefViewModel: UserPrefViewModel) {
             Box(modifier = Modifier.padding(2.dp)) {
                 ToggleDaysButton(
                     text = day,
-                    isSelected = booleanSelectedDay[index],
+                    isSelected = selectedDays.value == index,
                     onToggle = {
-                        booleanSelectedDay[index] = it
+                        selectedDays.value = if (selectedDays.value == index) null else index
                         var selectedDay = when (day) {
                             "Mon" -> "Monday"
                             "Tue" -> "Tuesday"
@@ -200,7 +203,7 @@ fun ExposedDropDownMenuWeeks(userPrefViewModel: UserPrefViewModel) {
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ExposedDropDownMenuTime() {
+fun ExposedDropDownMenuTime(onNextButtonClicked: (String) -> Unit) {
 
     // Declaring a boolean value to store
     // the expanded state of the Text Field
@@ -216,7 +219,7 @@ fun ExposedDropDownMenuTime() {
         Icons.Filled.KeyboardArrowUp
     else
         Icons.Filled.KeyboardArrowDown
-    Column {
+    Column(modifier = Modifier.fillMaxHeight()) {
         Text(text = "Delivery Time", fontSize = 18.sp)
 
         BoxWithConstraints(
@@ -271,6 +274,27 @@ fun ExposedDropDownMenuTime() {
                     )
                 }
             }
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(
+            onClick = { onNextButtonClicked(mSelectedText) },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(
+                    id = R.color.party_pink
+                )
+            ),
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 30.dp)
+        ) {
+            Text(
+                text = stringResource(id = R.string.btn_next),
+                modifier = Modifier.padding(10.dp),
+                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight(700))
+            )
         }
     }
 }

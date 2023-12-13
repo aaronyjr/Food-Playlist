@@ -31,6 +31,7 @@
     <string name="txt_rating">Rating: </string>
     <string name="btn_submit">Submit</string>
     <string name="home">Home</string>
+    <string name="btn_next">Next</string>
 
     <!-- Strings for FreqTimePreferenceScreen-->
     <string name="txt_every">Every</string>

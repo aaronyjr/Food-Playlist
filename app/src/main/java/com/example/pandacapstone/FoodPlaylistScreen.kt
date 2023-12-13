@@ -62,7 +62,6 @@ enum class FoodPlaylistScreen(@StringRes val title: Int) {
 fun AppBar(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
-    onNextButtonClicked: () -> Unit,
     currentScreen: FoodPlaylistScreen
 ) {
     val ctx = LocalContext.current
@@ -83,16 +82,6 @@ fun AppBar(
             }
         },
         actions = {
-            if (currentScreen == FoodPlaylistScreen.FreqTimePreference) {
-                IconButton(onClick = onNextButtonClicked) {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = "Select",
-                        tint = colorResource(id = R.color.party_pink),
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
-            }
             if (currentScreen == FoodPlaylistScreen.Start) {
                 IconButton(onClick = navigateUp) {
                     Icon(imageVector = Icons.Default.Close, contentDescription = "Close")
@@ -117,11 +106,6 @@ fun FoodPlaylistApp(
         AppBar(
             canNavigateBack = navController.previousBackStackEntry != null,
             navigateUp = { navController.navigateUp() },
-            onNextButtonClicked = {
-                if (currentScreen == FoodPlaylistScreen.FreqTimePreference) {
-                    navController.navigate(FoodPlaylistScreen.Customisation.name)
-                }
-            },
             currentScreen = currentScreen
         )
         Column(
@@ -170,7 +154,7 @@ fun FoodPlaylistApp(
 
             NavHost(
                 navController = navController,
-                startDestination = FoodPlaylistScreen.DietPreference.name,
+                startDestination = FoodPlaylistScreen.Home.name,
             ) {
                 composable(route = FoodPlaylistScreen.Home.name) {
                     HomeScreen(onNextButtonClicked = {
@@ -205,7 +189,14 @@ fun FoodPlaylistApp(
                         )
                 }
                 composable(route = FoodPlaylistScreen.FreqTimePreference.name) {
-                    FreqTimePreferenceScreen()
+                    FreqTimePreferenceScreen(
+                        onNextButtonClicked = {
+                            viewModel.setDeliveryTime(it)
+                            navController.navigate(
+                                FoodPlaylistScreen.Customisation.name
+                            )
+                        }
+                    )
                 }
                 composable(route = FoodPlaylistScreen.Customisation.name) {
                     CustomisationScreen(userPreferences = userPrefState)

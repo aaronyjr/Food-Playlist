@@ -1,6 +1,5 @@
 package com.example.pandacapstone
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -18,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -40,7 +38,7 @@ fun DietPreferenceScreen(
     onNextButtonClicked: (String) -> Unit
 ) {
     Column() {
-        val dietViewModel: DietViewModel = viewModel()
+        val userPrefViewModel: UserPrefViewModel = viewModel()
 
         DietTypeCard(
             listOf(
@@ -64,7 +62,7 @@ fun DietPreferenceScreen(
                     stringResource(id = R.string.diet_halal_desc),
                     painterResource(id = R.drawable.halal_icon)
                 )
-            ), onNextButtonClicked, viewModel = dietViewModel
+            ), onNextButtonClicked, viewModel = userPrefViewModel
         )
     }
 }
@@ -75,7 +73,7 @@ data class DietType(val dietTypeName: String, val dietTypeDesc: String, val diet
 fun DietTypeCard(
     listDietType: List<DietType>,
     onNextButtonClicked: (String) -> Unit,
-    viewModel: DietViewModel
+    viewModel: UserPrefViewModel
 ) {
 
     LazyColumn() {
