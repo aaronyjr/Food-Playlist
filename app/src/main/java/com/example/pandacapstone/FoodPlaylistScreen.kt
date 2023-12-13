@@ -12,11 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -54,7 +51,8 @@ enum class FoodPlaylistScreen(@StringRes val title: Int) {
     DietPreference(title = R.string.diet_preference),
     FoodPreference(title = R.string.food_preference),
     FreqTimePreference(title = R.string.freq_time_preference),
-    Customisation(title = R.string.customisation_preference)
+    Customisation(title = R.string.customisation_preference),
+    UserInput(title = R.string.btn_submit)
 }
 
 @Composable
@@ -171,10 +169,11 @@ fun FoodPlaylistApp(
                     })
                 }
                 composable(route = FoodPlaylistScreen.DietPreference.name) {
-                    DietPreferenceScreen(onNextButtonClicked = {
-                        viewModel.setDietType(it)
-                        navController.navigate(FoodPlaylistScreen.FoodPreference.name)
-                    },
+                    DietPreferenceScreen(
+                        onNextButtonClicked = {
+                            viewModel.setDietType(it)
+                            navController.navigate(FoodPlaylistScreen.FoodPreference.name)
+                        },
                     )
                 }
                 composable(route = FoodPlaylistScreen.FoodPreference.name) {
@@ -186,7 +185,7 @@ fun FoodPlaylistApp(
                             )
                         },
                         userPreferences = userPrefState
-                        )
+                    )
                 }
                 composable(route = FoodPlaylistScreen.FreqTimePreference.name) {
                     FreqTimePreferenceScreen(
@@ -199,7 +198,17 @@ fun FoodPlaylistApp(
                     )
                 }
                 composable(route = FoodPlaylistScreen.Customisation.name) {
-                    CustomisationScreen(userPreferences = userPrefState)
+                    CustomisationScreen(
+                        onNextButtonClicked = { quantity: Int, meal: String, rating: Int, minPrice: Int, maxPrice: Int ->
+                            viewModel.setCustomisation(quantity, meal, rating, minPrice, maxPrice)
+                            navController.navigate(
+                                FoodPlaylistScreen.UserInput.name
+                            )
+                        }
+                    )
+                }
+                composable(route = FoodPlaylistScreen.UserInput.name) {
+                    UserInputScreen(userPreferences = userPrefState)
                 }
             }
         }

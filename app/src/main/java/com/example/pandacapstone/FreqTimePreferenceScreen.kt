@@ -7,14 +7,12 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -33,9 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
-import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.pandacapstone.model.UserPreferences
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -67,11 +63,11 @@ fun FreqTimePreferenceScreen(
             )
         }
 
-        DaySelection(userPrefViewModel)
+        DaySelection(userPrefViewModel, onNextButtonClicked)
 
-        Spacer(modifier = Modifier.height(16.dp))
+//        Spacer(modifier = Modifier.height(16.dp))
 
-        ExposedDropDownMenuTime(onNextButtonClicked)
+//        ExposedDropDownMenuTime(onNextButtonClicked)
     }
 }
 
@@ -79,9 +75,14 @@ fun FreqTimePreferenceScreen(
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun DaySelection(userPrefViewModel: UserPrefViewModel) {
+fun DaySelection(
+    userPrefViewModel: UserPrefViewModel,
+    onNextButtonClicked: (String) -> Unit
+) {
     val listOfdays = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
     val selectedDays = userPrefViewModel.selectedDays
+    var selectedDay by remember { mutableStateOf("") }
+
 
     FlowRow(
         modifier = Modifier.fillMaxWidth()
@@ -93,7 +94,7 @@ fun DaySelection(userPrefViewModel: UserPrefViewModel) {
                     isSelected = selectedDays.value == index,
                     onToggle = {
                         selectedDays.value = if (selectedDays.value == index) null else index
-                        var selectedDay = when (day) {
+                        selectedDay = when (day) {
                             "Mon" -> "Monday"
                             "Tue" -> "Tuesday"
                             "Wed" -> "Wednesday"
@@ -109,6 +110,9 @@ fun DaySelection(userPrefViewModel: UserPrefViewModel) {
             }
         }
     }
+
+    Spacer(modifier = Modifier.height(16.dp))
+    ExposedDropDownMenuTime(onNextButtonClicked, selectedDays.value)
 }
 
 // Button to toggle days
@@ -203,7 +207,10 @@ fun ExposedDropDownMenuWeeks(userPrefViewModel: UserPrefViewModel) {
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ExposedDropDownMenuTime(onNextButtonClicked: (String) -> Unit) {
+fun ExposedDropDownMenuTime(
+    onNextButtonClicked: (String) -> Unit,
+    selectedDay: Int?
+) {
 
     // Declaring a boolean value to store
     // the expanded state of the Text Field
@@ -288,8 +295,9 @@ fun ExposedDropDownMenuTime(onNextButtonClicked: (String) -> Unit) {
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 30.dp)
-        ) {
+                .padding(bottom = 30.dp),
+            enabled = selectedDay != null,
+            ) {
             Text(
                 text = stringResource(id = R.string.btn_next),
                 modifier = Modifier.padding(10.dp),

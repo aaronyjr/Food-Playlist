@@ -7,9 +7,11 @@ data class UserPreferences(
     var day: String = "",
     var deliveryTime: String = "",
     var quantity: Int = 0,
-    var meal: Boolean = true,
+    var meal: String = "Yes",
     var rating: Int = 0,
-    var priceRange: String = ""
+    var minPrice: Int = 0,
+    var maxPrice: Int = 0,
+    var deliveryDate: String = ""
 )
 
 
