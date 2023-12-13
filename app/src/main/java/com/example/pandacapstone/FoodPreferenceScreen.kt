@@ -1,8 +1,5 @@
 package com.example.pandacapstone
 
-import android.graphics.drawable.Icon
-import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +20,8 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -66,7 +65,7 @@ fun SearchViewCuisine(
         val textState = remember { mutableStateOf(TextFieldValue("")) }
         val selectedCuisine = rememberSaveable { mutableStateOf<String?>(null) }
 
-        SearchViewCuisine(
+        SearchTextField(
             state = textState,
             placeHolder = stringResource(id = R.string.txt_cuisine),
             modifier = modifier,
@@ -75,13 +74,22 @@ fun SearchViewCuisine(
 
         val searchedText = textState.value.text
 
-        LazyColumn() {
-            items(items = list.filter {
-                it.contains(searchedText, ignoreCase = true)
-            }, key = { it }) { item ->
-                ColumnItem(foodItem = item, selectedCuisine = selectedCuisine) {
-                    // TO DO: Click menu to pass information
-                    onNextButtonClicked(item)
+        // Show extra text when search does not match any cuisines
+        val filteredList = list.filter {
+            it.contains(searchedText, ignoreCase = true)
+        }
+
+        if (filteredList.isEmpty()) {
+            CuisineListEmptyState()
+        } else {
+            LazyColumn() {
+                items(items = list.filter {
+                    it.contains(searchedText, ignoreCase = true)
+                }, key = { it }) { item ->
+                    ColumnItem(foodItem = item, selectedCuisine = selectedCuisine) {
+                        // TO DO: Click menu to pass information
+                        onNextButtonClicked(item)
+                    }
                 }
             }
         }
@@ -101,7 +109,6 @@ fun ColumnItem(
         modifier = Modifier
             .padding(2.dp)
             .clickable {
-                // When the item is clicked, toggle isSelected and call onClick
                 isSelected = !isSelected
                 if (isSelected) {
                     selectedCuisine.value = foodItem
@@ -129,7 +136,7 @@ fun ColumnItem(
 }
 
 @Composable
-fun SearchViewCuisine(
+fun SearchTextField(
     state: MutableState<TextFieldValue>,
     placeHolder: String,
     modifier: Modifier,
@@ -163,8 +170,35 @@ fun SearchViewCuisine(
                 imageVector = icon,
                 contentDescription = "Search"
             )
+        },
+        trailingIcon = {
+            if (placeHolder.isNotEmpty()) {
+                IconButton(onClick = { state.value = TextFieldValue("") }) {
+                    Icon(imageVector = Icons.Default.Close, contentDescription = "Clear button")
+                }
+            }
         }
     )
+}
+
+@Composable
+fun CuisineListEmptyState(
+    modifier: Modifier = Modifier
+) {
+    Column(
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.fillMaxSize()
+    ) {
+        Text(
+            text = "No cuisines found",
+            style = MaterialTheme.typography.titleMedium
+        )
+        Text(
+            text = "Try adjusting your search",
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
 }
 
 fun generateCuisineList(): List<String> {
