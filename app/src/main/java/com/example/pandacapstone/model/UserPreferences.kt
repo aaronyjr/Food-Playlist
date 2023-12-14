@@ -11,7 +11,7 @@ data class UserPreferences(
     var rating: Int = 0,
     var minPrice: Int = 0,
     var maxPrice: Int = 0,
-    var deliveryDate: String = ""
+    var deliveryDate: List<String> = listOf()
 )
 
 

@@ -4,13 +4,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,7 +15,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.temporal.TemporalAdjuster
 import java.time.temporal.TemporalAdjusters
 
 class UserPrefViewModel : ViewModel() {
@@ -41,9 +34,6 @@ class UserPrefViewModel : ViewModel() {
     private val _priceRange = MutableStateFlow(10f..30f)
     val priceRange: StateFlow<ClosedFloatingPointRange<Float>> get() = _priceRange
 
-    val deliveryDayList = mutableListOf<String>()
-
-
     fun setDietType(dietType: String) {
         userPref.update { currentState ->
             currentState.copy(
@@ -62,24 +52,27 @@ class UserPrefViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun calDeliveryDate(day: String) {
+    fun setFreqTime(day: String, deliveryTime: String) {
+        val deliveryDayList = mutableListOf<String>()
+
         var ld: LocalDate = LocalDate.of(LocalDate.now().year, LocalDate.now().month, LocalDate.now().dayOfMonth)
 
         for (i in 1..10) {
-            var nextDate = ld.with(TemporalAdjusters.next(DayOfWeek.valueOf(day.uppercase())))
+            var nextDate = ld.with(TemporalAdjusters.nextOrSame(DayOfWeek.valueOf(day.uppercase())))
             var everynWeek = nextDate.plusWeeks(numofWeeks.toLong())
             ld = everynWeek
             deliveryDayList.add(everynWeek.toString())
-//            Log.i("foodpanda2", nextDate.toString())
-//            Log.i("foodpanda2", everynWeek.toString())
-        }
-        for (day in deliveryDayList) {
-            Log.i("foodpanda", day)
         }
 
         userPref.update { currentState ->
             currentState.copy(
-                deliveryDate = "test"
+                deliveryDate = deliveryDayList
+            )
+        }
+
+        userPref.update { currentState ->
+            currentState.copy(
+                deliveryTime = deliveryTime
             )
         }
     }
@@ -92,18 +85,9 @@ class UserPrefViewModel : ViewModel() {
         }
     }
 
-    fun setDeliveryTime(deliveryTime: String) {
-        userPref.update { currentState ->
-            currentState.copy(
-                deliveryTime = deliveryTime
-            )
-        }
-    }
-
     fun onDietTypeSelected(dietType: DietType) {
         _selectedDietType.value = dietType
     }
-
 
     fun setCustomisation(quantity: Int, meal: String, rating: Int, minPrice: Int, maxPrice: Int) {
         userPref.update { currentState ->
@@ -120,6 +104,4 @@ class UserPrefViewModel : ViewModel() {
     fun updatePriceRange(newRange: ClosedFloatingPointRange<Float>) {
         _priceRange.value = newRange
     }
-
-
 }

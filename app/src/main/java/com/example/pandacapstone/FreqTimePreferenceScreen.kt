@@ -39,7 +39,7 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FreqTimePreferenceScreen(
-    onNextButtonClicked: (String) -> Unit
+    onNextButtonClicked: (String, String) -> Unit
 ) {
     var userPrefViewModel: UserPrefViewModel = viewModel()
 
@@ -77,7 +77,7 @@ fun FreqTimePreferenceScreen(
 @Composable
 fun DaySelection(
     userPrefViewModel: UserPrefViewModel,
-    onNextButtonClicked: (String) -> Unit
+    onNextButtonClicked: (String, String) -> Unit
 ) {
     val listOfdays = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
     val selectedDays = userPrefViewModel.selectedDays
@@ -104,7 +104,7 @@ fun DaySelection(
                             "Sun" -> "Sunday"
                             else -> ""
                         }
-                        userPrefViewModel.calDeliveryDate(selectedDay)
+//                        userPrefViewModel.calDeliveryDate(selectedDay)
                     },
                 )
             }
@@ -112,7 +112,7 @@ fun DaySelection(
     }
 
     Spacer(modifier = Modifier.height(16.dp))
-    ExposedDropDownMenuTime(onNextButtonClicked, selectedDays.value)
+    ExposedDropDownMenuTime(onNextButtonClicked, selectedDays.value, selectedDay)
 }
 
 // Button to toggle days
@@ -208,8 +208,9 @@ fun ExposedDropDownMenuWeeks(userPrefViewModel: UserPrefViewModel) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ExposedDropDownMenuTime(
-    onNextButtonClicked: (String) -> Unit,
-    selectedDay: Int?
+    onNextButtonClicked: (String, String) -> Unit,
+    selectedDays: Int?,
+    selectedDay: String
 ) {
 
     // Declaring a boolean value to store
@@ -286,7 +287,7 @@ fun ExposedDropDownMenuTime(
         Spacer(modifier = Modifier.weight(1f))
 
         Button(
-            onClick = { onNextButtonClicked(mSelectedText) },
+            onClick = { onNextButtonClicked(selectedDay, mSelectedText) },
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(
                     id = R.color.party_pink
@@ -296,7 +297,7 @@ fun ExposedDropDownMenuTime(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 30.dp),
-            enabled = selectedDay != null,
+            enabled = selectedDays != null,
             ) {
             Text(
                 text = stringResource(id = R.string.btn_next),
