@@ -76,15 +76,15 @@ fun SearchViewCuisine(
 
         // Show extra text when search does not match any cuisines
         val filteredList = list.filter {
-            it.contains(searchedText, ignoreCase = true)
+            it.startsWith(searchedText, ignoreCase = true)
         }
 
         if (filteredList.isEmpty()) {
             CuisineListEmptyState()
         } else {
-            LazyColumn() {
+            LazyColumn {
                 items(items = list.filter {
-                    it.contains(searchedText, ignoreCase = true)
+                    it.startsWith(searchedText, ignoreCase = true)
                 }, key = { it }) { item ->
                     ColumnItem(foodItem = item, selectedCuisine = selectedCuisine) {
                         // TO DO: Click menu to pass information
@@ -232,7 +232,10 @@ fun generateCuisineList(): List<String> {
         "Cuban",
         "Haitian"
     )
-    return cuisineList.sorted()
+
+    val sortedCuisineList = cuisineList.sortedBy { it.firstOrNull() }
+
+    return sortedCuisineList
 }
 
 
