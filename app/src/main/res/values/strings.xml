@@ -17,8 +17,8 @@
     <string name="freq_time_preference">Frequency and Time Preference</string>
     <string name="customisation_preference">Customisation</string>
 
-    <string name="food_header">What is your food preferences?</string>
-    <string name="freqtime_header">Select frequency and time</string>
+    <string name="food_header">What are your food preferences?</string>
+    <string name="freqtime_header">Select delivery frequency and time</string>
     <string name="customisation_header">Customise your preference</string>
 
     <string name="playlistIntro_title">Tailored to your taste and needs</string>
@@ -31,4 +31,12 @@
     <string name="txt_rating">Rating: </string>
     <string name="btn_submit">Submit</string>
     <string name="home">Home</string>
+    <string name="btn_next">Next</string>
+
+    <!-- Strings for FreqTimePreferenceScreen-->
+    <string name="txt_every">Every</string>
+    <string name="txt_weeks">week(s) on</string>
+
+    <!--    Strings for FoodPreferenceScreen-->
+    <string name="txt_cuisine">Search for a specific cuisine...</string>
 </resources>

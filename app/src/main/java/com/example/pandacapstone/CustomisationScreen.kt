@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
@@ -31,9 +33,12 @@ import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,19 +49,28 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlin.math.*
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomisationScreen() {
-    var quantity = remember { mutableIntStateOf(1) }
+fun CustomisationScreen(onNextButtonClicked: (Int, String, Int, Int, Int) -> Unit) {
+    var quantity = rememberSaveable { mutableIntStateOf(1) }
     var mealOptions: List<String> = listOf("Yes", "No")
-    var meal = remember { mutableStateOf(mealOptions[0]) }
-    var priceRange = remember { mutableStateOf(5f..15f) }
-    var rating = remember { mutableIntStateOf(3) }
+    var meal = rememberSaveable { mutableStateOf(mealOptions[0]) }
+    var rating = rememberSaveable { mutableIntStateOf(3) }
 
-    Column(modifier = Modifier.padding(top = 30.dp)) {
+    val userPrefViewModel: UserPrefViewModel = viewModel()
+    var priceRange = userPrefViewModel.priceRange.collectAsState().value
+
+
+    Column(
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(top = 30.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
         Row() {
             Column(modifier = Modifier.padding(end = 16.dp)) {
                 Row(
@@ -105,7 +119,7 @@ fun CustomisationScreen() {
                             disabledContainerColor = colorResource(id = R.color.cool_grey),
                             disabledContentColor = Color.LightGray
                         ),
-                        enabled = quantity.value > 0,
+                        enabled = quantity.value >= 2,
                         modifier = Modifier
                             .border(1.dp, Color.LightGray, shape = RoundedCornerShape(10.dp))
                             .size(width = 40.dp, height = 40.dp)
@@ -204,10 +218,9 @@ fun CustomisationScreen() {
                     modifier = Modifier.padding(end = 10.dp)
                 )
                 RangeSlider(
-                    value = priceRange.value,
+                    value = priceRange,
                     onValueChange = { newValues ->
-                        priceRange.value = newValues
-                        Log.i("capstone", priceRange.value.toString())
+                        userPrefViewModel.updatePriceRange(newValues)
                     },
                     onValueChangeFinished = {
 
@@ -221,41 +234,35 @@ fun CustomisationScreen() {
                 )
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "$${priceRange.value.start.roundToInt()}")
-                    Text(text = "$${priceRange.value.endInclusive.roundToInt()}")
-                }
-
-                Column(
-                    verticalArrangement = Arrangement.Bottom,
                     modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(bottom = 30.dp)
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp)
                 ) {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Button(
-                            onClick = { },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = colorResource(
-                                    id = R.color.party_pink
-                                )
-                            ),
-                            shape = RoundedCornerShape(8.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.btn_submit),
-                                modifier = Modifier.padding(10.dp),
-                                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight(700))
-                            )
-                        }
-                    }
+                    Text(text = "$${priceRange.start.roundToInt()}")
+                    Text(text = "$${priceRange.endInclusive.roundToInt()}")
                 }
             }
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(
+            onClick = { onNextButtonClicked(quantity.value, meal.value, rating.value, priceRange.start.roundToInt(), priceRange.endInclusive.roundToInt())},
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(
+                    id = R.color.party_pink
+                )
+            ),
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 30.dp)
+        ) {
+            Text(
+                text = stringResource(id = R.string.btn_submit),
+                modifier = Modifier.padding(10.dp),
+                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight(700))
+            )
         }
     }
 }
