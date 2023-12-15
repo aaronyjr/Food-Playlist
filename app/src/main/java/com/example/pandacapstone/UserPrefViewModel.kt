@@ -1,7 +1,6 @@
 package com.example.pandacapstone
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -20,8 +19,6 @@ import java.time.temporal.TemporalAdjusters
 class UserPrefViewModel : ViewModel() {
     private val userPref = MutableStateFlow(UserPreferences())
     val userPrefState: StateFlow<UserPreferences> = userPref.asStateFlow()
-
-    var numofWeeks: String = "1"
 
     // diet type
     private val _selectedDietType = MutableLiveData<DietType?>()
@@ -42,26 +39,26 @@ class UserPrefViewModel : ViewModel() {
         }
     }
 
-    fun setNumOfWeeks(selNumofWeeks: String) {
-        numofWeeks = selNumofWeeks
-        userPref.update { currentState ->
-            currentState.copy(
-                nWeek = numofWeeks
-            )
-        }
-    }
-
     @RequiresApi(Build.VERSION_CODES.O)
-    fun setFreqTime(day: String, deliveryTime: String) {
+    fun setFreqTime(day: String, deliveryTime: String, nWeek: String) {
         val deliveryDayList = mutableListOf<String>()
 
         var ld: LocalDate = LocalDate.of(LocalDate.now().year, LocalDate.now().month, LocalDate.now().dayOfMonth)
+        var nextDate: LocalDate
+        var everynWeek: LocalDate
 
-        for (i in 1..10) {
-            var nextDate = ld.with(TemporalAdjusters.nextOrSame(DayOfWeek.valueOf(day.uppercase())))
-            var everynWeek = nextDate.plusWeeks(numofWeeks.toLong())
+        for (i in 1..9) {
+            nextDate = ld.with(TemporalAdjusters.nextOrSame(DayOfWeek.valueOf(day.uppercase())))
+            when (i) { 1 -> deliveryDayList.add(nextDate.toString()) }
+            everynWeek = nextDate.plusWeeks(nWeek.toLong())
             ld = everynWeek
             deliveryDayList.add(everynWeek.toString())
+        }
+
+        userPref.update { currentState ->
+            currentState.copy(
+                nWeek = nWeek
+            )
         }
 
         userPref.update { currentState ->

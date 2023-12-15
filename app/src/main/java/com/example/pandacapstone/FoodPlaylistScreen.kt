@@ -189,8 +189,8 @@ fun FoodPlaylistApp(
                 }
                 composable(route = FoodPlaylistScreen.FreqTimePreference.name) {
                     FreqTimePreferenceScreen(
-                        onNextButtonClicked = { deliveryTime: String, deliveryDate: String ->
-                            viewModel.setFreqTime(deliveryTime, deliveryDate)
+                        onNextButtonClicked = { deliveryTime: String, deliveryDate: String, nWeek: String ->
+                            viewModel.setFreqTime(deliveryTime, deliveryDate, nWeek)
                             navController.navigate(
                                 FoodPlaylistScreen.Customisation.name
                             )
