@@ -81,7 +81,7 @@ fun DaySelection(
 ) {
     val listOfdays = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
     val selectedDays = userPrefViewModel.selectedDays
-    var selectedDay by remember { mutableStateOf("") }
+    var selectedDay by rememberSaveable { mutableStateOf("") }
 
 
     FlowRow(
