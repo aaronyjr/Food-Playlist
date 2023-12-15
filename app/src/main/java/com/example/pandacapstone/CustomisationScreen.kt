@@ -1,6 +1,7 @@
 package com.example.pandacapstone
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -116,11 +117,11 @@ fun CustomisationScreen(onNextButtonClicked: (Int, String, Int, Int, Int) -> Uni
                         onClick = { quantity.value -= 1 },
                         colors = IconButtonDefaults.iconButtonColors(
                             contentColor = colorResource(id = R.color.party_pink),
-                            disabledContainerColor = colorResource(id = R.color.cool_grey),
+                            disabledContainerColor = Color.Transparent,
                             disabledContentColor = Color.LightGray
                         ),
                         enabled = quantity.value >= 2,
-                        modifier = Modifier
+                      modifier = Modifier
                             .border(1.dp, Color.LightGray, shape = RoundedCornerShape(10.dp))
                             .size(width = 40.dp, height = 40.dp)
                     ) {

@@ -232,7 +232,7 @@ fun generateCuisineList(): List<String> {
         "Cuban",
         "Haitian"
     )
-    return cuisineList
+    return cuisineList.sorted()
 }
 
 

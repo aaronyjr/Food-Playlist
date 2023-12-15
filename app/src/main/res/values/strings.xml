@@ -26,7 +26,7 @@
     <string name="dietary_preference">Dietary Preferences</string>
     <string name="dish_preference">Dish Preferences</string>
     <string name="txt_quantity">Quantity: </string>
-    <string name="txt_meal">Meal: </string>
+    <string name="txt_meal">Set Meal: </string>
     <string name="txt_price">Price: </string>
     <string name="txt_rating">Rating: </string>
     <string name="btn_submit">Submit</string>
@@ -34,7 +34,7 @@
     <string name="btn_next">Next</string>
 
     <!-- Strings for FreqTimePreferenceScreen-->
-    <string name="txt_every">Every</string>
+    <string name="txt_every">Deliver every</string>
     <string name="txt_weeks">week(s) on</string>
 
     <!--    Strings for FoodPreferenceScreen-->
