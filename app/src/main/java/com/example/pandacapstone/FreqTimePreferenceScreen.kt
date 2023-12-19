@@ -1,11 +1,14 @@
 package com.example.pandacapstone
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -13,7 +16,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -45,6 +47,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 // Requires API 26 because of function generateDeliveryTime()
+@OptIn(ExperimentalLayoutApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FreqTimePreferenceScreen(
@@ -52,57 +55,222 @@ fun FreqTimePreferenceScreen(
 ) {
     var userPrefViewModel: UserPrefViewModel = viewModel()
 
-    Column(Modifier.fillMaxSize()) {
-
-        ExposedDropDownMenuWeeks(userPrefViewModel, onNextButtonClicked)
-
-    }
-}
-
-
-@RequiresApi(Build.VERSION_CODES.O)
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun DaySelection(
-    userPrefViewModel: UserPrefViewModel,
-    onNextButtonClicked: (String, String, String) -> Unit,
-    nWeek: String
-) {
-    val listOfdays = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
-    val selectedDays = userPrefViewModel.selectedDays
-    var selectedDay by rememberSaveable { mutableStateOf("") }
-
-
-    FlowRow(
-        modifier = Modifier.fillMaxWidth()
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
-        listOfdays.forEachIndexed { index, day ->
-            Box(modifier = Modifier.padding(2.dp)) {
-                ToggleDaysButton(
-                    text = day,
-                    isSelected = selectedDays.value == index,
-                    onToggle = {
-                        selectedDays.value = if (selectedDays.value == index) null else index
-                        selectedDay = when (day) {
-                            "Mon" -> "Monday"
-                            "Tue" -> "Tuesday"
-                            "Wed" -> "Wednesday"
-                            "Thu" -> "Thursday"
-                            "Fri" -> "Friday"
-                            "Sat" -> "Saturday"
-                            "Sun" -> "Sunday"
-                            else -> ""
+        // Declaring a boolean value to store
+        // the expanded state of the Text Field
+        var weekExpanded by remember { mutableStateOf(false) }
+        // Create a list of cities
+        val weekList = listOf("1", "2", "3", "4")
+        // Create a string value to store the selected city
+        var nWeek by rememberSaveable { mutableStateOf("1") }
+        var weekTextFieldSize by remember { mutableStateOf(Size.Zero) }
+
+        // Up Icon when expanded and down icon when collapsed
+        val icon = if (weekExpanded)
+            Icons.Filled.KeyboardArrowUp
+        else
+            Icons.Filled.KeyboardArrowDown
+
+        // Menu to set number of weeks
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(top = 20.dp)
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = stringResource(id = R.string.txt_every),
+                fontSize = 18.sp
+            )
+
+            Column(Modifier.padding(20.dp)) {
+                // Create an Outlined Text Field
+                // with icon and not expanded
+                OutlinedTextField(
+                    textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        disabledBorderColor = Color.LightGray,
+                        disabledTextColor = Color.Black
+                    ),
+                    readOnly = true,
+                    value = nWeek,
+                    onValueChange = { nWeek = it },
+                    modifier = Modifier
+                        .width(80.dp)
+                        .onGloballyPositioned { coordinates ->
+                            // This value is used to assign to
+                            // the DropDown the same width
+                            weekTextFieldSize = coordinates.size.toSize()
                         }
-//                        userPrefViewModel.calDeliveryDate(selectedDay)
+                        .clickable { weekExpanded = !weekExpanded },
+                    trailingIcon = {
+                        Icon(
+                            icon,
+                            "contentDescription",
+                            Modifier.clickable { weekExpanded = !weekExpanded },
+                            tint = colorResource(id = R.color.party_pink)
+                        )
                     },
+                    enabled = false
                 )
+
+                // Create a drop-down menu with list of cities,
+                // when clicked, set the Text Field text as the city selected
+                DropdownMenu(
+                    expanded = weekExpanded,
+                    onDismissRequest = { weekExpanded = false },
+                    modifier = Modifier
+                        .width(with(LocalDensity.current) { weekTextFieldSize.width.toDp() })
+                ) {
+                    weekList.forEach { label ->
+                        DropdownMenuItem(onClick = {
+                            nWeek = label
+                            weekExpanded = false
+                        }, text = { Text(label) }
+                        )
+                    }
+                }
+            }
+            Text(
+                text = stringResource(id = R.string.txt_weeks),
+                fontSize = 18.sp
+            )
+        }
+
+        // Select days
+        val listOfdays = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+        val selectedDays = userPrefViewModel.selectedDays
+        var selectedDay by rememberSaveable { mutableStateOf("") }
+        Log.i("selected", selectedDay)
+
+        FlowRow(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            listOfdays.forEachIndexed { index, day ->
+                Box(modifier = Modifier.padding(2.dp)) {
+                    ToggleDaysButton(
+                        text = day,
+                        isSelected = selectedDays.value == index,
+                        onToggle = {
+                            selectedDays.value = if (selectedDays.value == index) null else index
+                            selectedDay = when (day) {
+                                "Mon" -> "Monday"
+                                "Tue" -> "Tuesday"
+                                "Wed" -> "Wednesday"
+                                "Thu" -> "Thursday"
+                                "Fri" -> "Friday"
+                                "Sat" -> "Saturday"
+                                "Sun" -> "Sunday"
+                                else -> ""
+                            }
+                        },
+                    )
+                }
             }
         }
-    }
 
-    Spacer(modifier = Modifier.height(16.dp))
-    ExposedDropDownMenuTime(onNextButtonClicked, selectedDays.value, selectedDay, nWeek)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // select delivery time
+        var mExpanded by remember { mutableStateOf(false) }
+        // Create a list of cities
+        val deliveryTimeList = generateDeliveryTime()
+        // Create a string value to store the selected city
+        var deliveryTime by rememberSaveable { mutableStateOf("12:00 pm - 12:15pm") }
+        var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
+
+        // Up Icon when expanded and down icon when collapsed
+        val deliveryIcon = if (mExpanded)
+            Icons.Filled.KeyboardArrowUp
+        else
+            Icons.Filled.KeyboardArrowDown
+        Column(modifier = Modifier.fillMaxHeight()) {
+            Text(text = "Delivery Time", fontSize = 18.sp)
+
+            BoxWithConstraints(
+                modifier = Modifier
+                    .clipToBounds()
+            ) {
+                // Create an Outlined Text Field
+                // with icon and not expanded
+                TextField(
+                    textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp),
+                    colors = TextFieldDefaults.colors(
+                        disabledContainerColor = Color.White,
+                        disabledTextColor = Color.Black,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    readOnly = true,
+                    value = deliveryTime,
+                    onValueChange = { deliveryTime = it },
+                    modifier = Modifier
+                        .requiredWidth(maxWidth + 16.dp)
+                        .offset(x = (-8).dp, y = (-8).dp)
+                        .onGloballyPositioned { coordinates ->
+                            // This value is used to assign to
+                            // the DropDown the same width
+                            mTextFieldSize = coordinates.size.toSize()
+                        }
+                        .clickable { mExpanded = !mExpanded },
+                    trailingIcon = {
+                        Icon(
+                            deliveryIcon, "contentDescription",
+                            Modifier.clickable { mExpanded = !mExpanded }, tint = colorResource(id = R.color.party_pink)
+                        )
+                    },
+                    enabled = false
+                )
+
+                // Create a drop-down menu with list of cities,
+                // when clicked, set the Text Field text as the city selected
+                DropdownMenu(
+                    expanded = mExpanded,
+                    onDismissRequest = { mExpanded = false },
+                    // Set expanded list maxHeight
+                    modifier = Modifier
+                        .requiredSizeIn(maxHeight = 300.dp)
+                        .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
+                ) {
+                    deliveryTimeList.forEach { label ->
+                        DropdownMenuItem(onClick = {
+                            deliveryTime = label
+                            mExpanded = false
+                        }, text = { Text(text = label, fontSize = 16.sp, fontWeight = FontWeight.Bold) }
+                        )
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        // next button
+        Button(
+            onClick = { onNextButtonClicked(selectedDay, deliveryTime, nWeek) },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(
+                    id = R.color.party_pink
+                )
+            ),
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 30.dp),
+            enabled = selectedDays.value != null,
+        ) {
+            Text(
+                text = stringResource(id = R.string.btn_next),
+                modifier = Modifier.padding(10.dp),
+                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight(700))
+            )
+        }
+    }
 }
+
 
 // Button to toggle days
 @Composable
@@ -122,200 +290,6 @@ fun ToggleDaysButton(text: String, isSelected: Boolean, onToggle: (Boolean) -> U
         ),
     ) {
         Text(text = text, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-    }
-}
-
-// Menu to set number of weeks
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun ExposedDropDownMenuWeeks(
-    userPrefViewModel: UserPrefViewModel,
-    onNextButtonClicked: (String, String, String) -> Unit
-) {
-
-    // Declaring a boolean value to store
-    // the expanded state of the Text Field
-    var mExpanded by remember { mutableStateOf(false) }
-    // Create a list of cities
-    val weekList = listOf("1", "2", "3", "4")
-    // Create a string value to store the selected city
-    var nWeek by rememberSaveable { mutableStateOf("1") }
-    var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
-
-    // Up Icon when expanded and down icon when collapsed
-    val icon = if (mExpanded)
-        Icons.Filled.KeyboardArrowUp
-    else
-        Icons.Filled.KeyboardArrowDown
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .padding(top = 20.dp)
-            .fillMaxWidth()
-    ) {
-        Text(
-            text = stringResource(id = R.string.txt_every),
-            fontSize = 18.sp
-        )
-
-        Column(Modifier.padding(20.dp)) {
-            // Create an Outlined Text Field
-            // with icon and not expanded
-            OutlinedTextField(
-                textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    disabledBorderColor = Color.LightGray,
-                    disabledTextColor = Color.Black
-                ),
-                readOnly = true,
-                value = nWeek,
-                onValueChange = { nWeek = it },
-                modifier = Modifier
-                    .width(80.dp)
-                    .onGloballyPositioned { coordinates ->
-                        // This value is used to assign to
-                        // the DropDown the same width
-                        mTextFieldSize = coordinates.size.toSize()
-                    }
-                    .clickable { mExpanded = !mExpanded },
-                trailingIcon = {
-                    Icon(
-                        icon, "contentDescription",
-                        Modifier.clickable { mExpanded = !mExpanded }, tint = colorResource(id = R.color.party_pink)
-                    )
-                },
-                enabled = false
-            )
-
-            // Create a drop-down menu with list of cities,
-            // when clicked, set the Text Field text as the city selected
-            DropdownMenu(
-                expanded = mExpanded,
-                onDismissRequest = { mExpanded = false },
-                modifier = Modifier
-                    .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
-            ) {
-                weekList.forEach { label ->
-                    DropdownMenuItem(onClick = {
-                        nWeek = label
-                        mExpanded = false
-                    }, text = { Text(label) }
-                    )
-                }
-            }
-        }
-        Text(
-            text = stringResource(id = R.string.txt_weeks),
-            fontSize = 18.sp
-        )
-    }
-
-    DaySelection(userPrefViewModel = userPrefViewModel, onNextButtonClicked = onNextButtonClicked, nWeek)
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun ExposedDropDownMenuTime(
-    onNextButtonClicked: (String, String, String) -> Unit,
-    selectedDays: Int?,
-    selectedDay: String,
-    nWeek: String
-) {
-
-    // Declaring a boolean value to store
-    // the expanded state of the Text Field
-    var mExpanded by remember { mutableStateOf(false) }
-    // Create a list of cities
-    val deliveryTimeList = generateDeliveryTime()
-    // Create a string value to store the selected city
-    var deliveryTime by rememberSaveable { mutableStateOf("12:00 pm - 12:15pm") }
-    var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
-
-    // Up Icon when expanded and down icon when collapsed
-    val icon = if (mExpanded)
-        Icons.Filled.KeyboardArrowUp
-    else
-        Icons.Filled.KeyboardArrowDown
-    Column(modifier = Modifier.fillMaxHeight()) {
-        Text(text = "Delivery Time", fontSize = 18.sp)
-
-        BoxWithConstraints(
-            modifier = Modifier
-                .clipToBounds()
-        ) {
-            // Create an Outlined Text Field
-            // with icon and not expanded
-            TextField(
-                textStyle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp),
-                colors = TextFieldDefaults.colors(
-                    disabledContainerColor = Color.White,
-                    disabledTextColor = Color.Black,
-                    disabledIndicatorColor = Color.Transparent
-                ),
-                readOnly = true,
-                value = deliveryTime,
-                onValueChange = { deliveryTime = it },
-                modifier = Modifier
-                    .requiredWidth(maxWidth + 16.dp)
-                    .offset(x = (-8).dp, y = (-8).dp)
-                    .onGloballyPositioned { coordinates ->
-                        // This value is used to assign to
-                        // the DropDown the same width
-                        mTextFieldSize = coordinates.size.toSize()
-                    }
-                    .clickable { mExpanded = !mExpanded },
-                trailingIcon = {
-                    Icon(
-                        icon, "contentDescription",
-                        Modifier.clickable { mExpanded = !mExpanded }, tint = colorResource(id = R.color.party_pink)
-                    )
-                },
-                enabled = false
-            )
-
-            // Create a drop-down menu with list of cities,
-            // when clicked, set the Text Field text as the city selected
-            DropdownMenu(
-                expanded = mExpanded,
-                onDismissRequest = { mExpanded = false },
-                // Set expanded list maxHeight
-                modifier = Modifier
-                    .requiredSizeIn(maxHeight = 300.dp)
-                    .width(with(LocalDensity.current) { mTextFieldSize.width.toDp() })
-            ) {
-                deliveryTimeList.forEach { label ->
-                    DropdownMenuItem(onClick = {
-                        deliveryTime = label
-                        mExpanded = false
-                    }, text = { Text(text = label, fontSize = 16.sp, fontWeight = FontWeight.Bold) }
-                    )
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Button(
-            onClick = { onNextButtonClicked(selectedDay, deliveryTime, nWeek) },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(
-                    id = R.color.party_pink
-                )
-            ),
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 30.dp),
-            enabled = selectedDays != null,
-        ) {
-            Text(
-                text = stringResource(id = R.string.btn_next),
-                modifier = Modifier.padding(10.dp),
-                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight(700))
-            )
-        }
     }
 }
 
