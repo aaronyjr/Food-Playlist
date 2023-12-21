@@ -1,4 +1,4 @@
-package com.example.pandacapstone
+package com.example.pandacapstone.view
 
 import android.util.Log
 import androidx.compose.foundation.clickable
@@ -37,6 +37,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.pandacapstone.R
+import com.example.pandacapstone.viewModel.UserPrefViewModel
 import kotlin.math.roundToInt
 
 

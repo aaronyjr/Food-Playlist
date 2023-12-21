@@ -1,4 +1,4 @@
-package com.example.pandacapstone
+package com.example.pandacapstone.view
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -31,6 +31,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.pandacapstone.R
+import com.example.pandacapstone.viewModel.UserPrefViewModel
 
 
 @Composable

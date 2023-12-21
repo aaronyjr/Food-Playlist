@@ -1,4 +1,4 @@
-package com.example.pandacapstone
+package com.example.pandacapstone.view
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

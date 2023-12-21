@@ -32,6 +32,7 @@
     <string name="btn_submit">Submit</string>
     <string name="home">Home</string>
     <string name="btn_next">Next</string>
+    <string name="generated_playlist">Generated Playlist</string>
 
     <!-- Strings for FreqTimePreferenceScreen-->
     <string name="txt_every">Deliver every</string>

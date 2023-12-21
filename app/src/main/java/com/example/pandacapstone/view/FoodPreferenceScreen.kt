@@ -1,4 +1,4 @@
-package com.example.pandacapstone
+package com.example.pandacapstone.view
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -43,6 +43,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pandacapstone.R
 import com.example.pandacapstone.model.UserPreferences
 
 @Composable

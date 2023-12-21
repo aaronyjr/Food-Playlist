@@ -1,4 +1,4 @@
-package com.example.pandacapstone
+package com.example.pandacapstone.view
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -42,6 +42,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.pandacapstone.R
+import com.example.pandacapstone.viewModel.PlaylistViewModel
+import com.example.pandacapstone.viewModel.UserPrefViewModel
 import com.maryamrzdh.stepper.Stepper
 
 // enum values that represent the screens in the app
@@ -52,7 +55,9 @@ enum class FoodPlaylistScreen(@StringRes val title: Int) {
     FoodPreference(title = R.string.food_preference),
     FreqTimePreference(title = R.string.freq_time_preference),
     Customisation(title = R.string.customisation_preference),
-    UserInput(title = R.string.btn_submit)
+    UserInput(title = R.string.btn_submit),
+    Api(title = R.string.generated_playlist)
+
 }
 
 @Composable
@@ -149,10 +154,12 @@ fun FoodPlaylistApp(
                 else -> null
             }
             val userPrefState by viewModel.userPrefState.collectAsState()
+            val generatedPlaylistVM: PlaylistViewModel = viewModel()
+
 
             NavHost(
                 navController = navController,
-                startDestination = FoodPlaylistScreen.Home.name,
+                startDestination = FoodPlaylistScreen.Api.name,
             ) {
                 composable(route = FoodPlaylistScreen.Home.name) {
                     HomeScreen(onNextButtonClicked = {
@@ -202,13 +209,13 @@ fun FoodPlaylistApp(
                         onNextButtonClicked = {rating: Int, minPrice: Int, maxPrice: Int ->
                             viewModel.setCustomisation(rating, minPrice, maxPrice)
                             navController.navigate(
-                                FoodPlaylistScreen.UserInput.name
+                                FoodPlaylistScreen.Api.name
                             )
                         }
                     )
                 }
-                composable(route = FoodPlaylistScreen.UserInput.name) {
-                    UserInputScreen(userPreferences = userPrefState)
+                composable(route = FoodPlaylistScreen.Api.name) {
+                    GeneratedPlaylistScreen(generatedPlaylistVM)
                 }
             }
         }

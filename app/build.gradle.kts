@@ -72,4 +72,19 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.5.3")
     add("implementation", project(":stepper"))
     implementation("androidx.compose.material:material-icons-extended-android:1.5.0-beta02")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("javax.inject:javax.inject:1")
+    implementation("com.squareup.retrofit2:converter-moshi:2.4.0")
+    implementation("io.coil-kt:coil-compose:1.4.0")
+
+
+
+
+
 }

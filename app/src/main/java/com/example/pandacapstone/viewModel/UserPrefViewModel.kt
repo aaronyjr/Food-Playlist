@@ -1,4 +1,4 @@
-package com.example.pandacapstone
+package com.example.pandacapstone.viewModel
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pandacapstone.model.UserPreferences
+import com.example.pandacapstone.view.DietType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
