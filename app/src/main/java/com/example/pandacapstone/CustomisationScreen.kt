@@ -26,7 +26,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,10 +42,10 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomisationScreen(onNextButtonClicked: (Int, String, Int, Int, Int) -> Unit) {
-    var quantity = rememberSaveable { mutableIntStateOf(1) }
-    var mealOptions: List<String> = listOf("Yes", "No")
-    var meal = rememberSaveable { mutableStateOf(mealOptions[0]) }
+fun CustomisationScreen(onNextButtonClicked: (Int, Int, Int) -> Unit) {
+//    var quantity = rememberSaveable { mutableIntStateOf(1) }
+//    var mealOptions: List<String> = listOf("Yes", "No")
+//    var meal = rememberSaveable { mutableStateOf(mealOptions[0]) }
     var rating = rememberSaveable { mutableIntStateOf(3) }
 
     val userPrefViewModel: UserPrefViewModel = viewModel()
@@ -235,7 +234,7 @@ fun CustomisationScreen(onNextButtonClicked: (Int, String, Int, Int, Int) -> Uni
         Spacer(modifier = Modifier.weight(1f))
 
         Button(
-            onClick = { onNextButtonClicked(quantity.value, meal.value, rating.value, priceRange.start.roundToInt(), priceRange.endInclusive.roundToInt())},
+            onClick = { onNextButtonClicked(rating.value, priceRange.start.roundToInt(), priceRange.endInclusive.roundToInt())},
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(
                     id = R.color.party_pink

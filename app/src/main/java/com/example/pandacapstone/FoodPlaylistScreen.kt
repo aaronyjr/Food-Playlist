@@ -199,8 +199,8 @@ fun FoodPlaylistApp(
                 }
                 composable(route = FoodPlaylistScreen.Customisation.name) {
                     CustomisationScreen(
-                        onNextButtonClicked = { quantity: Int, meal: String, rating: Int, minPrice: Int, maxPrice: Int ->
-                            viewModel.setCustomisation(quantity, meal, rating, minPrice, maxPrice)
+                        onNextButtonClicked = {rating: Int, minPrice: Int, maxPrice: Int ->
+                            viewModel.setCustomisation(rating, minPrice, maxPrice)
                             navController.navigate(
                                 FoodPlaylistScreen.UserInput.name
                             )

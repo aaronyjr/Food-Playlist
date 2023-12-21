@@ -86,11 +86,9 @@ class UserPrefViewModel : ViewModel() {
         _selectedDietType.value = dietType
     }
 
-    fun setCustomisation(quantity: Int, meal: String, rating: Int, minPrice: Int, maxPrice: Int) {
+    fun setCustomisation(rating: Int, minPrice: Int, maxPrice: Int) {
         userPref.update { currentState ->
             currentState.copy(
-                quantity = quantity,
-                meal = meal,
                 rating = rating,
                 minPrice = minPrice,
                 maxPrice = maxPrice
