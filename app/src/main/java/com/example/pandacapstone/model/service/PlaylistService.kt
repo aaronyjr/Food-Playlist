@@ -6,4 +6,7 @@ import retrofit2.http.GET
 interface PlaylistService {
     @GET("api/characters")
     suspend fun getRestaurant(): List<Playlist>
+
+//    @GET("api/characters")
+//    suspend fun getFiltered(@Query("gender") gender:String) : List<Playlist>
 }

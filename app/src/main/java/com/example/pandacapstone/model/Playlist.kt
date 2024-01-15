@@ -6,8 +6,8 @@ data class Playlist(
     @SerializedName("name")
     var name:String = "",
 
-    @SerializedName("species")
-    var foodName: String = "",
+    @SerializedName("gender")
+    var gender: String = "",
 //
 //    @SerializedName("dateOfBirth")
 //    var deliveryOn: String = "",

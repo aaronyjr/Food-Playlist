@@ -10,4 +10,8 @@ class PlaylistRepository {
         return playlistService.getRestaurant()
     }
 
+//    suspend fun getFiltered(gender: String): List<Playlist> {
+//        return playlistService.getFiltered(gender)
+//    }
+
 }

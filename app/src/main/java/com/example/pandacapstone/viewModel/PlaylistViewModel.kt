@@ -27,6 +27,20 @@ class PlaylistViewModel: ViewModel() {
                 Log.e("ViewModel Error", e.toString())
             }
         }
-
     }
+
+//    fun fetchFiltered(gender: String) {
+//        viewModelScope.launch {
+//            try {
+//                val genPlaylist = repository.getFiltered(gender)
+//                Log.i("foodpanda", genPlaylist.toString())
+//                _playlist.value = genPlaylist
+//                Log.i("foodpanda", "success")
+//                Log.i("foodpanda", _playlist.value.toString())
+//
+//            } catch (e: IllegalStateException) {
+//                Log.e("ViewModel Error", e.toString())
+//            }
+//        }
+//    }
 }
