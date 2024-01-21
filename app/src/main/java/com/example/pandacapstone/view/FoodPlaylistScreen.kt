@@ -112,7 +112,7 @@ fun FoodPlaylistApp(
             currentScreen = currentScreen
         )
         Column(
-            modifier = if (currentScreen == FoodPlaylistScreen.Start) Modifier
+            modifier = if (currentScreen == FoodPlaylistScreen.Start || currentScreen == FoodPlaylistScreen.Api) Modifier
                 .padding(0.dp, 0.dp)
                 .fillMaxHeight()
             else Modifier
