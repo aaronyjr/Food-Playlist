@@ -182,7 +182,7 @@ fun FreqTimePreferenceScreen(
         // Create a list of cities
         val deliveryTimeList = generateDeliveryTime()
         // Create a string value to store the selected city
-        var deliveryTime by rememberSaveable { mutableStateOf("12:00 pm - 12:15pm") }
+        var deliveryTime by rememberSaveable { mutableStateOf("12:00 pm - 12:15 pm") }
         var mTextFieldSize by remember { mutableStateOf(Size.Zero) }
 
         // Up Icon when expanded and down icon when collapsed
@@ -304,7 +304,6 @@ fun generateTimeRangeList(startTime: LocalTime, endTime: LocalTime, intervalMinu
         val endTimeOfRange = currentTime.plusMinutes(intervalMinutes.toLong())
         var formattedTimeRange = "${currentTime.format(DateTimeFormatter.ofPattern("hh:mm a"))} " +
             "- ${endTimeOfRange.format(DateTimeFormatter.ofPattern("hh:mm a"))}"
-        // sorry i got OCD for the capitalization of the AM and PM -gw
         formattedTimeRange = formattedTimeRange.replace("AM", "am").replace("PM", "pm")
         timeList.add(formattedTimeRange)
         currentTime = endTimeOfRange

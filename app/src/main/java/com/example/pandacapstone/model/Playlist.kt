@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Playlist(
     @SerializedName("name")
-    var name:String = "",
+    var name: String = "",
 
     @SerializedName("gender")
     var gender: String = "",

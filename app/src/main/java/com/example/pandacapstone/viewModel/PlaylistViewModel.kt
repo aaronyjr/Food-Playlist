@@ -9,19 +9,22 @@ import com.example.pandacapstone.model.Playlist
 import com.example.pandacapstone.model.repository.PlaylistRepository
 import kotlinx.coroutines.launch
 
-class PlaylistViewModel: ViewModel() {
+class PlaylistViewModel() : ViewModel() {
     private val repository = PlaylistRepository()
 
-    private val _playlist = MutableLiveData<List<Playlist>>()
-    val playlist: LiveData<List<Playlist>> = _playlist
+    private val _playlist = MutableLiveData<List<Pair<Playlist, String>>>()
+    val playlist: LiveData<List<Pair<Playlist, String>>> = _playlist
 
-    fun fetchPlaylist() {
+    fun fetchPlaylist(deliveryDate: List<String>) {
         viewModelScope.launch {
             try {
                 val genPlaylist = repository.getRestaurants()
-                    _playlist.value = genPlaylist
-                    Log.i("foodpanda", "success")
-                    Log.i("foodpanda", _playlist.value.toString())
+                var combined: List<Pair<Playlist, String>> = genPlaylist.zip(deliveryDate)
+                _playlist.value = combined
+                Log.i("foodpanda22", deliveryDate.toString())
+                Log.i("foodpanda22", combined.toString())
+                Log.i("foodpanda", "success")
+                Log.i("foodpanda", _playlist.value.toString())
 
             } catch (e: IllegalStateException) {
                 Log.e("ViewModel Error", e.toString())

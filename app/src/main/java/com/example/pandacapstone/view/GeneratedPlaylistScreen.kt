@@ -56,18 +56,22 @@ import androidx.compose.ui.unit.toSize
 import coil.compose.rememberImagePainter
 import com.example.pandacapstone.R
 import com.example.pandacapstone.model.Playlist
+import com.example.pandacapstone.model.UserPreferences
 import com.example.pandacapstone.viewModel.PlaylistViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GeneratedPlaylistScreen(viewModel: PlaylistViewModel) {
+fun GeneratedPlaylistScreen(
+    viewModel: PlaylistViewModel,
+    userPreferences: UserPreferences,
+) {
 
     val playlists by viewModel.playlist.observeAsState(emptyList())
+    val deliveryDate = userPreferences.deliveryDate
 
     LaunchedEffect(Unit) {
-        viewModel.fetchPlaylist()
+        viewModel.fetchPlaylist(deliveryDate)
     }
-
 
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -120,7 +124,7 @@ fun GeneratedPlaylistScreen(viewModel: PlaylistViewModel) {
                 ) {
                     Column(modifier = Modifier.padding(bottom = 15.dp)) {
                         Image(
-                            painter = rememberImagePainter(data = item.image),
+                            painter = rememberImagePainter(data = item.first.image),
                             contentDescription = null,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -176,7 +180,7 @@ fun GeneratedPlaylistScreen(viewModel: PlaylistViewModel) {
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
-                                    Text(text = item.name, fontWeight = FontWeight.Bold)
+                                    Text(text = item.first.name, fontWeight = FontWeight.Bold)
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         Image(
                                             painter = painterResource(id = R.drawable.rating_icon),
@@ -190,20 +194,30 @@ fun GeneratedPlaylistScreen(viewModel: PlaylistViewModel) {
                                 Row(
                                     Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
+                                    verticalAlignment = Alignment.Bottom
                                 ) {
                                     Column() {
-                                        Text(text = item.gender)
-                                        Text(text = "Delivery on", color = colorResource(id = R.color.party_pink))
+                                        Text(
+                                            text = item.first.gender,
+                                            color = Color.Gray
+                                        )
+                                        Text(
+                                            modifier = Modifier.padding(top = 4.dp),
+                                            text = "Delivers on ${item.second}",
+                                            color = colorResource(id = R.color.party_pink),
+                                            fontSize = 14.sp
+                                        )
                                     }
                                     Column() {
                                         Icon(
                                             Icons.Filled.MoreVert,
                                             contentDescription = "More vertical",
-                                            Modifier.clickable {
-                                                showBottomSheet = true
-                                                clicked = item
-                                            })
+                                            Modifier
+                                                .clickable {
+                                                    showBottomSheet = true
+                                                    clicked = item.first
+                                                }
+                                        )
                                     }
                                 }
                             }

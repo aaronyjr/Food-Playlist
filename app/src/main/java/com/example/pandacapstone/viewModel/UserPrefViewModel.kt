@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 
 class UserPrefViewModel : ViewModel() {
@@ -50,10 +51,16 @@ class UserPrefViewModel : ViewModel() {
 
         for (i in 1..9) {
             nextDate = ld.with(TemporalAdjusters.nextOrSame(DayOfWeek.valueOf(day.uppercase())))
-            when (i) { 1 -> deliveryDayList.add(nextDate.toString()) }
+            when (i) {
+                1 -> {
+                    val formatted = nextDate.format(DateTimeFormatter.ofPattern("d MMM"))
+                    deliveryDayList.add("$formatted, $deliveryTime")
+                }
+            }
             everynWeek = nextDate.plusWeeks(nWeek.toLong())
             ld = everynWeek
-            deliveryDayList.add(everynWeek.toString())
+            val formatted = everynWeek.format(DateTimeFormatter.ofPattern("d MMM"))
+            deliveryDayList.add("$formatted, $deliveryTime")
         }
 
         userPref.update { currentState ->

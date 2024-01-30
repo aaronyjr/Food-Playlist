@@ -215,7 +215,7 @@ fun FoodPlaylistApp(
                     )
                 }
                 composable(route = FoodPlaylistScreen.Api.name) {
-                    GeneratedPlaylistScreen(generatedPlaylistVM)
+                    GeneratedPlaylistScreen(generatedPlaylistVM, userPrefState)
                 }
             }
         }
