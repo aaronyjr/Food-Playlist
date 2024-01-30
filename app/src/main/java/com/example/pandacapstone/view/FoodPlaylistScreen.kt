@@ -159,7 +159,7 @@ fun FoodPlaylistApp(
 
             NavHost(
                 navController = navController,
-                startDestination = FoodPlaylistScreen.Api.name,
+                startDestination = FoodPlaylistScreen.Home.name,
             ) {
                 composable(route = FoodPlaylistScreen.Home.name) {
                     HomeScreen(onNextButtonClicked = {
