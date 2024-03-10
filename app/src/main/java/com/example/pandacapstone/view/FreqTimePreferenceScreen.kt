@@ -279,7 +279,7 @@ fun FreqTimePreferenceScreen(
 fun ToggleDaysButton(text: String, isSelected: Boolean, onToggle: (Boolean) -> Unit) {
     Button(
         modifier = Modifier
-            .width(90.dp),
+            .width(85.dp),
         shape = RoundedCornerShape(10.dp),
         onClick = { onToggle(!isSelected) },
         border = if (isSelected) BorderStroke(1.dp, colorResource(id = R.color.party_pink)) else BorderStroke(
@@ -291,7 +291,11 @@ fun ToggleDaysButton(text: String, isSelected: Boolean, onToggle: (Boolean) -> U
             contentColor = if (isSelected) Color.White else colorResource(id = R.color.black)
         ),
     ) {
-        Text(text = text, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+        Text(
+            text = text,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+        )
     }
 }
 
