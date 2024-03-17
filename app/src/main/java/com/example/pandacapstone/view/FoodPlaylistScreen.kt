@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -65,15 +65,14 @@ enum class FoodPlaylistScreen(@StringRes val title: Int) {
 fun AppBar(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
-    currentScreen: FoodPlaylistScreen
+    currentScreen: FoodPlaylistScreen,
+    navController: NavHostController,
 ) {
-    val ctx = LocalContext.current
-
     TopAppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.White),
         title = { },
         navigationIcon = {
-            if (canNavigateBack && currentScreen != FoodPlaylistScreen.Start) {
+            if (canNavigateBack && currentScreen != FoodPlaylistScreen.Start && currentScreen != FoodPlaylistScreen.Home) {
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
@@ -88,6 +87,16 @@ fun AppBar(
             if (currentScreen == FoodPlaylistScreen.Start) {
                 IconButton(onClick = navigateUp) {
                     Icon(imageVector = Icons.Default.Close, contentDescription = "Close")
+                }
+            }
+            if (currentScreen == FoodPlaylistScreen.Api) {
+                IconButton(onClick = {
+                    navController.navigate(FoodPlaylistScreen.Home.name)
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Home, contentDescription = "Home",
+                        tint = colorResource(id = R.color.party_pink),
+                    )
                 }
             }
         },
@@ -109,7 +118,8 @@ fun FoodPlaylistApp(
         AppBar(
             canNavigateBack = navController.previousBackStackEntry != null,
             navigateUp = { navController.navigateUp() },
-            currentScreen = currentScreen
+            currentScreen = currentScreen,
+            navController = navController,
         )
         Column(
             modifier = if (currentScreen == FoodPlaylistScreen.Start || currentScreen == FoodPlaylistScreen.Api) Modifier
@@ -191,7 +201,6 @@ fun FoodPlaylistApp(
                                 FoodPlaylistScreen.FreqTimePreference.name
                             )
                         },
-                        userPreferences = userPrefState
                     )
                 }
                 composable(route = FoodPlaylistScreen.FreqTimePreference.name) {

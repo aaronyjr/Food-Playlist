@@ -1,5 +1,6 @@
 package com.example.pandacapstone.view
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -33,7 +34,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
+import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import com.example.pandacapstone.R
 import com.example.pandacapstone.model.Playlist
 import com.example.pandacapstone.model.UserPreferences
@@ -41,6 +43,7 @@ import com.example.pandacapstone.viewModel.PlaylistViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GeneratedPlaylistScreen(
@@ -50,9 +53,17 @@ fun GeneratedPlaylistScreen(
 
     val playlists by viewModel.playlist.observeAsState(emptyList())
     val deliveryDate = userPreferences.deliveryDate
+    var imageBanner by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
-        viewModel.fetchPlaylist(deliveryDate)
+        viewModel.fetchPlaylist(
+            deliveryDate,
+            userPreferences.foodPreference,
+            userPreferences.dietType,
+            userPreferences.minPrice.toFloat(),
+            userPreferences.maxPrice.toFloat(),
+            userPreferences.rating.toFloat()
+        )
     }
 
     val sheetState = rememberModalBottomSheetState()
@@ -65,16 +76,21 @@ fun GeneratedPlaylistScreen(
         item {
             Box(contentAlignment = Alignment.BottomStart)
             {
-                Image(
-                    painter = painterResource(id = R.drawable.burger_example),
+                for ((index, imageUrl) in playlists.withIndex()) {
+                    if (index == 0) {
+                        imageBanner = imageUrl.first.imageUrl
+                    }
+                }
+                AsyncImage(
+                    model = imageBanner,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .fillMaxHeight()
+                        .height(250.dp)
                 )
                 Text(
-                    "Burgers",
+                    text = userPreferences.foodPreference,
                     color = Color.White,
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
@@ -105,11 +121,12 @@ fun GeneratedPlaylistScreen(
                 ) {
                     Column(modifier = Modifier.padding(bottom = 15.dp)) {
                         Image(
-                            painter = rememberImagePainter(data = item.first.image),
+                            painter = rememberAsyncImagePainter(model = item.first.imageUrl),
                             contentDescription = null,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(200.dp)
+                                .height(200.dp),
+                            contentScale = ContentScale.Crop,
                         )
 
                         var quantity by remember { mutableIntStateOf(1) }
@@ -152,14 +169,14 @@ fun GeneratedPlaylistScreen(
                                             horizontalArrangement = Arrangement.SpaceBetween,
                                             modifier = Modifier.fillMaxWidth()
                                         ) {
-                                            Text(text = item.first.name, fontWeight = FontWeight.Bold)
+                                            Text(text = item.first.restaurantName, fontWeight = FontWeight.Bold)
                                             Row(verticalAlignment = Alignment.CenterVertically) {
                                                 Image(
                                                     painter = painterResource(id = R.drawable.rating_icon),
                                                     contentDescription = "Rating",
                                                     modifier = Modifier.size(30.dp)
                                                 )
-                                                Text("4.5")
+                                                Text(text = item.first.rating.toString())
                                                 Text("(100+)")
                                             }
                                         }
@@ -170,7 +187,7 @@ fun GeneratedPlaylistScreen(
                                         ) {
                                             Column() {
                                                 Text(
-                                                    text = item.first.gender,
+                                                    text = item.first.name,
                                                     color = Color.Gray
                                                 )
                                                 Text(

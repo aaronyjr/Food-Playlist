@@ -69,7 +69,7 @@ fun DietPreferenceScreen(
     }
 }
 
-data class DietType(val dietTypeName: String, val dietTypeDesc: String, val dietTypeIcon: Painter)
+data class DietType(var dietTypeName: String, val dietTypeDesc: String, val dietTypeIcon: Painter)
 
 @Composable
 fun DietTypeCard(
@@ -110,7 +110,11 @@ fun DietTypeItem(
             .padding(bottom = 20.dp)
             .clickable {
                 onItemSelected(dietType)
-                inputDietType = dietType.dietTypeName
+                inputDietType = if (dietType.dietTypeName == "I eat everything") {
+                    "Normal"
+                } else {
+                    dietType.dietTypeName
+                }
                 onNextButtonClicked(inputDietType)
             },
         colors = CardDefaults.cardColors(Color.White),

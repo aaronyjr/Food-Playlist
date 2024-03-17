@@ -44,11 +44,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pandacapstone.R
-import com.example.pandacapstone.model.UserPreferences
 
 @Composable
 fun FoodPreferenceScreen(
-    userPreferences: UserPreferences,
     onNextButtonClicked: (String) -> Unit
 ) {
     SearchViewCuisine(onNextButtonClicked, list = generateCuisineList())
@@ -204,34 +202,22 @@ fun CuisineListEmptyState(
 
 fun generateCuisineList(): List<String> {
     val cuisineList = listOf(
-        "Mochi",
-        "Waffle",
-        "African",
-        "American",
-        "Southern American",
-        "Cajun",
-        "Tex-Mex",
-        "Native American",
         "Chinese",
         "Indian",
         "Japanese",
         "Korean",
         "Thai",
-        "Vietnamese",
         "Indonesian",
-        "Malaysian",
-        "Filipino",
         "Singaporean",
-        "Sri Lankan",
-        "Bangladeshi",
-        "Nepali",
-        "Burmese",
-        "Mongolian",
-        "Cambodian",
-        "Laotian",
-        "Jamaican",
-        "Cuban",
-        "Haitian"
+        "Rice",
+        "Noodles",
+        "Malaysian",
+        "Soup",
+        "Chicken",
+        "Italian",
+        "Dessert",
+        "Healthy",
+        "Dim Sum",
     )
 
     val sortedCuisineList = cuisineList.sortedBy { it.firstOrNull() }

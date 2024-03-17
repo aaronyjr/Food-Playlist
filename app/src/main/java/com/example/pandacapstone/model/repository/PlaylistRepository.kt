@@ -6,8 +6,14 @@ import com.example.pandacapstone.model.service.RetrofitInstance
 class PlaylistRepository {
     private val playlistService = RetrofitInstance.playlistService
 
-    suspend fun getRestaurants(): List<Playlist> {
-        return playlistService.getRestaurant()
+    suspend fun getRestaurants(
+        cuisine: String,
+        dietType: String,
+        minPrice: Float,
+        maxPrice: Float,
+        rating: Float,
+    ): List<Playlist> {
+        return playlistService.getFiltered(cuisine, dietType, minPrice, maxPrice, rating)
     }
 
 //    suspend fun getFiltered(gender: String): List<Playlist> {
