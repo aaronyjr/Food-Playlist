@@ -66,6 +66,7 @@ fun GeneratedPlaylistScreen(
         )
     }
 
+    Log.i("vegetarian", "${userPreferences.dietType}")
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -125,7 +126,7 @@ fun GeneratedPlaylistScreen(
                             contentDescription = null,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(200.dp),
+                                .height(150.dp),
                             contentScale = ContentScale.Crop,
                         )
 

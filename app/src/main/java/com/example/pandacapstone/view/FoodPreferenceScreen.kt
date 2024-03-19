@@ -1,5 +1,6 @@
 package com.example.pandacapstone.view
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -110,7 +111,12 @@ fun ColumnItem(
             .clickable {
                 isSelected = !isSelected
                 if (isSelected) {
-                    selectedCuisine.value = foodItem
+                    Log.i("selectedCuisine", "${selectedCuisine.value}")
+                    if (selectedCuisine.value == "Anything") {
+                        selectedCuisine.value = ""
+                    } else {
+                        selectedCuisine.value = foodItem
+                    }
                     onClick()
                 } else {
                     selectedCuisine.value = null
@@ -202,22 +208,26 @@ fun CuisineListEmptyState(
 
 fun generateCuisineList(): List<String> {
     val cuisineList = listOf(
+        "Anything",
+        "American",
+        "Mexican",
         "Chinese",
         "Indian",
         "Japanese",
         "Korean",
         "Thai",
+        "Vietnamese",
         "Indonesian",
+        "Italian",
+        "Western",
         "Singaporean",
         "Rice",
         "Noodles",
-        "Malaysian",
         "Soup",
-        "Chicken",
-        "Italian",
         "Dessert",
         "Healthy",
-        "Dim Sum",
+        "Drink",
+        "Vegan",
     )
 
     val sortedCuisineList = cuisineList.sortedBy { it.firstOrNull() }
