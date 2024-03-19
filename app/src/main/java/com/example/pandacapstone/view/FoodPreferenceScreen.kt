@@ -1,6 +1,5 @@
 package com.example.pandacapstone.view
 
-import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -111,19 +110,18 @@ fun ColumnItem(
             .clickable {
                 isSelected = !isSelected
                 if (isSelected) {
-                    Log.i("selectedCuisine", "${selectedCuisine.value}")
-                    if (selectedCuisine.value == "Anything") {
-                        selectedCuisine.value = ""
-                    } else {
-                        selectedCuisine.value = foodItem
-                    }
+                    selectedCuisine.value = foodItem
                     onClick()
                 } else {
                     selectedCuisine.value = null
                 }
             }
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(text = foodItem, modifier = Modifier.padding(top = 16.dp, bottom = 16.dp), fontSize = 14.sp)
             Spacer(modifier = Modifier.width(4.dp))
             if (isSelected) {
@@ -234,5 +232,3 @@ fun generateCuisineList(): List<String> {
 
     return sortedCuisineList
 }
-
-

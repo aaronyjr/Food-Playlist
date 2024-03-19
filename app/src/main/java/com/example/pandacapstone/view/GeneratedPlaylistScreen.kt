@@ -88,7 +88,7 @@ fun GeneratedPlaylistScreen(
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(250.dp)
+                        .height(200.dp)
                 )
                 Text(
                     text = userPreferences.foodPreference,
@@ -126,7 +126,7 @@ fun GeneratedPlaylistScreen(
                             contentDescription = null,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(150.dp),
+                                .height(160.dp),
                             contentScale = ContentScale.Crop,
                         )
 
@@ -135,7 +135,7 @@ fun GeneratedPlaylistScreen(
 
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(start = 10.dp, end = 10.dp),
+                            modifier = Modifier.padding(top =10.dp, start = 10.dp, end = 10.dp),
                         ) {
                             Column(Modifier.padding(end = 8.dp)) {
                                 OutlinedTextField(

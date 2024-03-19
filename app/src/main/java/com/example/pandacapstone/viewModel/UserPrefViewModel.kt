@@ -30,7 +30,7 @@ class UserPrefViewModel : ViewModel() {
     private val _selectedDays = mutableStateOf<Int?>(null)
     val selectedDays: MutableState<Int?> = _selectedDays
 
-    private val _priceRange = MutableStateFlow(10f..30f)
+    private val _priceRange = MutableStateFlow(5f..20f)
     val priceRange: StateFlow<ClosedFloatingPointRange<Float>> get() = _priceRange
 
     fun setDietType(dietType: String) {
