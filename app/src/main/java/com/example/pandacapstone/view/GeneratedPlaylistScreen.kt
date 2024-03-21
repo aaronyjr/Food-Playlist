@@ -6,7 +6,17 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
@@ -43,6 +53,10 @@ import com.example.pandacapstone.viewModel.PlaylistViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+data class CreatePlaylistDishRequest(
+    val date_to_be_delivered: String
+)
+
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,16 +72,10 @@ fun GeneratedPlaylistScreen(
     LaunchedEffect(Unit) {
         Log.i("vegetarian", "${userPreferences.deliveryDateJson}")
 
-        val list = listOf("""{"date_to_be_delivered":"24 Mar, 12:00 pm - 12:15pm"},
-            {"date_to_be_delivered":"31 Mar, 12:00 pm - 12:15pm"},
-            {"date_to_be_delivered":"7 Apr, 12:00 pm - 12:15pm"},
-            {"date_to_be_delivered":"14 Apr, 12:00 pm - 12:15pm"},
-            {"date_to_be_delivered":"21 Apr, 12:00 pm - 12:15pm"},
-            {"date_to_be_delivered":"28 Apr, 12:00 pm - 12:15pm"},
-            {"date_to_be_delivered":"5 May, 12:00 pm - 12:15pm"},
-            {"date_to_be_delivered":"12 May, 12:00 pm - 12:15pm"},
-            {"date_to_be_delivered":"19 May, 12:00 pm - 12:15pm"},
-            {"date_to_be_delivered":"26 May, 12:00 pm - 12:15 pm"}""")
+        val list = listOf(
+            CreatePlaylistDishRequest("24 Mar, 12:00 pm - 12:15pm"),
+            CreatePlaylistDishRequest("31 Mar, 12:00 pm - 12:15pm")
+        )
 
         viewModel.fetchPlaylist(
             list,

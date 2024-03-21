@@ -3,19 +3,20 @@ package com.example.pandacapstone.model.repository
 import com.example.pandacapstone.model.CompletedPlaylist
 import com.example.pandacapstone.model.Playlist
 import com.example.pandacapstone.model.service.RetrofitInstance
+import com.example.pandacapstone.view.CreatePlaylistDishRequest
 
 class PlaylistRepository {
     private val playlistService = RetrofitInstance.playlistService
 
     suspend fun getRestaurants(
-        deliveryDate: List<String>,
+        deliveryDate: List<CreatePlaylistDishRequest>,
         cuisine: String,
         dietType: String,
         minPrice: Float,
         maxPrice: Float,
         rating: Float,
 
-    ): List<Playlist> {
+        ): List<Playlist> {
         return playlistService.getFiltered(deliveryDate, cuisine, dietType, minPrice, maxPrice, rating)
     }
 

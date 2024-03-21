@@ -2,6 +2,7 @@ package com.example.pandacapstone.model.service
 
 import com.example.pandacapstone.model.CompletedPlaylist
 import com.example.pandacapstone.model.Playlist
+import com.example.pandacapstone.view.CreatePlaylistDishRequest
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -13,7 +14,7 @@ interface PlaylistService {
 
     @POST("dishes/{cuisinename}/{type}/{smallnum}/{bignum}/{rating}")
     suspend fun getFiltered(
-        @Body body: List<String>,
+        @Body body: List<CreatePlaylistDishRequest>,
         @Path("cuisinename") cuisine: String,
         @Path("type") dietType: String,
         @Path("smallnum") minPrice: Float,
