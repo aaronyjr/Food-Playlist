@@ -56,13 +56,27 @@ fun GeneratedPlaylistScreen(
     var imageBanner by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
+        Log.i("vegetarian", "${userPreferences.deliveryDateJson}")
+
+        val list = listOf("""{"date_to_be_delivered":"24 Mar, 12:00 pm - 12:15pm"},
+            {"date_to_be_delivered":"31 Mar, 12:00 pm - 12:15pm"},
+            {"date_to_be_delivered":"7 Apr, 12:00 pm - 12:15pm"},
+            {"date_to_be_delivered":"14 Apr, 12:00 pm - 12:15pm"},
+            {"date_to_be_delivered":"21 Apr, 12:00 pm - 12:15pm"},
+            {"date_to_be_delivered":"28 Apr, 12:00 pm - 12:15pm"},
+            {"date_to_be_delivered":"5 May, 12:00 pm - 12:15pm"},
+            {"date_to_be_delivered":"12 May, 12:00 pm - 12:15pm"},
+            {"date_to_be_delivered":"19 May, 12:00 pm - 12:15pm"},
+            {"date_to_be_delivered":"26 May, 12:00 pm - 12:15 pm"}""")
+
         viewModel.fetchPlaylist(
+            list,
             deliveryDate,
             userPreferences.foodPreference,
             userPreferences.dietType,
             userPreferences.minPrice.toFloat(),
             userPreferences.maxPrice.toFloat(),
-            userPreferences.rating.toFloat()
+            userPreferences.rating.toFloat(),
         )
     }
 

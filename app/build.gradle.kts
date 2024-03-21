@@ -40,6 +40,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -87,6 +88,7 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 }
 
 kapt {

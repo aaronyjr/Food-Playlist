@@ -1,7 +1,6 @@
 package com.example.pandacapstone.model
 
 import com.google.gson.annotations.SerializedName
-import kotlinx.serialization.Serializable
 
 data class Playlist(
     @SerializedName("id")
@@ -50,6 +49,5 @@ data class CompletedPlaylist(
 
 )
 
-@Serializable
 data class DeliveryDate(val dateTobeDelivered: List<String>)
 

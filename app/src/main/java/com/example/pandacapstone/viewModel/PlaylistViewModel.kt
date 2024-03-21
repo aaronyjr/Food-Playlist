@@ -17,6 +17,7 @@ class PlaylistViewModel() : ViewModel() {
     val playlist: LiveData<List<Pair<Playlist, String>>> = _playlist
 
     fun fetchPlaylist(
+        deliveryDateJson: List<String>,
         deliveryDate: List<String>,
         cuisine: String,
         dietType: String,
@@ -26,7 +27,7 @@ class PlaylistViewModel() : ViewModel() {
     ) {
         viewModelScope.launch {
             try {
-                val genPlaylist = repository.getRestaurants(cuisine, dietType, minPrice, maxPrice, rating)
+                val genPlaylist = repository.getRestaurants(deliveryDateJson, cuisine, dietType, minPrice, maxPrice, rating)
                 Log.i("playlist", genPlaylist.toString())
                 var combined: List<Pair<Playlist, String>> = genPlaylist.zip(deliveryDate)
                 _playlist.value = combined
