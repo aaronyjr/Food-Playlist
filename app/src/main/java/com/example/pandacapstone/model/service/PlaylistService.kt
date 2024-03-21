@@ -1,8 +1,12 @@
 package com.example.pandacapstone.model.service
 
 import com.example.pandacapstone.model.CompletedPlaylist
+import com.example.pandacapstone.model.DeliveryDate
 import com.example.pandacapstone.model.Playlist
+import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface PlaylistService {
@@ -20,4 +24,9 @@ interface PlaylistService {
 
     @GET("playlists")
     suspend fun getCompletedPlaylists(): List<CompletedPlaylist>
+
+    @POST("playlistdishes")
+    fun postDeliveryDate(
+        @Body requestBody: String
+    ): Call<DeliveryDate>
 }

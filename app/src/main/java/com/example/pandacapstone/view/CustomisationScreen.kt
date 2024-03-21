@@ -18,7 +18,6 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.SliderDefaults
@@ -41,18 +40,12 @@ import com.example.pandacapstone.R
 import com.example.pandacapstone.viewModel.UserPrefViewModel
 import kotlin.math.roundToInt
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomisationScreen(onNextButtonClicked: (Int, Int, Int) -> Unit) {
-//    var quantity = rememberSaveable { mutableIntStateOf(1) }
-//    var mealOptions: List<String> = listOf("Yes", "No")
-//    var meal = rememberSaveable { mutableStateOf(mealOptions[0]) }
     var rating = rememberSaveable { mutableIntStateOf(3) }
 
     val userPrefViewModel: UserPrefViewModel = viewModel()
     var priceRange = userPrefViewModel.priceRange.collectAsState().value
-
 
     Column(
         modifier = Modifier
@@ -62,31 +55,6 @@ fun CustomisationScreen(onNextButtonClicked: (Int, Int, Int) -> Unit) {
     ) {
         Row() {
             Column(modifier = Modifier.padding(end = 16.dp)) {
-//                Row(
-//                    modifier = Modifier.height(52.dp),
-//                    verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    Text(
-//                        text = stringResource(id = R.string.txt_quantity),
-//                        style = TextStyle(fontSize = 18.sp),
-//                        modifier = Modifier.padding(end = 10.dp)
-//                    )
-//                }
-
-//                Spacer(modifier = Modifier.height(10.dp))
-//                Row(
-//                    modifier = Modifier.height(52.dp),
-//                    verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    Text(
-//                        text = stringResource(id = R.string.txt_meal),
-//                        style = TextStyle(fontSize = 18.sp),
-//                        modifier = Modifier.padding(end = 10.dp)
-//                    )
-//                }
-//
-//                Spacer(modifier = Modifier.height(10.dp))
-
                 Row(
                     modifier = Modifier.height(52.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -100,77 +68,6 @@ fun CustomisationScreen(onNextButtonClicked: (Int, Int, Int) -> Unit) {
             }
 
             Column {
-//                Row(verticalAlignment = Alignment.CenterVertically) {
-//                    IconButton(
-//                        onClick = { quantity.value -= 1 },
-//                        colors = IconButtonDefaults.iconButtonColors(
-//                            contentColor = colorResource(id = R.color.party_pink),
-//                            disabledContainerColor = Color.Transparent,
-//                            disabledContentColor = Color.LightGray
-//                        ),
-//                        enabled = quantity.value >= 2,
-//                      modifier = Modifier
-//                            .border(1.dp, Color.LightGray, shape = RoundedCornerShape(10.dp))
-//                            .size(width = 40.dp, height = 40.dp)
-//                    ) {
-//                        Icon(
-//                            imageVector = Icons.Default.Remove,
-//                            contentDescription = "Minus",
-//                            modifier = Modifier.size(width = 20.dp, height = 20.dp)
-//                        )
-//                    }
-//
-//                    Text(text = quantity.value.toString(), modifier = Modifier.padding(16.dp))
-//
-//                    IconButton(
-//                        onClick = { quantity.value += 1 },
-//                        colors = IconButtonDefaults.iconButtonColors(
-//                            contentColor = colorResource(id = R.color.party_pink)
-//                        ),
-//                        modifier = Modifier
-//                            .border(1.dp, Color.LightGray, shape = RoundedCornerShape(10.dp))
-//                            .size(width = 40.dp, height = 40.dp)
-//                    ) {
-//                        Icon(
-//                            imageVector = Icons.Default.Add,
-//                            contentDescription = "Add",
-//                            modifier = Modifier.size(width = 20.dp, height = 20.dp)
-//                        )
-//                    }
-//                }
-//
-//                Spacer(modifier = Modifier.height(10.dp))
-//
-//                Row(
-//                    modifier = Modifier.height(52.dp),
-//                ) {
-//                    mealOptions.forEach { label ->
-//                        Row(
-//                            modifier = Modifier
-//                                .height(56.dp)
-//                                .selectable(
-//                                    selected = (meal.value == label),
-//                                    onClick = { meal.value = label },
-//                                    role = Role.RadioButton
-//                                )
-//                                .padding(end = 16.dp),
-//                            verticalAlignment = Alignment.CenterVertically
-//                        ) {
-//                            RadioButton(
-//                                modifier = Modifier.padding(end = 6.dp),
-//                                selected = (meal.value == label),
-//                                onClick = null, // null recommended for accessibility with screen readers
-//                                colors = RadioButtonDefaults.colors(
-//                                    selectedColor = colorResource(id = R.color.party_pink),
-//                                )
-//                            )
-//                            Text(text = label)
-//                        }
-//                    }
-//                }
-//
-//                Spacer(modifier = Modifier.height(10.dp))
-
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.height(56.dp),
@@ -236,7 +133,7 @@ fun CustomisationScreen(onNextButtonClicked: (Int, Int, Int) -> Unit) {
         Spacer(modifier = Modifier.weight(1f))
 
         Button(
-            onClick = { onNextButtonClicked(rating.value, priceRange.start.roundToInt(), priceRange.endInclusive.roundToInt())},
+            onClick = { onNextButtonClicked(rating.value, priceRange.start.roundToInt(), priceRange.endInclusive.roundToInt()) },
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(
                     id = R.color.party_pink
@@ -255,8 +152,3 @@ fun CustomisationScreen(onNextButtonClicked: (Int, Int, Int) -> Unit) {
         }
     }
 }
-
-
-
-
-

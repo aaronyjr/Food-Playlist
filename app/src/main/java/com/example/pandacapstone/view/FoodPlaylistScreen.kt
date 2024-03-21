@@ -44,6 +44,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.pandacapstone.R
 import com.example.pandacapstone.viewModel.HomeScreenViewModel
+import com.example.pandacapstone.model.repository.PlaylistRepository
 import com.example.pandacapstone.viewModel.PlaylistViewModel
 import com.example.pandacapstone.viewModel.UserPrefViewModel
 import com.maryamrzdh.stepper.Stepper
@@ -169,6 +170,8 @@ fun FoodPlaylistApp(
             }
             val userPrefState by userPrefViewModel.userPrefState.collectAsState()
             val generatedPlaylistVM: PlaylistViewModel = viewModel()
+
+            val repository = PlaylistRepository()
 
             NavHost(
                 navController = navController,

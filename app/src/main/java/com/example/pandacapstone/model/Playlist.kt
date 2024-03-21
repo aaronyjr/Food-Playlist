@@ -1,10 +1,14 @@
 package com.example.pandacapstone.model
 
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
 data class Playlist(
-    @SerializedName("restaurant_id")
+    @SerializedName("id")
     var id: Int = 0,
+
+    @SerializedName("restaurant_id")
+    var restaurantId: Int = 0,
 
     @SerializedName("name")
     var name: String = "",
@@ -45,3 +49,7 @@ data class CompletedPlaylist(
     var createdOn: Boolean
 
 )
+
+@Serializable
+data class DeliveryDate(val dateTobeDelivered: List<String>)
+

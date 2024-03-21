@@ -67,6 +67,8 @@ fun GeneratedPlaylistScreen(
     }
 
     Log.i("vegetarian", "${userPreferences.dietType}")
+    Log.i("vegetarian", "${userPreferences.deliveryDateJson}")
+
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }

@@ -1,6 +1,7 @@
 package com.example.pandacapstone.viewModel
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -8,7 +9,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.pandacapstone.model.UserPreferences
+import com.example.pandacapstone.model.repository.PlaylistRepository
 import com.example.pandacapstone.view.DietType
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,6 +36,12 @@ class UserPrefViewModel : ViewModel() {
     private val _priceRange = MutableStateFlow(5f..20f)
     val priceRange: StateFlow<ClosedFloatingPointRange<Float>> get() = _priceRange
 
+    private val _deliveryDateJson = mutableStateOf<String>("")
+    val deliveryDateJson: MutableState<String> get() = _deliveryDateJson
+
+
+    private val repository = PlaylistRepository()
+
     fun setDietType(dietType: String) {
         userPref.update { currentState ->
             currentState.copy(
@@ -40,6 +49,15 @@ class UserPrefViewModel : ViewModel() {
             )
         }
     }
+
+    fun setDeliveryDateJson(deliveryDateJson: String) {
+        userPref.update { currentState ->
+            currentState.copy(
+                deliveryDateJson = deliveryDateJson
+            )
+        }
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun setFreqTime(day: String, deliveryTime: String, nWeek: String) {
@@ -61,6 +79,16 @@ class UserPrefViewModel : ViewModel() {
             ld = everynWeek
             val formatted = everynWeek.format(DateTimeFormatter.ofPattern("d MMM"))
             deliveryDayList.add("$formatted, $deliveryTime")
+
+            val jsonList = deliveryDayList.map { date -> mapOf("date_to_be_delivered" to date) }
+            val gson = Gson()
+            val jsonString = gson.toJson(jsonList)
+
+            repository.postDeliveryDate(jsonString)
+
+//            setDeliveryDateJson(jsonString)
+
+            Log.i("deliverydatejson", jsonString)
         }
 
         userPref.update { currentState ->
