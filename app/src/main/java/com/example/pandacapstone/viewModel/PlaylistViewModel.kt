@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.pandacapstone.model.Playlist
 import com.example.pandacapstone.model.repository.PlaylistRepository
 import kotlinx.coroutines.launch
+import java.net.ConnectException
 
 class PlaylistViewModel() : ViewModel() {
     private val repository = PlaylistRepository()
@@ -29,9 +30,10 @@ class PlaylistViewModel() : ViewModel() {
                 Log.i("playlist", genPlaylist.toString())
                 var combined: List<Pair<Playlist, String>> = genPlaylist.zip(deliveryDate)
                 _playlist.value = combined
-
             } catch (e: IllegalStateException) {
                 Log.e("ViewModel Error", e.toString())
+            } catch (e: ConnectException) {
+                Log.e("No database loaded", e.toString())
             }
         }
     }

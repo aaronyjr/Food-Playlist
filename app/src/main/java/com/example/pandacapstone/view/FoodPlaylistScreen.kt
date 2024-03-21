@@ -43,6 +43,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.pandacapstone.R
+import com.example.pandacapstone.viewModel.HomeScreenViewModel
 import com.example.pandacapstone.viewModel.PlaylistViewModel
 import com.example.pandacapstone.viewModel.UserPrefViewModel
 import com.maryamrzdh.stepper.Stepper
@@ -106,7 +107,8 @@ fun AppBar(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FoodPlaylistApp(
-    viewModel: UserPrefViewModel = viewModel(),
+    userPrefViewModel: UserPrefViewModel = viewModel(),
+    homeScreenViewModel: HomeScreenViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -163,9 +165,8 @@ fun FoodPlaylistApp(
 
                 else -> null
             }
-            val userPrefState by viewModel.userPrefState.collectAsState()
+            val userPrefState by userPrefViewModel.userPrefState.collectAsState()
             val generatedPlaylistVM: PlaylistViewModel = viewModel()
-
 
             NavHost(
                 navController = navController,
@@ -174,9 +175,9 @@ fun FoodPlaylistApp(
                 composable(route = FoodPlaylistScreen.Home.name) {
                     HomeScreen(onNextButtonClicked = {
                         navController.navigate(
-                            FoodPlaylistScreen.Start.name
+                            FoodPlaylistScreen.Start.name,
                         )
-                    })
+                    }, viewModel = homeScreenViewModel)
                 }
                 composable(route = FoodPlaylistScreen.Start.name) {
                     PlaylistIntro(onNextButtonClicked = {
@@ -188,7 +189,7 @@ fun FoodPlaylistApp(
                 composable(route = FoodPlaylistScreen.DietPreference.name) {
                     DietPreferenceScreen(
                         onNextButtonClicked = {
-                            viewModel.setDietType(it)
+                            userPrefViewModel.setDietType(it)
                             navController.navigate(FoodPlaylistScreen.FoodPreference.name)
                         },
                     )
@@ -196,7 +197,7 @@ fun FoodPlaylistApp(
                 composable(route = FoodPlaylistScreen.FoodPreference.name) {
                     FoodPreferenceScreen(
                         onNextButtonClicked = {
-                            viewModel.setFoodPref(it)
+                            userPrefViewModel.setFoodPref(it)
                             navController.navigate(
                                 FoodPlaylistScreen.FreqTimePreference.name
                             )
@@ -206,17 +207,19 @@ fun FoodPlaylistApp(
                 composable(route = FoodPlaylistScreen.FreqTimePreference.name) {
                     FreqTimePreferenceScreen(
                         onNextButtonClicked = { deliveryTime: String, deliveryDate: String, nWeek: String ->
-                            viewModel.setFreqTime(deliveryTime, deliveryDate, nWeek)
+                            userPrefViewModel.setFreqTime(deliveryTime, deliveryDate, nWeek)
                             navController.navigate(
                                 FoodPlaylistScreen.Customisation.name
                             )
                         }
-                    )
-                }
+                )
+            }
                 composable(route = FoodPlaylistScreen.Customisation.name) {
                     CustomisationScreen(
-                        onNextButtonClicked = {rating: Int, minPrice: Int, maxPrice: Int ->
-                            viewModel.setCustomisation(rating, minPrice, maxPrice)
+                        onNextButtonClicked = { rating: Int, minPrice: Int, maxPrice: Int ->
+                            userPrefViewModel.setCustomisation(rating, minPrice, maxPrice)
+                            homeScreenViewModel.fetchCompletedPlaylists()
+                            homeScreenViewModel._viewState.value = HomeScreenViewModel.HomeScreenState.Loaded
                             navController.navigate(
                                 FoodPlaylistScreen.Api.name
                             )

@@ -24,3 +24,24 @@ data class Playlist(
     @SerializedName("image_url")
     var imageUrl: String = "0",
 )
+
+data class CompletedPlaylist(
+    @SerializedName("id")
+    var id: Int = 0,
+
+    @SerializedName("name")
+    var playlistName: String = "",
+
+    @SerializedName("image")
+    var image: String,
+
+    @SerializedName("food_items")
+    var foodItems: String,
+
+    @SerializedName("is_active")
+    var isActive: Boolean,
+
+    @SerializedName("created_on")
+    var createdOn: Boolean
+
+)

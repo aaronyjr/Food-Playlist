@@ -4,55 +4,54 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.pandacapstone.R
-
+import com.example.pandacapstone.viewModel.HomeScreenViewModel
 
 @Composable
-fun HomeScreen(
+fun HomeScreen (
     onNextButtonClicked: () -> Unit = {},
-
+    viewModel: HomeScreenViewModel,
     ) {
-
-    val list = listOf(
-        "Item 1",
-        "Waichin"
-    )
-
+    val viewState by viewModel.viewState.collectAsState()
 
     Column {
-        Text(text = "Upcoming deliveries",
+        Text(
+            text = "Upcoming deliveries",
             modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
-            style = TextStyle( fontSize = 24.sp,
-            fontWeight = FontWeight.Bold)
+            style = TextStyle(
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
+            )
         )
 
-        Text(text = "My playlists",
+        Text(
+            text = "My playlists",
             modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
-            style = TextStyle( fontSize = 24.sp,
-                fontWeight = FontWeight.Bold)
+            style = TextStyle(
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
+            )
         )
 
-        Row{
+        Row {
             Text(
                 text = "No more meal dilemmas! Share your preferences, and " +
                     "we'll create a personalised restaurant playlist, just for you!",
@@ -69,28 +68,34 @@ fun HomeScreen(
                     tint = colorResource(id = R.color.party_pink)
                 )
             }
-
         }
+        when (viewState) {
+            is HomeScreenViewModel.HomeScreenState.Empty ->
+                Image(painter = painterResource(id = R.drawable.burger_example), contentDescription = null)
 
-        LazyRow {
-            items(list) { item ->
-                Image(
-                    painter = painterResource(
-                        id = R.drawable.burger_example
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier.size(180.dp, 180.dp),
-                    contentScale = ContentScale.Crop
-                )
-                Spacer(modifier = Modifier.size(8.dp))
+            is HomeScreenViewModel.HomeScreenState.Loaded -> {
+                Column {
+                    PlaylistContent(viewModel = viewModel)
+                }
             }
         }
     }
 }
 
-
-@Preview(showBackground = true)
 @Composable
-fun HomeScreenpreview() {
-    HomeScreen()
+fun PlaylistContent(
+    viewModel: HomeScreenViewModel
+) {
+    val completedPlaylists by viewModel.completedPlaylists.collectAsState()
+
+    AsyncImage(
+        model = completedPlaylists[0].image,
+        contentDescription = null
+    )
 }
+
+//@Preview(showBackground = true)
+//@Composable
+//fun HomeScreenpreview() {
+//    HomeScreen(viewState = )
+//}
