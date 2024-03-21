@@ -117,12 +117,14 @@ fun FoodPlaylistApp(
     )
 
     Column {
-        AppBar(
-            canNavigateBack = navController.previousBackStackEntry != null,
-            navigateUp = { navController.navigateUp() },
-            currentScreen = currentScreen,
-            navController = navController,
-        )
+        if (currentScreen != FoodPlaylistScreen.Home) {
+            AppBar(
+                canNavigateBack = navController.previousBackStackEntry != null,
+                navigateUp = { navController.navigateUp() },
+                currentScreen = currentScreen,
+                navController = navController,
+            )
+        }
         Column(
             modifier = if (currentScreen == FoodPlaylistScreen.Start || currentScreen == FoodPlaylistScreen.Api) Modifier
                 .padding(0.dp, 0.dp)
