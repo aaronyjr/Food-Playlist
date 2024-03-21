@@ -1,22 +1,19 @@
 package com.example.pandacapstone.viewModel
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.pandacapstone.model.CreatePlaylistDishRequest
 import com.example.pandacapstone.model.UserPreferences
 import com.example.pandacapstone.view.DietType
-import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody.Companion.toRequestBody
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -49,47 +46,25 @@ class UserPrefViewModel : ViewModel() {
         }
     }
 
-    fun setDeliveryDateJson(deliveryDate: List<String>) {
-        userPref.update { currentState ->
-            currentState.copy(
-                deliveryDate = deliveryDate
-            )
-        }
-    }
-
-
     @RequiresApi(Build.VERSION_CODES.O)
     fun setFreqTime(day: String, deliveryTime: String, nWeek: String) {
-        val deliveryDayList = mutableListOf<String>()
-
         var ld: LocalDate = LocalDate.of(LocalDate.now().year, LocalDate.now().month, LocalDate.now().dayOfMonth)
         var nextDate: LocalDate
         var everynWeek: LocalDate
+        val deliveryDateList: MutableList<CreatePlaylistDishRequest> = mutableListOf()
 
         for (i in 1..9) {
             nextDate = ld.with(TemporalAdjusters.nextOrSame(DayOfWeek.valueOf(day.uppercase())))
             when (i) {
                 1 -> {
                     val formatted = nextDate.format(DateTimeFormatter.ofPattern("d MMM"))
-                    deliveryDayList.add("$formatted, $deliveryTime")
+                    deliveryDateList.add(CreatePlaylistDishRequest("$formatted, $deliveryTime"))
                 }
             }
             everynWeek = nextDate.plusWeeks(nWeek.toLong())
             ld = everynWeek
             val formatted = everynWeek.format(DateTimeFormatter.ofPattern("d MMM"))
-            deliveryDayList.add("$formatted, $deliveryTime")
-
-            val json = "{\"key\": \"value\"}"
-            val requestBody = json.toRequestBody("application/json".toMediaType())
-
-            val jsonList = deliveryDayList.map { date -> mapOf("date_to_be_delivered" to date) }
-            val gson = Gson()
-            val jsonString = gson.toJson(jsonList)
-
-
-            setDeliveryDateJson(deliveryDayList)
-
-            Log.i("deliverydatejson", jsonString)
+            deliveryDateList.add(CreatePlaylistDishRequest("$formatted, $deliveryTime"))
         }
 
         userPref.update { currentState ->
@@ -100,7 +75,7 @@ class UserPrefViewModel : ViewModel() {
 
         userPref.update { currentState ->
             currentState.copy(
-                deliveryDate = deliveryDayList
+                deliveryDate = deliveryDateList
             )
         }
 

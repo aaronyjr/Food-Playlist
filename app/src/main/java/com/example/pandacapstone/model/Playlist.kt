@@ -18,7 +18,7 @@ data class Playlist(
     @SerializedName("cuisine")
     var cuisine: String = "",
 
-    @SerializedName("restaurant_name")
+    @SerializedName("name_2")
     var restaurantName: String = "",
 
     @SerializedName("rating")
@@ -26,6 +26,12 @@ data class Playlist(
 
     @SerializedName("image_url")
     var imageUrl: String = "0",
+
+    @SerializedName("date_to_be_delivered")
+    var dateToBeDelivered: String = "",
+
+    @SerializedName("number_of_reviews")
+    var numOfReviews: Int = 0
 )
 
 data class CompletedPlaylist(
@@ -49,5 +55,6 @@ data class CompletedPlaylist(
 
 )
 
-data class DeliveryDate(val dateTobeDelivered: List<String>)
-
+data class CreatePlaylistDishRequest(
+    val date_to_be_delivered: String
+)

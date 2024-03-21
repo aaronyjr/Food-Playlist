@@ -5,21 +5,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pandacapstone.model.CreatePlaylistDishRequest
 import com.example.pandacapstone.model.Playlist
 import com.example.pandacapstone.model.repository.PlaylistRepository
-import com.example.pandacapstone.view.CreatePlaylistDishRequest
 import kotlinx.coroutines.launch
 import java.net.ConnectException
 
 class PlaylistViewModel() : ViewModel() {
     private val repository = PlaylistRepository()
 
-    private val _playlist = MutableLiveData<List<Pair<Playlist, String>>>()
-    val playlist: LiveData<List<Pair<Playlist, String>>> = _playlist
+    private val _playlist = MutableLiveData<List<Playlist>>()
+    val playlist: LiveData<List<Playlist>> = _playlist
 
     fun fetchPlaylist(
         deliveryDateJson: List<CreatePlaylistDishRequest>,
-        deliveryDate: List<String>,
         cuisine: String,
         dietType: String,
         minPrice: Float,
@@ -29,9 +28,7 @@ class PlaylistViewModel() : ViewModel() {
         viewModelScope.launch {
             try {
                 val genPlaylist = repository.getRestaurants(deliveryDateJson, cuisine, dietType, minPrice, maxPrice, rating)
-                Log.i("playlist", genPlaylist.toString())
-                var combined: List<Pair<Playlist, String>> = genPlaylist.zip(deliveryDate)
-                _playlist.value = combined
+                _playlist.value = genPlaylist
             } catch (e: IllegalStateException) {
                 Log.e("ViewModel Error", e.toString())
             } catch (e: ConnectException) {
@@ -39,19 +36,4 @@ class PlaylistViewModel() : ViewModel() {
             }
         }
     }
-
-//    fun fetchFiltered(gender: String) {
-//        viewModelScope.launch {
-//            try {
-//                val genPlaylist = repository.getFiltered(gender)
-//                Log.i("foodpanda", genPlaylist.toString())
-//                _playlist.value = genPlaylist
-//                Log.i("foodpanda", "success")
-//                Log.i("foodpanda", _playlist.value.toString())
-//
-//            } catch (e: IllegalStateException) {
-//                Log.e("ViewModel Error", e.toString())
-//            }
-//        }
-//    }
 }

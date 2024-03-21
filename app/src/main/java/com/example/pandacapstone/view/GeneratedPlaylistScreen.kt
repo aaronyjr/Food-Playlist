@@ -53,10 +53,6 @@ import com.example.pandacapstone.viewModel.PlaylistViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-data class CreatePlaylistDishRequest(
-    val date_to_be_delivered: String
-)
-
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,30 +62,19 @@ fun GeneratedPlaylistScreen(
 ) {
 
     val playlists by viewModel.playlist.observeAsState(emptyList())
-    val deliveryDate = userPreferences.deliveryDate
     var imageBanner by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
-        Log.i("vegetarian", "${userPreferences.deliveryDateJson}")
-
-        val list = listOf(
-            CreatePlaylistDishRequest("24 Mar, 12:00 pm - 12:15pm"),
-            CreatePlaylistDishRequest("31 Mar, 12:00 pm - 12:15pm")
-        )
-
         viewModel.fetchPlaylist(
-            list,
-            deliveryDate,
+            userPreferences.deliveryDate,
             userPreferences.foodPreference,
             userPreferences.dietType,
             userPreferences.minPrice.toFloat(),
             userPreferences.maxPrice.toFloat(),
             userPreferences.rating.toFloat(),
         )
-    }
 
-    Log.i("vegetarian", "${userPreferences.dietType}")
-    Log.i("vegetarian", "${userPreferences.deliveryDateJson}")
+    }
 
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -103,7 +88,7 @@ fun GeneratedPlaylistScreen(
             {
                 for ((index, imageUrl) in playlists.withIndex()) {
                     if (index == 0) {
-                        imageBanner = imageUrl.first.imageUrl
+                        imageBanner = imageUrl.imageUrl
                     }
                 }
                 AsyncImage(
@@ -146,7 +131,7 @@ fun GeneratedPlaylistScreen(
                 ) {
                     Column(modifier = Modifier.padding(bottom = 15.dp)) {
                         Image(
-                            painter = rememberAsyncImagePainter(model = item.first.imageUrl),
+                            painter = rememberAsyncImagePainter(model = item.imageUrl),
                             contentDescription = null,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -194,15 +179,15 @@ fun GeneratedPlaylistScreen(
                                             horizontalArrangement = Arrangement.SpaceBetween,
                                             modifier = Modifier.fillMaxWidth()
                                         ) {
-                                            Text(text = item.first.restaurantName, fontWeight = FontWeight.Bold)
+                                            Text(text = item.restaurantName, fontWeight = FontWeight.Bold)
                                             Row(verticalAlignment = Alignment.CenterVertically) {
                                                 Image(
                                                     painter = painterResource(id = R.drawable.rating_icon),
                                                     contentDescription = "Rating",
-                                                    modifier = Modifier.size(30.dp)
+                                                    modifier = Modifier.size(26.dp)
                                                 )
-                                                Text(text = item.first.rating.toString())
-                                                Text("(100+)")
+                                                Text(text = item.rating.toString(), style = TextStyle(fontSize = 13.sp))
+                                                Text(text = " ("+ item.numOfReviews.toString() + ")", style = TextStyle(fontSize = 13.sp))
                                             }
                                         }
                                         Row(
@@ -212,12 +197,12 @@ fun GeneratedPlaylistScreen(
                                         ) {
                                             Column() {
                                                 Text(
-                                                    text = item.first.name,
+                                                    text = item.name,
                                                     color = Color.Gray
                                                 )
                                                 Text(
                                                     modifier = Modifier.padding(top = 4.dp),
-                                                    text = "Delivers on ${item.second}",
+                                                    text = "Delivers on ${item.dateToBeDelivered}",
                                                     color = colorResource(id = R.color.party_pink),
                                                     fontSize = 14.sp
                                                 )
@@ -229,7 +214,7 @@ fun GeneratedPlaylistScreen(
                                                     Modifier
                                                         .clickable {
                                                             showBottomSheet = true
-                                                            clicked = item.first
+                                                            clicked = item
                                                         }
                                                 )
                                             }

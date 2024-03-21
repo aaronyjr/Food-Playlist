@@ -9,8 +9,7 @@ data class UserPreferences(
     var rating: Int = 0,
     var minPrice: Int = 0,
     var maxPrice: Int = 0,
-    var deliveryDate: List<String> = listOf(),
-    var deliveryDateJson: String = "",
+    var deliveryDate: MutableList<CreatePlaylistDishRequest> = mutableListOf(),
 )
 
 
