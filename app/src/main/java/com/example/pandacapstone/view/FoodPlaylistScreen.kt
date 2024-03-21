@@ -218,8 +218,6 @@ fun FoodPlaylistApp(
                     CustomisationScreen(
                         onNextButtonClicked = { rating: Int, minPrice: Int, maxPrice: Int ->
                             userPrefViewModel.setCustomisation(rating, minPrice, maxPrice)
-                            homeScreenViewModel.fetchCompletedPlaylists()
-                            homeScreenViewModel._viewState.value = HomeScreenViewModel.HomeScreenState.Loaded
                             navController.navigate(
                                 FoodPlaylistScreen.Api.name
                             )
@@ -228,6 +226,7 @@ fun FoodPlaylistApp(
                 }
                 composable(route = FoodPlaylistScreen.Api.name) {
                     GeneratedPlaylistScreen(generatedPlaylistVM, userPrefState)
+                    homeScreenViewModel.fetchCompletedPlaylists()
                 }
             }
         }

@@ -22,10 +22,16 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
     private val _completedPlaylists: MutableStateFlow<List<CompletedPlaylist>> = MutableStateFlow(emptyList())
     val completedPlaylists: StateFlow<List<CompletedPlaylist>> = _completedPlaylists
 
+    init {
+        fetchCompletedPlaylists()
+    }
+
     fun fetchCompletedPlaylists() {
         viewModelScope.launch {
             try {
-                _completedPlaylists.value = repository.getCompletedPlaylists()
+                val completedPlaylist = repository.getCompletedPlaylists()
+                _completedPlaylists.value = completedPlaylist
+                _viewState.value = HomeScreenState.Loaded
                 Log.i("Successfully called API", _completedPlaylists.value.toString())
             } catch (e: IllegalStateException) {
                 Log.e("ViewModel Error", e.toString())

@@ -18,8 +18,7 @@ class PlaylistRepository {
     }
 
     suspend fun getCompletedPlaylists(): List<CompletedPlaylist> {
-        val test = playlistService.getCompletedPlaylists()
-        return test
+        return playlistService.getCompletedPlaylists()
     }
 
 //    suspend fun getFiltered(gender: String): List<Playlist> {

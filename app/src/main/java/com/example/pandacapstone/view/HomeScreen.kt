@@ -2,10 +2,14 @@ package com.example.pandacapstone.view
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
@@ -21,18 +25,18 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import com.example.pandacapstone.R
 import com.example.pandacapstone.viewModel.HomeScreenViewModel
 
 @Composable
-fun HomeScreen (
+fun HomeScreen(
     onNextButtonClicked: () -> Unit = {},
     viewModel: HomeScreenViewModel,
-    ) {
+) {
     val viewState by viewModel.viewState.collectAsState()
+    val completedPlaylist = viewModel.completedPlaylists.collectAsState()
 
-    Column {
+    Column() {
         Text(
             text = "Upcoming deliveries",
             modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
@@ -74,24 +78,31 @@ fun HomeScreen (
                 Image(painter = painterResource(id = R.drawable.burger_example), contentDescription = null)
 
             is HomeScreenViewModel.HomeScreenState.Loaded -> {
-                Column {
-                    PlaylistContent(viewModel = viewModel)
+                LazyVerticalGrid(columns = GridCells.FixedSize(180.dp)) {
+                    itemsIndexed(completedPlaylist.value) { index, playlist ->
+                        Box {
+                            Image(modifier = Modifier, painter = painterResource(id = R.drawable.burger_example), contentDescription = null)
+//                            AsyncImage(
+//                                model = playlist.image,
+//                                contentDescription = null,
+//                                contentScale = ContentScale.Crop,
+//                                modifier = Modifier
+//                                    .run {
+//                                        when {
+//                                            index % 2 == 0 -> this.padding(end = 8.dp)
+//                                            else -> this.padding(start = 8.dp)
+//                                        }
+//                                    }
+//                                    .padding(bottom = 16.dp)
+//                                    .size(160.dp)
+//                                    .clip(RoundedCornerShape(10.dp))
+//                            )
+                        }
+                    }
                 }
             }
         }
     }
-}
-
-@Composable
-fun PlaylistContent(
-    viewModel: HomeScreenViewModel
-) {
-    val completedPlaylists by viewModel.completedPlaylists.collectAsState()
-
-    AsyncImage(
-        model = completedPlaylists[0].image,
-        contentDescription = null
-    )
 }
 
 //@Preview(showBackground = true)
