@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
@@ -19,12 +20,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.pandacapstone.R
 import com.example.pandacapstone.viewModel.HomeScreenViewModel
 
@@ -78,25 +82,24 @@ fun HomeScreen(
                 Image(painter = painterResource(id = R.drawable.burger_example), contentDescription = null)
 
             is HomeScreenViewModel.HomeScreenState.Loaded -> {
-                LazyVerticalGrid(columns = GridCells.FixedSize(180.dp)) {
+                LazyVerticalGrid(columns = GridCells.Adaptive(180.dp)) {
                     itemsIndexed(completedPlaylist.value) { index, playlist ->
                         Box {
-                            Image(modifier = Modifier, painter = painterResource(id = R.drawable.burger_example), contentDescription = null)
-//                            AsyncImage(
-//                                model = playlist.image,
-//                                contentDescription = null,
-//                                contentScale = ContentScale.Crop,
-//                                modifier = Modifier
-//                                    .run {
-//                                        when {
-//                                            index % 2 == 0 -> this.padding(end = 8.dp)
-//                                            else -> this.padding(start = 8.dp)
-//                                        }
-//                                    }
-//                                    .padding(bottom = 16.dp)
-//                                    .size(160.dp)
-//                                    .clip(RoundedCornerShape(10.dp))
-//                            )
+                            AsyncImage(
+                                model = playlist.image,
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .run {
+                                        when {
+                                            index % 2 == 0 -> this.padding(end = 8.dp)
+                                            else -> this.padding(start = 8.dp)
+                                        }
+                                    }
+                                    .padding(bottom = 16.dp)
+                                    .size(180.dp)
+                                    .clip(RoundedCornerShape(10.dp))
+                            )
                         }
                     }
                 }
