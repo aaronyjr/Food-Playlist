@@ -49,7 +49,7 @@ fun HomeScreen(
     val completedPlaylist = viewModel.completedPlaylists.collectAsState()
     
     Column {
-        Spacer(modifier = Modifier.size(16.dp))
+        Spacer(modifier = Modifier.height(64.dp))
 
         Text(
             text = "Upcoming deliveries",
@@ -76,7 +76,7 @@ fun HomeScreen(
             }
         }
 
-        Spacer(modifier = Modifier.size(12.dp))
+        Spacer(modifier = Modifier.size(16.dp))
 
         Box {
             Column(modifier = Modifier.fillMaxWidth()) {
@@ -95,7 +95,7 @@ fun HomeScreen(
                         "we'll create a personalised restaurant playlist, just for you!",
                     modifier = Modifier.size(300.dp, 70.dp),
                     color = Color.Gray,
-                    style = TextStyle(fontSize = 15.sp)
+                    style = TextStyle(fontSize = 14.sp)
                 )
             }
 
