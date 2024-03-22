@@ -2,6 +2,7 @@ package com.example.pandacapstone.view
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -43,6 +44,7 @@ import com.example.pandacapstone.viewModel.HomeScreenViewModel
 @Composable
 fun HomeScreen(
     onNextButtonClicked: () -> Unit = {},
+    onPlaylistClicked: () -> Unit = {},
     viewModel: HomeScreenViewModel,
 ) {
     val viewState by viewModel.viewState.collectAsState()
@@ -132,7 +134,7 @@ fun HomeScreen(
 
         when (viewState) {
             is HomeScreenViewModel.HomeScreenState.Empty ->
-                Image(painter = painterResource(id = R.drawable.pau_singing_cropped), contentDescription = null)
+                Image(painter = painterResource(id = R.drawable.pau_pondering), contentDescription = null)
 
             is HomeScreenViewModel.HomeScreenState.Loaded -> {
                 LazyVerticalGrid(columns = GridCells.Adaptive(180.dp)) {
@@ -152,6 +154,7 @@ fun HomeScreen(
                                     .padding(bottom = 28.dp)
                                     .size(180.dp)
                                     .clip(RoundedCornerShape(10.dp))
+                                    .clickable { onPlaylistClicked() }
                             )
                             Text(
                                 text = playlist.playlistName,

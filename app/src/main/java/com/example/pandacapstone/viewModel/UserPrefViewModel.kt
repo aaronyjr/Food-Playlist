@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.pandacapstone.model.CreatePlaylistDishRequest
+import com.example.pandacapstone.model.SetDeliveryDate
 import com.example.pandacapstone.model.UserPreferences
 import com.example.pandacapstone.view.DietType
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -51,20 +51,20 @@ class UserPrefViewModel : ViewModel() {
         var ld: LocalDate = LocalDate.of(LocalDate.now().year, LocalDate.now().month, LocalDate.now().dayOfMonth)
         var nextDate: LocalDate
         var everynWeek: LocalDate
-        val deliveryDateList: MutableList<CreatePlaylistDishRequest> = mutableListOf()
+        val deliveryDateList: MutableList<SetDeliveryDate> = mutableListOf()
 
         for (i in 1..9) {
             nextDate = ld.with(TemporalAdjusters.nextOrSame(DayOfWeek.valueOf(day.uppercase())))
             when (i) {
                 1 -> {
                     val formatted = nextDate.format(DateTimeFormatter.ofPattern("d MMM"))
-                    deliveryDateList.add(CreatePlaylistDishRequest("$formatted, $deliveryTime"))
+                    deliveryDateList.add(SetDeliveryDate("$formatted, $deliveryTime"))
                 }
             }
             everynWeek = nextDate.plusWeeks(nWeek.toLong())
             ld = everynWeek
             val formatted = everynWeek.format(DateTimeFormatter.ofPattern("d MMM"))
-            deliveryDateList.add(CreatePlaylistDishRequest("$formatted, $deliveryTime"))
+            deliveryDateList.add(SetDeliveryDate("$formatted, $deliveryTime"))
         }
 
         userPref.update { currentState ->

@@ -43,8 +43,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.pandacapstone.R
-import com.example.pandacapstone.viewModel.HomeScreenViewModel
 import com.example.pandacapstone.model.repository.PlaylistRepository
+import com.example.pandacapstone.viewModel.HomeScreenViewModel
 import com.example.pandacapstone.viewModel.PlaylistViewModel
 import com.example.pandacapstone.viewModel.UserPrefViewModel
 import com.maryamrzdh.stepper.Stepper
@@ -178,11 +178,15 @@ fun FoodPlaylistApp(
                 startDestination = FoodPlaylistScreen.Home.name,
             ) {
                 composable(route = FoodPlaylistScreen.Home.name) {
-                    HomeScreen(onNextButtonClicked = {
-                        navController.navigate(
-                            FoodPlaylistScreen.Start.name,
-                        )
-                    }, viewModel = homeScreenViewModel)
+                    HomeScreen(
+                        onNextButtonClicked = {
+                            navController.navigate(FoodPlaylistScreen.Start.name)
+                        },
+                        onPlaylistClicked = {
+                            navController.navigate(FoodPlaylistScreen.Api.name)
+                        },
+                        viewModel = homeScreenViewModel
+                    )
                 }
                 composable(route = FoodPlaylistScreen.Start.name) {
                     PlaylistIntro(onNextButtonClicked = {

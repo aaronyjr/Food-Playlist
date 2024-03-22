@@ -55,6 +55,6 @@ data class CompletedPlaylist(
 
 )
 
-data class CreatePlaylistDishRequest(
+data class SetDeliveryDate(
     val date_to_be_delivered: String
 )

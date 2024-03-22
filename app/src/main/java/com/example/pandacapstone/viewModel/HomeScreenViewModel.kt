@@ -31,7 +31,7 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
             try {
                 val completedPlaylist = repository.getCompletedPlaylists()
                 _completedPlaylists.value = completedPlaylist
-                _viewState.value = HomeScreenState.Loaded
+                _viewState.value = if (completedPlaylist.isEmpty()) HomeScreenState.Empty else HomeScreenState.Loaded
                 Log.i("Successfully called API", _completedPlaylists.value.toString())
             } catch (e: IllegalStateException) {
                 Log.e("ViewModel Error", e.toString())
