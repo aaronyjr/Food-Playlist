@@ -70,5 +70,6 @@ data class IndividualPlaylist(
     @SerializedName("diet_type") val dietType: String,
     @SerializedName("playlist_id") val playlistId: Int,
     val rating: Double,
-    @SerializedName("number_of_reviews") val numberOfReviews: Int
+    @SerializedName("number_of_reviews") val numberOfReviews: Int,
+    @SerializedName("playlist_name") val playlistName: String
 )

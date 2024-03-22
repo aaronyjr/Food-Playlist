@@ -73,7 +73,11 @@ fun AppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.White),
         title = { },
         navigationIcon = {
-            if (canNavigateBack && currentScreen != FoodPlaylistScreen.Start && currentScreen != FoodPlaylistScreen.Home) {
+            if (canNavigateBack && currentScreen
+                != FoodPlaylistScreen.Start
+                && currentScreen != FoodPlaylistScreen.Home
+                && currentScreen != FoodPlaylistScreen.Api
+                ) {
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,

@@ -58,8 +58,8 @@ fun IndividualPlaylist(
     viewModel: HomeScreenViewModel,
 ) {
     val playlists by viewModel.individualPlaylists.collectAsState()
-    var imageBanner by remember { mutableStateOf("") }
     var cuisineName by remember { mutableStateOf("") }
+    var imageBanner by remember { mutableStateOf("") }
 
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -74,10 +74,10 @@ fun IndividualPlaylist(
                 for ((index, playlist) in playlists.withIndex()) {
                     if (index == 0) {
                         imageBanner = playlist.imageUrl
-                        cuisineName = playlist.name
                     }
+                    cuisineName = playlist.playlistName
                 }
-                AsyncImage(
+                    AsyncImage(
                     model = imageBanner,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
