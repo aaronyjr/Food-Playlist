@@ -43,14 +43,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.pandacapstone.R
-import com.example.pandacapstone.model.repository.PlaylistRepository
 import com.example.pandacapstone.viewModel.HomeScreenViewModel
 import com.example.pandacapstone.viewModel.PlaylistViewModel
 import com.example.pandacapstone.viewModel.UserPrefViewModel
 import com.maryamrzdh.stepper.Stepper
 
 // enum values that represent the screens in the app
-enum class FoodPlaylistScreen(@StringRes val title: Int) {
+enum class FoodPlaylistScreen(@StringRes title: Int) {
     Home(title = R.string.home),
     Start(title = R.string.playlist_intro),
     DietPreference(title = R.string.diet_preference),
@@ -58,8 +57,8 @@ enum class FoodPlaylistScreen(@StringRes val title: Int) {
     FreqTimePreference(title = R.string.freq_time_preference),
     Customisation(title = R.string.customisation_preference),
     UserInput(title = R.string.btn_submit),
-    Api(title = R.string.generated_playlist)
-
+    Api(title = R.string.generated_playlist),
+    IndividualPlaylistScreen(title = R.string.individual_playlist)
 }
 
 @Composable
@@ -171,8 +170,6 @@ fun FoodPlaylistApp(
             val userPrefState by userPrefViewModel.userPrefState.collectAsState()
             val generatedPlaylistVM: PlaylistViewModel = viewModel()
 
-            val repository = PlaylistRepository()
-
             NavHost(
                 navController = navController,
                 startDestination = FoodPlaylistScreen.Home.name,
@@ -182,11 +179,15 @@ fun FoodPlaylistApp(
                         onNextButtonClicked = {
                             navController.navigate(FoodPlaylistScreen.Start.name)
                         },
-                        onPlaylistClicked = {
-                            navController.navigate(FoodPlaylistScreen.Api.name)
+                        onPlaylistClicked = { index: Int ->
+                            homeScreenViewModel.fetchIndividualPlaylist(id = index)
+                            navController.navigate(FoodPlaylistScreen.IndividualPlaylistScreen.name)
                         },
                         viewModel = homeScreenViewModel
                     )
+                }
+                composable(FoodPlaylistScreen.IndividualPlaylistScreen.name) {
+                    IndividualPlaylist(viewModel = homeScreenViewModel)
                 }
                 composable(route = FoodPlaylistScreen.Start.name) {
                     PlaylistIntro(onNextButtonClicked = {
@@ -259,7 +260,7 @@ fun Step(currentStep: Int) {
 
 @Composable
 fun Header(headerStr: String, pauImg: Painter) {
-    Row() {
+    Row {
         Text(
             text = headerStr,
             style = TextStyle(

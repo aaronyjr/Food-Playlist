@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pandacapstone.model.CompletedPlaylist
+import com.example.pandacapstone.model.IndividualPlaylist
 import com.example.pandacapstone.model.repository.PlaylistRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +23,9 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
     private val _completedPlaylists: MutableStateFlow<List<CompletedPlaylist>> = MutableStateFlow(emptyList())
     val completedPlaylists: StateFlow<List<CompletedPlaylist>> = _completedPlaylists
 
+    val _individualPlaylists: MutableStateFlow<List<IndividualPlaylist>> = MutableStateFlow(emptyList())
+    val individualPlaylists: StateFlow<List<IndividualPlaylist>> = _individualPlaylists
+
     init {
         fetchCompletedPlaylists()
     }
@@ -38,6 +42,12 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
             } catch (e: ConnectException) {
                 Log.e("No database loaded", e.toString())
             }
+        }
+    }
+
+    fun fetchIndividualPlaylist(id: Int) {
+        viewModelScope.launch {
+            _individualPlaylists.value = repository.getIndividualPlaylist(id)
         }
     }
 

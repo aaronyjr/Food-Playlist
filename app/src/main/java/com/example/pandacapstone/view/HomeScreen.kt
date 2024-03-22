@@ -44,7 +44,7 @@ import com.example.pandacapstone.viewModel.HomeScreenViewModel
 @Composable
 fun HomeScreen(
     onNextButtonClicked: () -> Unit = {},
-    onPlaylistClicked: () -> Unit = {},
+    onPlaylistClicked: (Int) -> Unit = {},
     viewModel: HomeScreenViewModel,
 ) {
     val viewState by viewModel.viewState.collectAsState()
@@ -154,7 +154,7 @@ fun HomeScreen(
                                     .padding(bottom = 28.dp)
                                     .size(180.dp)
                                     .clip(RoundedCornerShape(10.dp))
-                                    .clickable { onPlaylistClicked() }
+                                    .clickable { onPlaylistClicked(index + 1) }
                             )
                             Text(
                                 text = playlist.playlistName,
@@ -169,7 +169,6 @@ fun HomeScreen(
                                     .offset(y = (-4).dp),
                                 color = Color.Black,
                                 fontWeight = FontWeight.Bold
-
                             )
                         }
                     }

@@ -1,6 +1,7 @@
 package com.example.pandacapstone.model.service
 
 import com.example.pandacapstone.model.CompletedPlaylist
+import com.example.pandacapstone.model.IndividualPlaylist
 import com.example.pandacapstone.model.Playlist
 import com.example.pandacapstone.model.SetDeliveryDate
 import retrofit2.http.Body
@@ -22,4 +23,9 @@ interface PlaylistService {
 
     @GET("playlists")
     suspend fun getCompletedPlaylists(): List<CompletedPlaylist>
+
+    @GET("playlist/{id}")
+    suspend fun getIndividualPlaylist(
+        @Path("id") playlistId: Int
+    ) : List<IndividualPlaylist>
 }

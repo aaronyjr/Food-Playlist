@@ -58,3 +58,17 @@ data class CompletedPlaylist(
 data class SetDeliveryDate(
     val date_to_be_delivered: String
 )
+
+data class IndividualPlaylist(
+    val id: Int,
+    val name: String,
+    val price: Double,
+    @SerializedName("image_url") val imageUrl: String,
+    @SerializedName("name_2") val restaurantName: String,
+    @SerializedName("date_to_be_delivered") val deliveryDate: String,
+    val cuisine: String,
+    @SerializedName("diet_type") val dietType: String,
+    @SerializedName("playlist_id") val playlistId: Int,
+    val rating: Double,
+    @SerializedName("number_of_reviews") val numberOfReviews: Int
+)

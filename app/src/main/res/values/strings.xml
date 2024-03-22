@@ -33,6 +33,7 @@
     <string name="home">Home</string>
     <string name="btn_next">Next</string>
     <string name="generated_playlist">Generated Playlist</string>
+    <string name="individual_playlist">Individual Playlist</string>
 
     <!-- Strings for FreqTimePreferenceScreen-->
     <string name="txt_every">Deliver every</string>
