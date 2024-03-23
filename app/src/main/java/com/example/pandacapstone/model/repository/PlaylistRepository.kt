@@ -28,4 +28,8 @@ class PlaylistRepository {
     suspend fun getIndividualPlaylist(id: Int) : List<IndividualPlaylist> {
         return playlistService.getIndividualPlaylist(id)
     }
+
+    suspend fun updateActiveStatus(id: Int, isActive: Boolean): List<CompletedPlaylist> {
+        return playlistService.updateActiveStatus(id, isActive)
+    }
 }

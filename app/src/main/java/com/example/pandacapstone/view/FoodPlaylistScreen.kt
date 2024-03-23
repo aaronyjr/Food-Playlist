@@ -130,7 +130,7 @@ fun FoodPlaylistApp(
             )
         }
         Column(
-            modifier = if (currentScreen == FoodPlaylistScreen.Start || currentScreen == FoodPlaylistScreen.Api) Modifier
+            modifier = if (currentScreen == FoodPlaylistScreen.Start || currentScreen == FoodPlaylistScreen.Api || currentScreen == FoodPlaylistScreen.IndividualPlaylistScreen) Modifier
                 .padding(0.dp, 0.dp)
                 .fillMaxHeight()
             else Modifier
@@ -239,7 +239,7 @@ fun FoodPlaylistApp(
                     )
                 }
                 composable(route = FoodPlaylistScreen.Api.name) {
-                    GeneratedPlaylistScreen(generatedPlaylistVM, userPrefState)
+                    GeneratedPlaylistScreen(generatedPlaylistVM, userPrefState, homeScreenViewModel)
                     homeScreenViewModel.fetchCompletedPlaylists()
                 }
             }

@@ -71,5 +71,6 @@ data class IndividualPlaylist(
     @SerializedName("playlist_id") val playlistId: Int,
     val rating: Double,
     @SerializedName("number_of_reviews") val numberOfReviews: Int,
-    @SerializedName("playlist_name") val playlistName: String
+    @SerializedName("playlist_name") val playlistName: String,
+    @SerializedName("is_active") val isActive: Boolean
 )

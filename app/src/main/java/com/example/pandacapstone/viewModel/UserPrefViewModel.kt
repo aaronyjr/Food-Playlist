@@ -58,13 +58,14 @@ class UserPrefViewModel : ViewModel() {
             when (i) {
                 1 -> {
                     val formatted = nextDate.format(DateTimeFormatter.ofPattern("d MMM"))
-                    deliveryDateList.add(SetDeliveryDate("$formatted, $deliveryTime"))
+                    deliveryDateList.add(SetDeliveryDate("$formatted, ${deliveryTime.subSequence(0,8)}"))
                 }
             }
             everynWeek = nextDate.plusWeeks(nWeek.toLong())
             ld = everynWeek
             val formatted = everynWeek.format(DateTimeFormatter.ofPattern("d MMM"))
-            deliveryDateList.add(SetDeliveryDate("$formatted, $deliveryTime"))
+
+            deliveryDateList.add(SetDeliveryDate("$formatted, ${deliveryTime.subSequence(0,8)}"))
         }
 
         userPref.update { currentState ->

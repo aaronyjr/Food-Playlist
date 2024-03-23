@@ -26,10 +26,6 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
     val _individualPlaylists: MutableStateFlow<List<IndividualPlaylist>> = MutableStateFlow(emptyList())
     val individualPlaylists: StateFlow<List<IndividualPlaylist>> = _individualPlaylists
 
-    init {
-        fetchCompletedPlaylists()
-    }
-
     fun fetchCompletedPlaylists() {
         viewModelScope.launch {
             try {
@@ -50,9 +46,19 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    fun updateActiveStatus(id: Int, isActive: Boolean) {
+        viewModelScope.launch {
+            try {
+                repository.updateActiveStatus(id, isActive)
+            } catch (e: Exception) {
+                Log.e("e", e.toString())
+            }
+        }
+    }
+
     sealed interface HomeScreenState {
-        object Empty: HomeScreenState
-        object Loaded: HomeScreenState
+        object Empty : HomeScreenState
+        object Loaded : HomeScreenState
     }
 
 }

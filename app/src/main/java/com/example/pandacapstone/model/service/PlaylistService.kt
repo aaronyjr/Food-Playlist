@@ -7,6 +7,7 @@ import com.example.pandacapstone.model.SetDeliveryDate
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface PlaylistService {
@@ -28,4 +29,10 @@ interface PlaylistService {
     suspend fun getIndividualPlaylist(
         @Path("id") playlistId: Int
     ) : List<IndividualPlaylist>
+
+    @PUT("updateisactive/{id}/{is_active}")
+    suspend fun updateActiveStatus(
+        @Path("id") playlistId: Int,
+        @Path("is_active") active: Boolean,
+    ) : List<CompletedPlaylist>
 }
