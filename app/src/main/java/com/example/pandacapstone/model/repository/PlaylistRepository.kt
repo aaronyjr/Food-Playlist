@@ -1,16 +1,16 @@
 package com.example.pandacapstone.model.repository
 
 import com.example.pandacapstone.model.CompletedPlaylist
+import com.example.pandacapstone.model.DeliverySchedule
 import com.example.pandacapstone.model.IndividualPlaylist
 import com.example.pandacapstone.model.Playlist
-import com.example.pandacapstone.model.SetDeliveryDate
 import com.example.pandacapstone.model.service.RetrofitInstance
 
 class PlaylistRepository {
     private val playlistService = RetrofitInstance.playlistService
 
     suspend fun getRestaurants(
-        postDeliveryDate: List<SetDeliveryDate>,
+        postDeliveryDate: List<DeliverySchedule>,
         cuisine: String,
         dietType: String,
         minPrice: Float,
@@ -31,5 +31,9 @@ class PlaylistRepository {
 
     suspend fun updateActiveStatus(id: Int, isActive: Boolean): List<CompletedPlaylist> {
         return playlistService.updateActiveStatus(id, isActive)
+    }
+
+    suspend fun deletePlaylistDish(id: Int) : List<IndividualPlaylist> {
+        return playlistService.deletePlaylistDish(id)
     }
 }

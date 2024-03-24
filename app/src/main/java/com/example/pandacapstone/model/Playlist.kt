@@ -31,7 +31,13 @@ data class Playlist(
     var dateToBeDelivered: String = "",
 
     @SerializedName("number_of_reviews")
-    var numOfReviews: Int = 0
+    var numOfReviews: Int = 0,
+
+    @SerializedName("numberofweeks")
+    var numberOfWeeks: Int = 0,
+
+    @SerializedName("dayofweek")
+    var dayOfWeek: String = "",
 )
 
 data class CompletedPlaylist(
@@ -55,9 +61,15 @@ data class CompletedPlaylist(
 
 )
 
-data class SetDeliveryDate(
-    val date_to_be_delivered: String
-)
+data class DeliverySchedule(
+    val numberofweeks: Long,
+    val dayofweek: String,
+    val delivery_dates: List<DeliveryDate>
+) {
+    data class DeliveryDate(
+        val date_to_be_delivered: String
+    )
+}
 
 data class IndividualPlaylist(
     val id: Int,
@@ -72,5 +84,10 @@ data class IndividualPlaylist(
     val rating: Double,
     @SerializedName("number_of_reviews") val numberOfReviews: Int,
     @SerializedName("playlist_name") val playlistName: String,
-    @SerializedName("is_active") val isActive: Boolean
+    @SerializedName("is_active") val isActive: Boolean,
+    @SerializedName("numberofweeks")
+    var numberOfWeeks: Int = 0,
+
+    @SerializedName("dayofweek")
+    var dayOfWeek: String = "",
 )

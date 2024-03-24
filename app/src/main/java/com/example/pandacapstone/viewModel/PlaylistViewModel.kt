@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pandacapstone.model.DeliverySchedule
 import com.example.pandacapstone.model.Playlist
-import com.example.pandacapstone.model.SetDeliveryDate
 import com.example.pandacapstone.model.repository.PlaylistRepository
 import kotlinx.coroutines.launch
 import java.net.ConnectException
@@ -18,7 +18,7 @@ class PlaylistViewModel() : ViewModel() {
     val playlist: LiveData<List<Playlist>> = _playlist
 
     fun fetchPlaylist(
-        deliveryDateJson: List<SetDeliveryDate>,
+        deliveryDateJson: List<DeliverySchedule>,
         cuisine: String,
         dietType: String,
         minPrice: Float,

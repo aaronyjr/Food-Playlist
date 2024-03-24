@@ -1,13 +1,14 @@
 package com.example.pandacapstone.viewModel
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.pandacapstone.model.SetDeliveryDate
+import com.example.pandacapstone.model.DeliverySchedule
 import com.example.pandacapstone.model.UserPreferences
 import com.example.pandacapstone.view.DietType
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -51,22 +52,27 @@ class UserPrefViewModel : ViewModel() {
         var ld: LocalDate = LocalDate.of(LocalDate.now().year, LocalDate.now().month, LocalDate.now().dayOfMonth)
         var nextDate: LocalDate
         var everynWeek: LocalDate
-        val deliveryDateList: MutableList<SetDeliveryDate> = mutableListOf()
+        val deliveryDateList: MutableList<DeliverySchedule.DeliveryDate> = mutableListOf()
+
+        val deliverySchedule: MutableList<DeliverySchedule> = mutableListOf()
 
         for (i in 1..9) {
             nextDate = ld.with(TemporalAdjusters.nextOrSame(DayOfWeek.valueOf(day.uppercase())))
             when (i) {
                 1 -> {
                     val formatted = nextDate.format(DateTimeFormatter.ofPattern("d MMM"))
-                    deliveryDateList.add(SetDeliveryDate("$formatted, ${deliveryTime.subSequence(0,8)}"))
+                    deliveryDateList.add(DeliverySchedule.DeliveryDate("$formatted, ${deliveryTime.subSequence(0, 8)}"))
                 }
             }
             everynWeek = nextDate.plusWeeks(nWeek.toLong())
             ld = everynWeek
             val formatted = everynWeek.format(DateTimeFormatter.ofPattern("d MMM"))
 
-            deliveryDateList.add(SetDeliveryDate("$formatted, ${deliveryTime.subSequence(0,8)}"))
+            deliveryDateList.add(DeliverySchedule.DeliveryDate("$formatted, ${deliveryTime.subSequence(0, 8)}"))
         }
+
+        deliverySchedule.add(DeliverySchedule(nWeek.toLong(), day, deliveryDateList))
+        Log.i("deliverySchedule", deliverySchedule.toString())
 
         userPref.update { currentState ->
             currentState.copy(
@@ -76,7 +82,13 @@ class UserPrefViewModel : ViewModel() {
 
         userPref.update { currentState ->
             currentState.copy(
-                deliveryDate = deliveryDateList
+                day = day
+            )
+        }
+
+        userPref.update { currentState ->
+            currentState.copy(
+                deliveryDate = deliverySchedule
             )
         }
 

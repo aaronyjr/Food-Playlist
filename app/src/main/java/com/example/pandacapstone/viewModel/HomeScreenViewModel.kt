@@ -56,6 +56,12 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    fun deletePlaylistDish(id: Int) {
+        viewModelScope.launch {
+            repository.deletePlaylistDish(id)
+        }
+    }
+
     sealed interface HomeScreenState {
         object Empty : HomeScreenState
         object Loaded : HomeScreenState

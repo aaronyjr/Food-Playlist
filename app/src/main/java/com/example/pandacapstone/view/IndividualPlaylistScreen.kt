@@ -38,6 +38,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -68,6 +69,9 @@ fun IndividualPlaylist(
     var showBottomSheet by remember { mutableStateOf(false) }
     var clicked by remember { mutableStateOf(Playlist()) }
     var isActive by remember { mutableStateOf(false) }
+    var numOfWeeks by remember { mutableIntStateOf(0) }
+    var dayOfWeeks by remember { mutableStateOf("") }
+    var time by remember { mutableStateOf("") }
 
     var id by remember { mutableIntStateOf(0) }
 
@@ -86,6 +90,9 @@ fun IndividualPlaylist(
                         }
                         cuisineName = playlist.playlistName.capitalize()
                         id = playlist.playlistId
+                        numOfWeeks = playlist.numberOfWeeks
+                        dayOfWeeks = playlist.dayOfWeek
+                        time = playlist.deliveryDate.substring(8)
 
                         if (playlist.isActive) {
                             isActive = true
@@ -103,7 +110,7 @@ fun IndividualPlaylist(
                 )
             }
 
-            Row(modifier = Modifier.padding(bottom = 16.dp)){
+            Row(modifier = Modifier.padding(bottom = 16.dp)) {
                 Row(
                     verticalAlignment = Alignment.Bottom,
                     modifier = Modifier.fillMaxWidth()
@@ -121,19 +128,22 @@ fun IndividualPlaylist(
                                 withStyle(
                                     style = SpanStyle(fontWeight = FontWeight.Bold)
                                 ) {
-                                    append("2 weeks ")
+                                    if (numOfWeeks == 1)
+                                        append("$numOfWeeks week ")
+                                    else
+                                        append("$numOfWeeks weeks ")
                                 }
                                 append("on ")
                                 withStyle(
                                     style = SpanStyle(fontWeight = FontWeight.Bold)
                                 ) {
-                                    append("Monday ")
+                                    append(dayOfWeeks)
                                 }
-                                append("at ")
+                                append(" at ")
                                 withStyle(
                                     style = SpanStyle(fontWeight = FontWeight.Bold)
                                 ) {
-                                    append("12:00 pm - 12:15 pm ")
+                                    append(time)
                                 }
                             },
                             fontSize = 12.sp,
@@ -258,7 +268,13 @@ fun IndividualPlaylist(
                                                     horizontalArrangement = Arrangement.SpaceBetween,
                                                     modifier = Modifier.fillMaxWidth()
                                                 ) {
-                                                    Text(text = item.restaurantName, fontWeight = FontWeight.Bold)
+                                                    Text(
+                                                        text = item.restaurantName,
+                                                        fontWeight = FontWeight.Bold,
+                                                        overflow = TextOverflow.Ellipsis,
+                                                        maxLines = 1,
+                                                        modifier = Modifier.fillMaxWidth(0.6f)
+                                                    )
                                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                                         Image(
                                                             painter = painterResource(id = R.drawable.rating_icon),
@@ -280,29 +296,30 @@ fun IndividualPlaylist(
                                                     horizontalArrangement = Arrangement.SpaceBetween,
                                                     verticalAlignment = Alignment.Bottom
                                                 ) {
-                                                    Column() {
-                                                        Text(
-                                                            text = item.name,
-                                                            color = Color.Gray
-                                                        )
-                                                        Text(
-                                                            modifier = Modifier.padding(top = 4.dp),
-                                                            text = "Delivers on ${item.deliveryDate}",
-                                                            color = colorResource(id = R.color.party_pink),
-                                                            fontSize = 14.sp
-                                                        )
-                                                    }
-                                                    Column() {
-                                                        Icon(
-                                                            Icons.Filled.MoreVert,
-                                                            contentDescription = "More vertical",
-                                                            Modifier
-                                                                .clickable {
-                                                                    showBottomSheet = true
-                                                                    // clicked = item
-                                                                }
-                                                        )
-                                                    }
+                                                    Text(text = item.name)
+                                                    Text(text = "$" + item.price)
+                                                }
+                                                Row(
+                                                    Modifier.fillMaxWidth(),
+                                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                                    verticalAlignment = Alignment.Bottom
+                                                ) {
+                                                    Text(
+                                                        modifier = Modifier.padding(top = 4.dp),
+                                                        text = "Delivers on ${item.deliveryDate}",
+                                                        color = colorResource(id = R.color.party_pink),
+                                                        fontSize = 14.sp
+                                                    )
+                                                    Icon(
+                                                        Icons.Filled.MoreVert,
+                                                        contentDescription = "More vertical",
+                                                        Modifier
+                                                            .size(16.dp)
+                                                            .clickable {
+                                                                showBottomSheet = true
+                                                                // clicked = item
+                                                            }
+                                                    )
                                                 }
                                             }
                                         }
@@ -379,6 +396,7 @@ fun IndividualPlaylist(
                                                         .fillMaxWidth()
                                                         .height(50.dp)
                                                         .clickable {
+//                                                            viewModel.deletePlaylistDish()
                                                             Log.i(
                                                                 "food2panda",
                                                                 "Clicked Remove from playlist $clicked"

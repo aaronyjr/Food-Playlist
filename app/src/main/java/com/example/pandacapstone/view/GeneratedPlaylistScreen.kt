@@ -129,19 +129,22 @@ fun GeneratedPlaylistScreen(
                                 withStyle(
                                     style = SpanStyle(fontWeight = FontWeight.Bold)
                                 ) {
-                                    append("2 weeks ")
+                                    if (userPreferences.nWeek.toInt() == 1)
+                                        append(userPreferences.nWeek + " week " )
+                                    else
+                                        append(userPreferences.nWeek + " weeks ")
                                 }
                                 append("on ")
                                 withStyle(
                                     style = SpanStyle(fontWeight = FontWeight.Bold)
                                 ) {
-                                    append("Monday ")
+                                    append(userPreferences.day)
                                 }
-                                append("at ")
+                                append(" at ")
                                 withStyle(
                                     style = SpanStyle(fontWeight = FontWeight.Bold)
                                 ) {
-                                    append("12:00 pm - 12:15 pm ")
+                                    append(userPreferences.deliveryTime.substring(0,8))
                                 }
                             }, fontSize = 12.sp, modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
                         )
@@ -257,25 +260,29 @@ fun GeneratedPlaylistScreen(
                                                     horizontalArrangement = Arrangement.SpaceBetween,
                                                     verticalAlignment = Alignment.Bottom
                                                 ) {
-                                                    Column() {
-                                                        Text(
-                                                            text = item.name, color = Color.Gray
-                                                        )
-                                                        Text(
-                                                            modifier = Modifier.padding(top = 4.dp),
-                                                            text = "Delivers on ${item.dateToBeDelivered}",
-                                                            color = colorResource(id = R.color.party_pink),
-                                                            fontSize = 14.sp
-                                                        )
-                                                    }
-                                                    Column() {
-                                                        Icon(Icons.Filled.MoreVert,
-                                                            contentDescription = "More vertical",
-                                                            Modifier.clickable {
+                                                    Text(text = item.name)
+                                                    Text(text = "$" + item.price)
+                                                }
+                                                Row(
+                                                    Modifier.fillMaxWidth(),
+                                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                                    verticalAlignment = Alignment.Bottom
+                                                ) {
+                                                    Text(
+                                                        modifier = Modifier.padding(top = 4.dp),
+                                                        text = "Delivers on ${item.dateToBeDelivered}",
+                                                        color = colorResource(id = R.color.party_pink),
+                                                        fontSize = 14.sp
+                                                    )
+                                                    Icon(Icons.Filled.MoreVert,
+                                                        contentDescription = "More vertical",
+                                                        Modifier
+                                                            .size(16.dp)
+                                                            .clickable {
                                                                 showBottomSheet = true
                                                                 clicked = item
-                                                            })
-                                                    }
+                                                            }
+                                                    )
                                                 }
                                             }
                                         }
