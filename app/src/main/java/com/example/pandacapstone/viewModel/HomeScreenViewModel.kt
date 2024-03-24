@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import retrofit2.Response
 import java.net.ConnectException
 import javax.inject.Inject
 
@@ -27,8 +28,12 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
     val _individualPlaylists: MutableStateFlow<List<IndividualPlaylist>> = MutableStateFlow(emptyList())
     val individualPlaylists: StateFlow<List<IndividualPlaylist>> = _individualPlaylists
 
-    val _upcomingDelivery: MutableStateFlow<UpcomingDelivery?> = MutableStateFlow(null)
-    val upcomingDelivery: StateFlow<UpcomingDelivery?> = _upcomingDelivery
+    val _upcomingDelivery: MutableStateFlow<Response<UpcomingDelivery>> = MutableStateFlow(Response.success(null))
+    val upcomingDelivery: StateFlow<Response<UpcomingDelivery>> = _upcomingDelivery
+
+    val _index  = MutableStateFlow<Int>(1)
+    val index: StateFlow<Int> = _index
+
 
     fun fetchCompletedPlaylists() {
         viewModelScope.launch {
@@ -68,7 +73,12 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
 
     fun fetchUpcomingDelivery() {
         viewModelScope.launch {
-            _upcomingDelivery.value = repository.getUpcomingDelivery()
+            val upcomingDelivery = repository.getUpcomingDelivery()
+            try {
+                _upcomingDelivery.value = upcomingDelivery
+            } catch (e: Exception) {
+                throw e
+            }
         }
     }
 

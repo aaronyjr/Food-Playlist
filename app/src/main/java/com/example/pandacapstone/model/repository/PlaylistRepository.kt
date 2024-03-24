@@ -7,6 +7,7 @@ import com.example.pandacapstone.model.IndividualPlaylist
 import com.example.pandacapstone.model.Playlist
 import com.example.pandacapstone.model.UpcomingDelivery
 import com.example.pandacapstone.model.service.RetrofitInstance
+import retrofit2.Response
 
 class PlaylistRepository {
     private val playlistService = RetrofitInstance.playlistService
@@ -39,7 +40,7 @@ class PlaylistRepository {
         return playlistService.deletePlaylistDish(id)
     }
 
-    suspend fun getUpcomingDelivery() : UpcomingDelivery {
+    suspend fun getUpcomingDelivery() : Response<UpcomingDelivery> {
         return playlistService.getUpcomingDelivery()
     }
 }

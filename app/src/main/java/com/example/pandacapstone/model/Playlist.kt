@@ -137,32 +137,32 @@ data class DeletedDish(
 
 data class UpcomingDelivery(
     @SerializedName("playlistdish_id")
-    val playlistDishId: Int,
+    val playlistDishId: Int?,
 
     @SerializedName("dish_id")
-    val dishId: Int,
+    val dishId: Int?,
 
     @SerializedName("dish_name")
-    val dishName: String,
+    val dishName: String?,
 
     @SerializedName("dish_price")
-    val dishPrice: Float,
+    val dishPrice: Float?,
 
     @SerializedName("date_to_be_delivered")
-    val dateToBeDelivered: String,
+    val dateToBeDelivered: String?,
 
     @SerializedName("cuisine")
-    val cuisine: String,
+    val cuisine: String?,
 
     @SerializedName("diet_type")
-    val dietType: String,
+    val dietType: String?,
 
     @SerializedName("playlist_id")
-    val playlistId: Int,
+    val playlistId: Int?,
 
     @SerializedName("dish_image")
-    val dishImage: String,
+    val dishImage: String?,
 
     @SerializedName("restaurant_name")
-    val restaurantName: String
+    val restaurantName: String?
 )

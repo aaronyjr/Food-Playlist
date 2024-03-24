@@ -1,5 +1,6 @@
 package com.example.pandacapstone.view
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
@@ -23,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -108,6 +110,7 @@ fun AppBar(
     )
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FoodPlaylistApp(
@@ -186,13 +189,17 @@ fun FoodPlaylistApp(
                             navController.navigate(FoodPlaylistScreen.Start.name)
                         },
                         onPlaylistClicked = { index: Int ->
-                            homeScreenViewModel.fetchIndividualPlaylist(id = index)
+                           // homeScreenViewModel.fetchIndividualPlaylist(id = index)
+                            homeScreenViewModel._index.value = index
                             navController.navigate(FoodPlaylistScreen.IndividualPlaylistScreen.name)
                         },
                         viewModel = homeScreenViewModel
                     )
                 }
                 composable(FoodPlaylistScreen.IndividualPlaylistScreen.name) {
+                    LaunchedEffect(homeScreenViewModel.index.value) {
+                        homeScreenViewModel.fetchIndividualPlaylist(homeScreenViewModel.index.value)
+                    }
                     IndividualPlaylist(viewModel = homeScreenViewModel)
                 }
                 composable(route = FoodPlaylistScreen.Start.name) {

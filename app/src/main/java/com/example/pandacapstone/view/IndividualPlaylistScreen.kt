@@ -28,7 +28,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -96,22 +95,15 @@ fun IndividualPlaylist(
                 contentAlignment = Alignment.BottomStart,
                 modifier = Modifier.padding(bottom = 16.dp)
             ) {
-                LaunchedEffect(individualPlaylists) {
-                    for ((index, playlist) in playlists.withIndex()) {
-                        if (index == 0) {
-                            imageBanner = playlist.imageUrl
-                            Log.i("switchState1", isActive.toString())
-                        }
-                        cuisineName = playlist.playlistName.capitalize()
-                        id = playlist.playlistId
-                        numOfWeeks = playlist.numberOfWeeks
-                        dayOfWeeks = playlist.dayOfWeek
-                        time = playlist.deliveryDate.substring(7)
 
-                        if (playlist.isActive) {
-                            isActive = true
-                        }
-                    }
+                imageBanner = playlists.firstOrNull()?.imageUrl.toString()
+                cuisineName = playlists.firstOrNull()?.playlistName.toString()
+                id = playlists.firstOrNull()?.playlistId ?: 0
+                numOfWeeks = playlists.firstOrNull()?.numberOfWeeks ?: 0
+                dayOfWeeks = playlists.firstOrNull()?.dayOfWeek.toString()
+                time = playlists.firstOrNull()?.deliveryDate.toString()
+                if (playlists.firstOrNull()?.isActive == true) {
+                    isActive = true
                 }
 
                 AsyncImage(
@@ -175,6 +167,7 @@ fun IndividualPlaylist(
                             onClick = {
                                 isActive = !isActive
                                 viewModel.updateActiveStatus(id, !isActive)
+                                Log.i("Button Test", isActive.toString())
                             },
                             modifier = Modifier.size(60.dp)
                         ) {
@@ -304,7 +297,8 @@ fun IndividualPlaylist(
                                                                 if (isActive) {
                                                                     showBottomSheet = true
                                                                     clicked = item
-                                                                } else {}
+                                                                } else {
+                                                                }
                                                             }
                                                     )
                                                 }

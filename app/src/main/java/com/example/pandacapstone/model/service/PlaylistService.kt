@@ -6,6 +6,7 @@ import com.example.pandacapstone.model.DeliverySchedule
 import com.example.pandacapstone.model.IndividualPlaylist
 import com.example.pandacapstone.model.Playlist
 import com.example.pandacapstone.model.UpcomingDelivery
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -45,5 +46,5 @@ interface PlaylistService {
     ) : DeletedDish
 
     @GET("upcomingdelivery")
-    suspend fun getUpcomingDelivery(): UpcomingDelivery
+    suspend fun getUpcomingDelivery(): Response<UpcomingDelivery>
 }

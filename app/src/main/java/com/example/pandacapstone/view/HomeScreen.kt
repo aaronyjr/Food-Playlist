@@ -48,6 +48,7 @@ import com.example.pandacapstone.model.CompletedPlaylist
 import com.example.pandacapstone.model.UpcomingDelivery
 import com.example.pandacapstone.viewModel.HomeScreenViewModel
 import kotlinx.coroutines.flow.StateFlow
+import retrofit2.Response
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
@@ -242,7 +243,7 @@ fun CreatePlaylistBtn(onNextButtonClicked: () -> Unit) {
 
 @Composable
 fun UpcomingDeliveryCard(
-    upcomingDelivery: UpcomingDelivery?
+    upcomingDelivery: Response<UpcomingDelivery>
 ) {
     if (upcomingDelivery != null) {
         Card(
@@ -257,7 +258,27 @@ fun UpcomingDeliveryCard(
                 val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.riding_animation))
                 val progress by animateLottieCompositionAsState(composition = composition, iterations = LottieConstants.IterateForever)
 
-                LottieAnimation(composition = composition, progress = { progress })
+                LottieAnimation(
+                    composition = composition,
+                    progress = { progress },
+                    modifier = Modifier.offset(x = (-130).dp)
+                )
+
+                Column(modifier = Modifier.align(Alignment.Center).offset(x = 50.dp)) {
+                    Row {
+                        Text(text = "XXX", style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold))
+
+                        Spacer(modifier = Modifier.width(100.dp) )
+
+                        Text(text = "S$54.50", style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold))
+                    }
+
+                    Text(text = "Restaurant", style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold))
+
+                    Text(text = "Thur, 11:00am - 11:15am")
+
+                    Text(text = "item1, item2, item 3, ...")
+                }
             }
         }
     }
