@@ -105,6 +105,10 @@ private fun Step(modifier: Modifier = Modifier,
         if (!it) 50.dp else 40.dp
     }
 
+    val dividerColor by transition.animateColor(label = "dividerColor") {
+        if (it) selectedColor ?: MaterialTheme.colors.primary else Color.LightGray
+    }
+
     val borderStroke:BorderStroke = if (isRainbow){
         BorderStroke(2.dp, rainBowColor)
     }else{
@@ -172,14 +176,14 @@ private fun Step(modifier: Modifier = Modifier,
                         .background(rainBowColor),
                     thickness = 1.dp,
                 )
-            }else{
+            } else{
                 Divider(
                     modifier = Modifier.constrainAs(line){
                         top.linkTo(circle.top)
                         bottom.linkTo(circle.bottom)
                         start.linkTo(circle.end)
                     },
-                    color = Color.LightGray,
+                    color = dividerColor,
                     thickness = 2.dp,
                 )
             }
