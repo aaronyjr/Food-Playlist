@@ -33,6 +33,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -49,6 +50,7 @@ import com.example.pandacapstone.model.UpcomingDelivery
 import com.example.pandacapstone.viewModel.HomeScreenViewModel
 import kotlinx.coroutines.flow.StateFlow
 import retrofit2.Response
+import java.text.DecimalFormat
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
@@ -245,6 +247,10 @@ fun CreatePlaylistBtn(onNextButtonClicked: () -> Unit) {
 fun UpcomingDeliveryCard(
     upcomingDelivery: Response<UpcomingDelivery>
 ) {
+    val price = upcomingDelivery.body()?.dishPrice ?: 0.0
+    val decimalFormat = DecimalFormat("#.00")
+    val formattedPrice = "$" + decimalFormat.format(price)
+
     if (upcomingDelivery != null) {
         Card(
             modifier = Modifier
@@ -256,28 +262,47 @@ fun UpcomingDeliveryCard(
         ) {
             Box(Modifier.fillMaxSize()) {
                 val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.riding_animation))
-                val progress by animateLottieCompositionAsState(composition = composition, iterations = LottieConstants.IterateForever)
+                val progress by animateLottieCompositionAsState(
+                    composition = composition,
+                    iterations = LottieConstants.IterateForever
+                )
 
                 LottieAnimation(
                     composition = composition,
                     progress = { progress },
-                    modifier = Modifier.offset(x = (-130).dp)
+                    modifier = Modifier.offset(x = (-135).dp)
                 )
 
-                Column(modifier = Modifier.align(Alignment.Center).offset(x = 50.dp)) {
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .offset(x = 56.dp)
+                ) {
                     Row {
-                        Text(text = "XXX", style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold))
+                        Text(
+                            modifier = Modifier.fillMaxWidth(0.5f),
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            text = upcomingDelivery.body()?.restaurantName.toString(),
+                            style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                        )
 
-                        Spacer(modifier = Modifier.width(100.dp) )
-
-                        Text(text = "S$54.50", style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold))
+                        Text(
+                            modifier = Modifier.padding(end = 8.dp),
+                            text = formattedPrice,
+                            style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                        )
                     }
 
-                    Text(text = "Restaurant", style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold))
+                    Text(
+                        text = upcomingDelivery.body()?.dishName.toString(),
+                        modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)
+                    )
+                    Text(
+                        text = upcomingDelivery.body()?.dateToBeDelivered.toString(),
+                        color = colorResource(id = R.color.party_pink)
+                    )
 
-                    Text(text = "Thur, 11:00am - 11:15am")
-
-                    Text(text = "item1, item2, item 3, ...")
                 }
             }
         }

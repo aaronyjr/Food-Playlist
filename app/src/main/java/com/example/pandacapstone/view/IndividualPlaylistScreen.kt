@@ -28,6 +28,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -63,6 +64,7 @@ import com.example.pandacapstone.viewModel.HomeScreenViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,8 +88,15 @@ fun IndividualPlaylist(
     var time by remember { mutableStateOf("") }
 
     var id by remember { mutableIntStateOf(0) }
+    var timeSubstring = ""
 
     val context = LocalContext.current
+
+    val decimalFormat = DecimalFormat("#.00")
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchIndividualPlaylist(viewModel.index.value)
+    }
 
     LazyColumn() {
         item {
@@ -102,8 +111,12 @@ fun IndividualPlaylist(
                 numOfWeeks = playlists.firstOrNull()?.numberOfWeeks ?: 0
                 dayOfWeeks = playlists.firstOrNull()?.dayOfWeek.toString()
                 time = playlists.firstOrNull()?.deliveryDate.toString()
-                if (playlists.firstOrNull()?.isActive == true) {
-                    isActive = true
+                timeSubstring = time.substring(time.indexOf(',') + 2) ?: ""
+
+                LaunchedEffect(individualPlaylists) {
+                    if (playlists.firstOrNull()?.isActive == true) {
+                        isActive = true
+                    }
                 }
 
                 AsyncImage(
@@ -149,7 +162,7 @@ fun IndividualPlaylist(
                                 withStyle(
                                     style = SpanStyle(fontWeight = FontWeight.Bold)
                                 ) {
-                                    append(time)
+                                    append(timeSubstring)
                                 }
                             },
                             fontSize = 12.sp,
@@ -261,21 +274,24 @@ fun IndividualPlaylist(
                                                         )
                                                         Text(
                                                             text = item.rating.toString(),
-                                                            style = TextStyle(fontSize = 13.sp)
+                                                            style = TextStyle(fontSize = 14.sp)
                                                         )
                                                         Text(
                                                             text = " (" + item.numberOfReviews.toString() + ")",
-                                                            style = TextStyle(fontSize = 13.sp)
+                                                            style = TextStyle(fontSize = 14.sp)
                                                         )
                                                     }
                                                 }
                                                 Row(
                                                     Modifier.fillMaxWidth(),
                                                     horizontalArrangement = Arrangement.SpaceBetween,
-                                                    verticalAlignment = Alignment.Bottom
+                                                    verticalAlignment = Alignment.CenterVertically
                                                 ) {
                                                     Text(text = item.name)
-                                                    Text(text = "$" + item.price)
+                                                    Text(
+                                                        text = "$" + decimalFormat.format(item.price),
+                                                        fontSize = 14.sp
+                                                    )
                                                 }
                                                 Row(
                                                     Modifier.fillMaxWidth(),

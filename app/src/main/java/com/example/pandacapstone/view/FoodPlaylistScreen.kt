@@ -24,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -189,7 +188,6 @@ fun FoodPlaylistApp(
                             navController.navigate(FoodPlaylistScreen.Start.name)
                         },
                         onPlaylistClicked = { index: Int ->
-                           // homeScreenViewModel.fetchIndividualPlaylist(id = index)
                             homeScreenViewModel._index.value = index
                             navController.navigate(FoodPlaylistScreen.IndividualPlaylistScreen.name)
                         },
@@ -197,9 +195,6 @@ fun FoodPlaylistApp(
                     )
                 }
                 composable(FoodPlaylistScreen.IndividualPlaylistScreen.name) {
-                    LaunchedEffect(homeScreenViewModel.index.value) {
-                        homeScreenViewModel.fetchIndividualPlaylist(homeScreenViewModel.index.value)
-                    }
                     IndividualPlaylist(viewModel = homeScreenViewModel)
                 }
                 composable(route = FoodPlaylistScreen.Start.name) {
