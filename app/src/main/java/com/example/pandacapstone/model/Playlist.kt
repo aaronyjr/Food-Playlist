@@ -73,21 +73,74 @@ data class DeliverySchedule(
 
 data class IndividualPlaylist(
     val id: Int,
+
     val name: String,
+
     val price: Double,
-    @SerializedName("image_url") val imageUrl: String,
-    @SerializedName("name_2") val restaurantName: String,
-    @SerializedName("date_to_be_delivered") val deliveryDate: String,
+
+    @SerializedName("image_url")
+    val imageUrl: String,
+
+    @SerializedName("name_2")
+    val restaurantName: String,
+
+    @SerializedName("date_to_be_delivered")
+    val deliveryDate: String,
+
     val cuisine: String,
-    @SerializedName("diet_type") val dietType: String,
-    @SerializedName("playlist_id") val playlistId: Int,
+
+    @SerializedName("diet_type")
+    val dietType: String,
+
+    @SerializedName("playlist_id")
+    val playlistId: Int,
+
     val rating: Double,
-    @SerializedName("number_of_reviews") val numberOfReviews: Int,
-    @SerializedName("playlist_name") val playlistName: String,
-    @SerializedName("is_active") val isActive: Boolean,
+
+    @SerializedName("number_of_reviews")
+    val numberOfReviews: Int,
+
+    @SerializedName("playlist_name")
+    val playlistName: String,
+
+    @SerializedName("is_active")
+    val isActive: Boolean,
+
     @SerializedName("numberofweeks")
     var numberOfWeeks: Int = 0,
 
     @SerializedName("dayofweek")
     var dayOfWeek: String = "",
+)
+
+data class UpcomingDelivery(
+    @SerializedName("playlistdish_id")
+    val playlistDishId: Int,
+
+    @SerializedName("dish_id")
+    val dishId: Int,
+
+    @SerializedName("dish_name")
+    val dishName: String,
+
+    @SerializedName("dish_price")
+    val dishPrice: Float,
+
+    @SerializedName("date_to_be_delivered")
+    val dateToBeDelivered: String,
+
+    @SerializedName("cuisine")
+    val cuisine: String,
+
+    @SerializedName("diet_type")
+    val dietType: String,
+
+    @SerializedName("playlist_id")
+    val playlistId: Int,
+
+    @SerializedName("dish_image")
+    val dishImage: String,
+
+    @SerializedName("restaurant_name")
+    val restaurantName: String
 )

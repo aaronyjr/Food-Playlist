@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pandacapstone.model.CompletedPlaylist
 import com.example.pandacapstone.model.IndividualPlaylist
+import com.example.pandacapstone.model.UpcomingDelivery
 import com.example.pandacapstone.model.repository.PlaylistRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,6 +26,9 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
 
     val _individualPlaylists: MutableStateFlow<List<IndividualPlaylist>> = MutableStateFlow(emptyList())
     val individualPlaylists: StateFlow<List<IndividualPlaylist>> = _individualPlaylists
+
+    val _upcomingDelivery: MutableStateFlow<UpcomingDelivery?> = MutableStateFlow(null)
+    val upcomingDelivery: StateFlow<UpcomingDelivery?> = _upcomingDelivery
 
     fun fetchCompletedPlaylists() {
         viewModelScope.launch {
@@ -59,6 +63,12 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
     fun deletePlaylistDish(id: Int) {
         viewModelScope.launch {
             repository.deletePlaylistDish(id)
+        }
+    }
+
+    fun fetchUpcomingDelivery() {
+        viewModelScope.launch {
+            _upcomingDelivery.value = repository.getUpcomingDelivery()
         }
     }
 

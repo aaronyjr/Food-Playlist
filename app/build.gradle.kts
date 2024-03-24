@@ -85,6 +85,7 @@ dependencies {
     implementation("javax.inject:javax.inject:1")
     implementation("com.squareup.retrofit2:converter-moshi:2.4.0")
     implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation("com.airbnb.android:lottie-compose:6.0.0")
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")

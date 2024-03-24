@@ -38,8 +38,14 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.pandacapstone.R
 import com.example.pandacapstone.model.CompletedPlaylist
+import com.example.pandacapstone.model.UpcomingDelivery
 import com.example.pandacapstone.viewModel.HomeScreenViewModel
 import kotlinx.coroutines.flow.StateFlow
 
@@ -53,9 +59,11 @@ fun HomeScreen(
     val viewState by viewModel.viewState.collectAsState()
     val completedPlaylists: StateFlow<List<CompletedPlaylist>> = viewModel.completedPlaylists
     val playlists by completedPlaylists.collectAsState()
+    val upcomingDelivery by viewModel.upcomingDelivery.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.fetchCompletedPlaylists()
+        viewModel.fetchUpcomingDelivery()
     }
 
     Column {
@@ -71,20 +79,7 @@ fun HomeScreen(
 
         Spacer(Modifier.size(8.dp))
 
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(175.dp),
-            colors = CardDefaults.cardColors(Color.White),
-            border = BorderStroke(2.dp, Color.Gray),
-            shape = RoundedCornerShape(40.dp)
-        ) {
-            Box(Modifier.fillMaxSize()) {
-                Text(
-                    text = "On the way", modifier = Modifier.align(Alignment.Center)
-                )
-            }
-        }
+        UpcomingDeliveryCard(upcomingDelivery = upcomingDelivery)
 
         Spacer(modifier = Modifier.size(16.dp))
 
@@ -131,11 +126,11 @@ fun HomeScreen(
                         style = TextStyle(fontSize = 14.sp),
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
-                    createPlaylistBtn(onNextButtonClicked)
+                    CreatePlaylistBtn(onNextButtonClicked)
                 }
 
             is HomeScreenViewModel.HomeScreenState.Loaded -> {
-                createPlaylistBtn(onNextButtonClicked)
+                CreatePlaylistBtn(onNextButtonClicked)
 
                 Spacer(modifier = Modifier.padding(bottom = 16.dp))
 
@@ -224,7 +219,7 @@ fun HomeScreen(
 }
 
 @Composable
-fun createPlaylistBtn(onNextButtonClicked: () -> Unit) {
+fun CreatePlaylistBtn(onNextButtonClicked: () -> Unit) {
     Button(
         onClick = onNextButtonClicked,
         colors = ButtonDefaults.buttonColors(
@@ -244,6 +239,30 @@ fun createPlaylistBtn(onNextButtonClicked: () -> Unit) {
         )
     }
 }
+
+@Composable
+fun UpcomingDeliveryCard(
+    upcomingDelivery: UpcomingDelivery?
+) {
+    if (upcomingDelivery != null) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(175.dp),
+            colors = CardDefaults.cardColors(Color.White),
+            border = BorderStroke(2.dp, Color.Gray),
+            shape = RoundedCornerShape(40.dp)
+        ) {
+            Box(Modifier.fillMaxSize()) {
+                val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.riding_animation))
+                val progress by animateLottieCompositionAsState(composition = composition, iterations = LottieConstants.IterateForever)
+
+                LottieAnimation(composition = composition, progress = { progress })
+            }
+        }
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable

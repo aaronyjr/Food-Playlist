@@ -4,6 +4,7 @@ import com.example.pandacapstone.model.CompletedPlaylist
 import com.example.pandacapstone.model.DeliverySchedule
 import com.example.pandacapstone.model.IndividualPlaylist
 import com.example.pandacapstone.model.Playlist
+import com.example.pandacapstone.model.UpcomingDelivery
 import com.example.pandacapstone.model.service.RetrofitInstance
 
 class PlaylistRepository {
@@ -35,5 +36,9 @@ class PlaylistRepository {
 
     suspend fun deletePlaylistDish(id: Int) : List<IndividualPlaylist> {
         return playlistService.deletePlaylistDish(id)
+    }
+
+    suspend fun getUpcomingDelivery() : UpcomingDelivery {
+        return playlistService.getUpcomingDelivery()
     }
 }
