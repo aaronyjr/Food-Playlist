@@ -111,7 +111,7 @@ fun CustomisationScreen(onNextButtonClicked: (Int, Int, Int) -> Unit) {
                     onValueChangeFinished = {
 
                     },
-                    valueRange = 1f..100f,
+                    valueRange = 1f..20f,
                     steps = 0,
                     colors = SliderDefaults.colors(
                         activeTrackColor = colorResource(id = R.color.party_pink),

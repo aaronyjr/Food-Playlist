@@ -72,45 +72,67 @@ data class DeliverySchedule(
 }
 
 data class IndividualPlaylist(
-    val id: Int,
-
-    val name: String,
-
-    val price: Double,
-
+    val id: Int = 0,
+    val name: String = "",
+    val price: Double = 0.0,
     @SerializedName("image_url")
-    val imageUrl: String,
+    val imageUrl: String = "",
 
     @SerializedName("name_2")
-    val restaurantName: String,
+    val restaurantName: String = "",
 
     @SerializedName("date_to_be_delivered")
-    val deliveryDate: String,
+    val deliveryDate: String = "",
 
-    val cuisine: String,
+    val cuisine: String = "",
 
     @SerializedName("diet_type")
-    val dietType: String,
+    val dietType: String = "",
 
     @SerializedName("playlist_id")
-    val playlistId: Int,
+    val playlistId: Int = 0,
 
-    val rating: Double,
-
+    val rating: Double = 0.0,
     @SerializedName("number_of_reviews")
-    val numberOfReviews: Int,
+    val numberOfReviews: Int = 0,
 
     @SerializedName("playlist_name")
-    val playlistName: String,
+    val playlistName: String = "",
 
     @SerializedName("is_active")
-    val isActive: Boolean,
+    val isActive: Boolean = true,
 
     @SerializedName("numberofweeks")
     var numberOfWeeks: Int = 0,
 
     @SerializedName("dayofweek")
     var dayOfWeek: String = "",
+
+    @SerializedName("playlist_dishesid")
+    var playlistDishesId: Int = 0,
+)
+
+data class DeletedDish(
+    @SerializedName("id")
+    var id: Int = 0,
+
+    @SerializedName("playlist_id")
+    var playlistId: Int = 0,
+
+    @SerializedName("dish_id")
+    var dishId: Int = 0,
+
+    @SerializedName("date_to_be_delivered")
+    val deliveryDate: String,
+
+    @SerializedName("image_url")
+    val imageUrl: String,
+
+    @SerializedName("created_at")
+    val createdAt: String,
+
+    @SerializedName("added_at")
+    val addedAt: String,
 )
 
 data class UpcomingDelivery(

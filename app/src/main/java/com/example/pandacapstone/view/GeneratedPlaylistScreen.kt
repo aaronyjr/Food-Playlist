@@ -129,7 +129,10 @@ fun GeneratedPlaylistScreen(
                 ) {
                     Column {
                         Text(
-                            text = userPreferences.foodPreference,
+                            text = if (userPreferences.foodPreference == "Anything")
+                                "Various Cuisines"
+                            else
+                                userPreferences.foodPreference,
                             fontSize = 30.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(start = 16.dp, bottom = 5.dp)
@@ -141,7 +144,7 @@ fun GeneratedPlaylistScreen(
                                     style = SpanStyle(fontWeight = FontWeight.Bold)
                                 ) {
                                     if (userPreferences.nWeek.toInt() == 1)
-                                        append(userPreferences.nWeek + " week " )
+                                        append(userPreferences.nWeek + " week ")
                                     else
                                         append(userPreferences.nWeek + " weeks ")
                                 }
@@ -155,7 +158,7 @@ fun GeneratedPlaylistScreen(
                                 withStyle(
                                     style = SpanStyle(fontWeight = FontWeight.Bold)
                                 ) {
-                                    append(userPreferences.deliveryTime.substring(0,8))
+                                    append(userPreferences.deliveryTime.substring(0, 8))
                                 }
                             }, fontSize = 12.sp, modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
                         )

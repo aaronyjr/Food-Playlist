@@ -1,6 +1,7 @@
 package com.example.pandacapstone.model.repository
 
 import com.example.pandacapstone.model.CompletedPlaylist
+import com.example.pandacapstone.model.DeletedDish
 import com.example.pandacapstone.model.DeliverySchedule
 import com.example.pandacapstone.model.IndividualPlaylist
 import com.example.pandacapstone.model.Playlist
@@ -34,7 +35,7 @@ class PlaylistRepository {
         return playlistService.updateActiveStatus(id, isActive)
     }
 
-    suspend fun deletePlaylistDish(id: Int) : List<IndividualPlaylist> {
+    suspend fun deletePlaylistDish(id: Int) : DeletedDish {
         return playlistService.deletePlaylistDish(id)
     }
 

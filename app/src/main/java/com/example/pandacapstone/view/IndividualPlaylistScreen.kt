@@ -2,6 +2,7 @@ package com.example.pandacapstone.view
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -58,7 +60,6 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.example.pandacapstone.R
 import com.example.pandacapstone.model.IndividualPlaylist
-import com.example.pandacapstone.model.Playlist
 import com.example.pandacapstone.viewModel.HomeScreenViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
@@ -72,13 +73,14 @@ fun IndividualPlaylist(
 ) {
     val individualPlaylists: StateFlow<List<IndividualPlaylist>> = viewModel.individualPlaylists
     val playlists by individualPlaylists.collectAsState()
+
     var cuisineName by remember { mutableStateOf("") }
     var imageBanner by remember { mutableStateOf("") }
 
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
-    var clicked by remember { mutableStateOf(Playlist()) }
+    var clicked by remember { mutableStateOf(IndividualPlaylist()) }
     var isActive by rememberSaveable { mutableStateOf(false) }
     var numOfWeeks by remember { mutableIntStateOf(0) }
     var dayOfWeeks by remember { mutableStateOf("") }
@@ -86,13 +88,14 @@ fun IndividualPlaylist(
 
     var id by remember { mutableIntStateOf(0) }
 
+    val context = LocalContext.current
+
     LazyColumn() {
         item {
             Box(
                 contentAlignment = Alignment.BottomStart,
                 modifier = Modifier.padding(bottom = 16.dp)
-            )
-            {
+            ) {
                 LaunchedEffect(individualPlaylists) {
                     for ((index, playlist) in playlists.withIndex()) {
                         if (index == 0) {
@@ -103,7 +106,7 @@ fun IndividualPlaylist(
                         id = playlist.playlistId
                         numOfWeeks = playlist.numberOfWeeks
                         dayOfWeeks = playlist.dayOfWeek
-                        time = playlist.deliveryDate.substring(8)
+                        time = playlist.deliveryDate.substring(7)
 
                         if (playlist.isActive) {
                             isActive = true
@@ -185,35 +188,6 @@ fun IndividualPlaylist(
                     }
                 }
             }
-
-//            Row(
-//                modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 16.dp),
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//                Text("Continue deliveries")
-//                Spacer(modifier = Modifier.weight(1f))
-//                IconButton(onClick = {
-//                    isActive = !isActive
-//                    viewModel.updateActiveStatus(id, !isActive)
-//                }) {
-//                    Icon(
-//                        imageVector = if (isActive) Icons.Default.PauseCircle else Icons.Default.PlayCircle,
-//                        contentDescription = "Play",
-//                        tint = colorResource(id = R.color.party_pink),
-//                        modifier = Modifier.size(200.dp)
-//                    )
-//                }
-////                Switch(
-////                    checked = isActive,
-////                    onCheckedChange = {
-//////                        viewModel.updateActiveStatus(id, !it)
-////                        isActive = it
-////                    },
-////                    colors = SwitchDefaults.colors(
-////                        checkedTrackColor = colorResource(id = R.color.party_pink)
-////                    )
-////                )
-//            }
         }
         itemsIndexed(items = playlists) { index, item ->
             BoxWithConstraints {
@@ -327,8 +301,10 @@ fun IndividualPlaylist(
                                                         Modifier
                                                             .size(16.dp)
                                                             .clickable {
-                                                                showBottomSheet = true
-                                                                // clicked = item
+                                                                if (isActive) {
+                                                                    showBottomSheet = true
+                                                                    clicked = item
+                                                                } else {}
                                                             }
                                                     )
                                                 }
@@ -407,10 +383,18 @@ fun IndividualPlaylist(
                                                         .fillMaxWidth()
                                                         .height(50.dp)
                                                         .clickable {
-//                                                            viewModel.deletePlaylistDish()
+                                                            viewModel.deletePlaylistDish(clicked.playlistDishesId)
+                                                            Toast
+                                                                .makeText(
+                                                                    context,
+                                                                    "Successfully removed from playlist",
+                                                                    Toast.LENGTH_SHORT
+                                                                )
+                                                                .show()
+                                                            showBottomSheet = false
                                                             Log.i(
                                                                 "food2panda",
-                                                                "Clicked Remove from playlist $clicked"
+                                                                "Clicked Remove from playlist ${clicked.playlistDishesId}"
                                                             )
                                                         }
                                                 ) {
@@ -423,12 +407,7 @@ fun IndividualPlaylist(
                                                     modifier = Modifier
                                                         .fillMaxWidth()
                                                         .height(50.dp)
-                                                        .clickable {
-                                                            Log.i(
-                                                                "foodpanda",
-                                                                "Clicked Change delivery date"
-                                                            )
-                                                        }
+                                                        .clickable {}
                                                 ) {
                                                     Text(
                                                         "Change delivery date",
@@ -440,12 +419,8 @@ fun IndividualPlaylist(
                                                     modifier = Modifier
                                                         .fillMaxWidth()
                                                         .height(50.dp)
-                                                        .clickable {
-                                                            Log.i(
-                                                                "foodpanda",
-                                                                "Clicked Change delivery date"
-                                                            )
-                                                        })
+                                                        .clickable {}
+                                                )
                                                 {
                                                     Text(
                                                         "Do not recommend this",

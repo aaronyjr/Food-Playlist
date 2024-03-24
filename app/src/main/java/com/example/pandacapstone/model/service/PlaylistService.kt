@@ -1,6 +1,7 @@
 package com.example.pandacapstone.model.service
 
 import com.example.pandacapstone.model.CompletedPlaylist
+import com.example.pandacapstone.model.DeletedDish
 import com.example.pandacapstone.model.DeliverySchedule
 import com.example.pandacapstone.model.IndividualPlaylist
 import com.example.pandacapstone.model.Playlist
@@ -41,7 +42,7 @@ interface PlaylistService {
     @DELETE("playlistdish/{id}")
     suspend fun deletePlaylistDish(
         @Path("id") id: Int,
-    ) : List<IndividualPlaylist>
+    ) : DeletedDish
 
     @GET("upcomingdelivery")
     suspend fun getUpcomingDelivery(): UpcomingDelivery
