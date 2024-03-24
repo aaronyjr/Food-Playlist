@@ -1,16 +1,20 @@
 package com.maryamrzdh.stepper
 
 import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
@@ -97,6 +101,10 @@ private fun Step(modifier: Modifier = Modifier,
     val color by transition.animateColor(label = "color")
     { if (it || isCurrent) selectedColor?:MaterialTheme.colors.primary else Color.LightGray }
 
+    val circleSize by transition.animateDp(label = "circleSize") {
+        if (!it) 50.dp else 40.dp
+    }
+
     val borderStroke:BorderStroke = if (isRainbow){
         BorderStroke(2.dp, rainBowColor)
     }else{
@@ -113,12 +121,14 @@ private fun Step(modifier: Modifier = Modifier,
             shape = CircleShape,
             border = borderStroke,
             color = innerCircleColor,
-            modifier = Modifier.size(40.dp).constrainAs(circle) {
-                top.linkTo(parent.top)
-                end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom)
-                start.linkTo(parent.start)
-            }
+            modifier = Modifier
+                .size(circleSize)
+                .constrainAs(circle) {
+                    top.linkTo(parent.top)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                }
         ) {
 
             Box(contentAlignment = Alignment.Center) {
@@ -153,11 +163,13 @@ private fun Step(modifier: Modifier = Modifier,
             //Line
             if (isRainbow){
                 Divider(
-                    modifier = Modifier.constrainAs(line){
-                        top.linkTo(circle.top)
-                        bottom.linkTo(circle.bottom)
-                        start.linkTo(circle.end)
-                    }.background(rainBowColor),
+                    modifier = Modifier
+                        .constrainAs(line) {
+                            top.linkTo(circle.top)
+                            bottom.linkTo(circle.bottom)
+                            start.linkTo(circle.end)
+                        }
+                        .background(rainBowColor),
                     thickness = 1.dp,
                 )
             }else{
