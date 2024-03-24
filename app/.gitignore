@@ -1,5 +1,15 @@
-# Built application files
-/*/build/
+# Ignore Gradle files
+.gradle/
+build/
+
+# Ignore local properties file
+local.properties
+
+# Ignore .lock files
+*.lock
+
+# Ignore .bin files
+*.bin
 
 # Crashlytics configuations
 com_crashlytics_export_strings.xml
