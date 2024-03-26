@@ -34,6 +34,8 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
     val _index  = MutableStateFlow<Int>(1)
     val index: StateFlow<Int> = _index
 
+    val _isActive: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isActive: StateFlow<Boolean> = _isActive
 
     fun fetchCompletedPlaylists() {
         viewModelScope.launch {

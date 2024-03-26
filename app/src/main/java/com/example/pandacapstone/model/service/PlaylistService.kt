@@ -25,7 +25,6 @@ interface PlaylistService {
         @Path("rating") rating: Float,
     ): List<Playlist>
 
-
     @GET("playlists")
     suspend fun getCompletedPlaylists(): List<CompletedPlaylist>
 

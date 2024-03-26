@@ -35,7 +35,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -73,6 +72,7 @@ fun IndividualPlaylist(
     viewModel: HomeScreenViewModel,
 ) {
     val individualPlaylists: StateFlow<List<IndividualPlaylist>> = viewModel.individualPlaylists
+    val isActive by viewModel.isActive.collectAsState()
     val playlists by individualPlaylists.collectAsState()
 
     var cuisineName by remember { mutableStateOf("") }
@@ -82,7 +82,6 @@ fun IndividualPlaylist(
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
     var clicked by remember { mutableStateOf(IndividualPlaylist()) }
-    var isActive by rememberSaveable { mutableStateOf(false) }
     var numOfWeeks by remember { mutableIntStateOf(0) }
     var dayOfWeeks by remember { mutableStateOf("") }
     var time by remember { mutableStateOf("") }
@@ -112,7 +111,6 @@ fun IndividualPlaylist(
                 dayOfWeeks = playlists.firstOrNull()?.dayOfWeek.toString()
                 time = playlists.firstOrNull()?.deliveryDate.toString()
                 timeSubstring = time.substring(time.indexOf(',') + 2)
-                isActive = playlists.firstOrNull()?.isActive == true
 
                 AsyncImage(
                     model = imageBanner,
@@ -173,8 +171,8 @@ fun IndividualPlaylist(
                     ) {
                         IconButton(
                             onClick = {
-                                isActive = !isActive
-                                viewModel.updateActiveStatus(id, !isActive)
+                                viewModel._isActive.value = !viewModel.isActive.value
+                                viewModel.updateActiveStatus(id, viewModel.isActive.value)
                                 Log.i("Button Test", isActive.toString())
                             },
                             modifier = Modifier.size(60.dp)
@@ -390,6 +388,7 @@ fun IndividualPlaylist(
                                                         .height(50.dp)
                                                         .clickable {
                                                             viewModel.deletePlaylistDish(clicked.playlistDishesId)
+                                                            viewModel.fetchIndividualPlaylist(index)
                                                             Toast
                                                                 .makeText(
                                                                     context,
