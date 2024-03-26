@@ -53,7 +53,9 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
 
     fun fetchIndividualPlaylist(id: Int) {
         viewModelScope.launch {
-            _individualPlaylists.value = repository.getIndividualPlaylist(id)
+            val individualPlaylist = repository.getIndividualPlaylist(id)
+            _individualPlaylists.value = individualPlaylist
+            _isActive.value = individualPlaylist.firstOrNull()?.isActive == true
         }
     }
 

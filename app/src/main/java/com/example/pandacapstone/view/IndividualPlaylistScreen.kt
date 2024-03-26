@@ -61,7 +61,6 @@ import com.example.pandacapstone.R
 import com.example.pandacapstone.model.IndividualPlaylist
 import com.example.pandacapstone.viewModel.HomeScreenViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 
@@ -71,9 +70,8 @@ import java.text.DecimalFormat
 fun IndividualPlaylist(
     viewModel: HomeScreenViewModel,
 ) {
-    val individualPlaylists: StateFlow<List<IndividualPlaylist>> = viewModel.individualPlaylists
     val isActive by viewModel.isActive.collectAsState()
-    val playlists by individualPlaylists.collectAsState()
+    val playlists by viewModel.individualPlaylists.collectAsState()
 
     var cuisineName by remember { mutableStateOf("") }
     var imageBanner by remember { mutableStateOf("") }
@@ -172,7 +170,7 @@ fun IndividualPlaylist(
                         IconButton(
                             onClick = {
                                 viewModel._isActive.value = !viewModel.isActive.value
-                                viewModel.updateActiveStatus(id, viewModel.isActive.value)
+                                viewModel.updateActiveStatus(id, !viewModel.isActive.value)
                                 Log.i("Button Test", isActive.toString())
                             },
                             modifier = Modifier.size(60.dp)
