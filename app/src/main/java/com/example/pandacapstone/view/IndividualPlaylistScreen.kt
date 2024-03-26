@@ -385,8 +385,11 @@ fun IndividualPlaylist(
                                                         .fillMaxWidth()
                                                         .height(50.dp)
                                                         .clickable {
-                                                            viewModel.deletePlaylistDish(clicked.playlistDishesId)
-                                                            viewModel.fetchIndividualPlaylist(index)
+                                                            scope.launch {
+                                                                val deleteJob = viewModel.deletePlaylistDish(clicked.playlistDishesId)
+                                                                deleteJob.join() // Wait for deletePlaylistDish to complete
+                                                                viewModel.fetchIndividualPlaylist(viewModel.index.value)
+                                                            }
                                                             Toast
                                                                 .makeText(
                                                                     context,
