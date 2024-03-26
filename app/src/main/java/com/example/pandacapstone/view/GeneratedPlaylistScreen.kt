@@ -65,6 +65,7 @@ import com.example.pandacapstone.viewModel.PlaylistViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,6 +103,7 @@ fun GeneratedPlaylistScreen(
     var showBottomSheet by remember { mutableStateOf(false) }
     var clicked by remember { mutableStateOf(Playlist()) }
     var isActive by rememberSaveable { mutableStateOf(true) }
+    val decimalFormat = DecimalFormat("#.00")
 
     LazyColumn() {
         item {
@@ -261,11 +263,11 @@ fun GeneratedPlaylistScreen(
                                                         )
                                                         Text(
                                                             text = item.rating.toString(),
-                                                            style = TextStyle(fontSize = 13.sp)
+                                                            style = TextStyle(fontSize = 14.sp)
                                                         )
                                                         Text(
                                                             text = " (" + item.numOfReviews.toString() + ")",
-                                                            style = TextStyle(fontSize = 13.sp)
+                                                            style = TextStyle(fontSize = 14.sp)
                                                         )
                                                     }
                                                 }
@@ -275,7 +277,10 @@ fun GeneratedPlaylistScreen(
                                                     verticalAlignment = Alignment.Bottom
                                                 ) {
                                                     Text(text = item.name)
-                                                    Text(text = "$" + item.price)
+                                                    Text(
+                                                        text = "$" + decimalFormat.format(item.price),
+                                                        fontSize = 14.sp
+                                                    )
                                                 }
                                                 Row(
                                                     Modifier.fillMaxWidth(),
