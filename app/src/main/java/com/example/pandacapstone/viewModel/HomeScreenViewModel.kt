@@ -8,6 +8,7 @@ import com.example.pandacapstone.model.IndividualPlaylist
 import com.example.pandacapstone.model.UpcomingDelivery
 import com.example.pandacapstone.model.repository.PlaylistRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -69,8 +70,8 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun deletePlaylistDish(id: Int) {
-        viewModelScope.launch {
+    fun deletePlaylistDish(id: Int): Job {
+        return viewModelScope.launch {
             repository.deletePlaylistDish(id)
         }
     }
