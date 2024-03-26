@@ -118,7 +118,7 @@ fun HomeScreen(
                         .fillMaxHeight()
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.pau_singing_cropped),
+                        painter = painterResource(id = R.drawable.pau_pondering),
                         contentDescription = null,
                         modifier = Modifier
                             .size(100.dp)
@@ -251,15 +251,15 @@ fun UpcomingDeliveryCard(
     val decimalFormat = DecimalFormat("#.00")
     val formattedPrice = "$" + decimalFormat.format(price)
 
-    if (upcomingDelivery != null) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(175.dp),
-            colors = CardDefaults.cardColors(Color.White),
-            border = BorderStroke(2.dp, Color.Gray),
-            shape = RoundedCornerShape(40.dp)
-        ) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(175.dp),
+        colors = CardDefaults.cardColors(Color.White),
+        border = BorderStroke(2.dp, Color.Gray),
+        shape = RoundedCornerShape(40.dp)
+    ) {
+        if (upcomingDelivery.body() != null) {
             Box(Modifier.fillMaxSize()) {
                 val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.riding_animation))
                 val progress by animateLottieCompositionAsState(
@@ -302,7 +302,31 @@ fun UpcomingDeliveryCard(
                         text = upcomingDelivery.body()?.dateToBeDelivered.toString(),
                         color = colorResource(id = R.color.party_pink)
                     )
+                }
+            }
+        } else {
+            Box(Modifier.fillMaxSize()) {
+                val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.pandasleep))
+                val progress by animateLottieCompositionAsState(
+                    composition = composition,
+                    iterations = LottieConstants.IterateForever
+                )
 
+                LottieAnimation(
+                    composition = composition,
+                    progress = { progress }
+                )
+
+                Box(
+                    modifier = Modifier
+                        .background(Color.White)
+                        .align(Alignment.TopCenter)
+                ) {
+                    Text(
+                        text = "No upcoming deliveries",
+                        style = TextStyle(fontSize = 14.sp),
+                        modifier = Modifier.offset(y = 30.dp)
+                    )
                 }
             }
         }
