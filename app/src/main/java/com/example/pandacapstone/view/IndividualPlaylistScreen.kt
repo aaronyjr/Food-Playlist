@@ -111,13 +111,8 @@ fun IndividualPlaylist(
                 numOfWeeks = playlists.firstOrNull()?.numberOfWeeks ?: 0
                 dayOfWeeks = playlists.firstOrNull()?.dayOfWeek.toString()
                 time = playlists.firstOrNull()?.deliveryDate.toString()
-                timeSubstring = time.substring(time.indexOf(',') + 2) ?: ""
-
-                LaunchedEffect(individualPlaylists) {
-                    if (playlists.firstOrNull()?.isActive == true) {
-                        isActive = true
-                    }
-                }
+                timeSubstring = time.substring(time.indexOf(',') + 2)
+                isActive = playlists.firstOrNull()?.isActive == true
 
                 AsyncImage(
                     model = imageBanner,
@@ -314,6 +309,7 @@ fun IndividualPlaylist(
                                                                     showBottomSheet = true
                                                                     clicked = item
                                                                 } else {
+                                                                    Unit
                                                                 }
                                                             }
                                                     )
@@ -447,6 +443,7 @@ fun IndividualPlaylist(
                     }
                 }
                 Box {
+                    Log.i("active state", isActive.toString())
                     Column(
                         modifier = Modifier
                             .padding(16.dp, 0.dp, 16.dp, 0.dp)
