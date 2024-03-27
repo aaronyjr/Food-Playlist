@@ -51,6 +51,7 @@ import com.example.pandacapstone.viewModel.HomeScreenViewModel
 import kotlinx.coroutines.flow.StateFlow
 import retrofit2.Response
 import java.text.DecimalFormat
+import java.util.Locale
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
@@ -148,7 +149,6 @@ fun HomeScreen(
                         BoxWithConstraints {
 
                             Box(Modifier.onSizeChanged { size = it }) {
-
                                 AsyncImage(
                                     model = playlist.image,
                                     contentDescription = null,
@@ -166,7 +166,9 @@ fun HomeScreen(
                                         .clickable { onPlaylistClicked(index + 1) }
                                 )
                                 Text(
-                                    text = playlist.playlistName.capitalize(),
+                                    text = playlist.playlistName.replaceFirstChar {
+                                        if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
+                                    },
                                     modifier = Modifier
                                         .run {
                                             when {
@@ -180,9 +182,14 @@ fun HomeScreen(
                                     fontWeight = FontWeight.Bold
                                 )
                             }
-
                             if (!playlist.isActive) {
                                 Box(Modifier
+                                    .run {
+                                        when {
+                                            index % 2 == 0 -> this.padding(end = 8.dp)
+                                            else -> this.padding(start = 8.dp)
+                                        }
+                                    }
                                     .then(
                                         with(LocalDensity.current) {
                                             Modifier.size(
@@ -211,8 +218,9 @@ fun HomeScreen(
                                         Text(
                                             text = "Paused".uppercase(),
                                             modifier = Modifier
-                                                .background(colorResource(id = R.color.party_pink))
-                                                .padding(5.dp),
+                                                .background(colorResource(id = R.color.party_pink), shape = RoundedCornerShape(4.dp)) // Add shape parameter here
+                                                .padding(5.dp)
+                                                .clip(RoundedCornerShape(4.dp)), // Add clip modifier here
                                             color = Color.White
                                         )
                                     }
