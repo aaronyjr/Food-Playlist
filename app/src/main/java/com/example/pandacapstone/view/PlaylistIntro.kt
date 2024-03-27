@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -109,6 +110,7 @@ fun PlaylistIntro(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 30.dp)
+                .shadow(8.dp, RoundedCornerShape(8.dp))
         ) {
             Text(
                 text = stringResource(id = R.string.btn_get_started),

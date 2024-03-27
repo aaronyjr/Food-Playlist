@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -261,7 +262,8 @@ fun FreqTimePreferenceScreen(
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 30.dp),
+                .padding(bottom = 30.dp)
+                .let { if (selectedDays.value != null) it.shadow(8.dp) else it }, // Add shadow here
             enabled = selectedDays.value != null,
         ) {
             Text(

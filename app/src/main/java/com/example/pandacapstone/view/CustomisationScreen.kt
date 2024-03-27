@@ -28,6 +28,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -143,6 +144,7 @@ fun CustomisationScreen(onNextButtonClicked: (Int, Int, Int) -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 30.dp)
+                .shadow(8.dp, RoundedCornerShape(8.dp))
         ) {
             Text(
                 text = stringResource(id = R.string.btn_submit),

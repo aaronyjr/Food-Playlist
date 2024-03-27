@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object RetrofitInstance {
-    private const val BASE_URL = "http://10.0.2.2:8080/"
+    private const val BASE_URL = "https://foodpanda-capstone-dev-qdhz.2.sg-1.fl0.io/"
     private val okHttp3Client = OkHttpClient.Builder()
 
     init {

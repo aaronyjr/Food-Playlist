@@ -9,6 +9,7 @@ import com.example.pandacapstone.model.UpcomingDelivery
 import com.example.pandacapstone.model.repository.PlaylistRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -23,6 +24,9 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
     val _viewState = MutableStateFlow<HomeScreenState>(HomeScreenState.Empty)
     val viewState: StateFlow<HomeScreenState> = _viewState
 
+    val _individualPlaylistViewState = MutableStateFlow<IndividualScreenState>(IndividualScreenState.LoadingScreen)
+    val individualPlaylistViewState: StateFlow<IndividualScreenState> = _individualPlaylistViewState
+
     private val _completedPlaylists: MutableStateFlow<List<CompletedPlaylist>> = MutableStateFlow(emptyList())
     val completedPlaylists: StateFlow<List<CompletedPlaylist>> = _completedPlaylists
 
@@ -32,7 +36,7 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
     val _upcomingDelivery: MutableStateFlow<Response<UpcomingDelivery>> = MutableStateFlow(Response.success(null))
     val upcomingDelivery: StateFlow<Response<UpcomingDelivery>> = _upcomingDelivery
 
-    val _index  = MutableStateFlow<Int>(1)
+    val _index  = MutableStateFlow(1)
     val index: StateFlow<Int> = _index
 
     val _isActive: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -40,9 +44,11 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
 
     fun fetchCompletedPlaylists() {
         viewModelScope.launch {
+            _viewState.value = HomeScreenState.LoadingScreen
             try {
                 val completedPlaylist = repository.getCompletedPlaylists()
                 _completedPlaylists.value = completedPlaylist
+                delay(500)
                 _viewState.value = if (completedPlaylist.isEmpty()) HomeScreenState.Empty else HomeScreenState.Loaded
             } catch (e: IllegalStateException) {
                 Log.e("ViewModel Error", e.toString())
@@ -54,9 +60,12 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
 
     fun fetchIndividualPlaylist(id: Int) {
         viewModelScope.launch {
+            _individualPlaylistViewState.value = IndividualScreenState.LoadingScreen
+            delay(500)
             val individualPlaylist = repository.getIndividualPlaylist(id)
             _individualPlaylists.value = individualPlaylist
             _isActive.value = individualPlaylist.firstOrNull()?.isActive == true
+            _individualPlaylistViewState.value = IndividualScreenState.Loaded
         }
     }
 
@@ -90,6 +99,12 @@ class HomeScreenViewModel @Inject constructor() : ViewModel() {
     sealed interface HomeScreenState {
         object Empty : HomeScreenState
         object Loaded : HomeScreenState
+        object LoadingScreen: HomeScreenState
+    }
+
+    sealed interface IndividualScreenState {
+        object LoadingScreen: IndividualScreenState
+        object Loaded: IndividualScreenState
     }
 
 }
